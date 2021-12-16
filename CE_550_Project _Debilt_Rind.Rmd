@@ -101,6 +101,25 @@ Sept21_TempWater<- subset(Sep21_WaterTemp,Date <"2021-12-6")
 #parameters:
 E= Estimated Evaporation Rate (mm/day)
 Rn = net radiation (W/m2)
+Rn = Rs*(1-αs) + ε* R_ld - R_lu         #from Brutsaert's book " Hydrology an introduction" chapter 2  (2.6.1)
+RS= Short wave (global) radiations (w/m2)
+αs= surface albedo (for water the range is 0.04-0.08)
+ε= emissivity of the surface (Water 0.95)
+R_ld= downward long-wave or atmospheric radiation (w/m2) 
+R_ld = R_ldc* (1+ a1* m_c^b1)
+m_c = fractional cloudiness 
+a1  and b1 are constants who's values depends of cloud type. (here, a1= 0.0496 and b1= 2.45 used from Brutsaert's book chapter 2)
+R_ldc = ε_ac * k* Ta^4         #R_ldc is to figure out the vertical profile data of humidity and temperature. Ta agian must be in Kelvin
+ε_ac = a2(ea/Ta)^b2  
+a2 and b2 are constants whose values are: a2 = 0.980 and b2 = 1/7 respectively.
+ea = vapor pressure of air in hPa
+
+R_lu= Upward long-wave radiation (w/m2) 
+R_lu= ε* K* (Ts^4)
+here, K is Stefan-Boltzmann constant (5.6697*10^-8 W.m^-2 . k^-4)
+Ts and Ta are used interchangeable but the values used must be in absolute k
+
+
 DQ= heat storage change in the water body (W/m2)
 rw= water density (1000 kg/m3)
 Lt= Latent heat of Vaporization (2.45 x 10^6 J/ kg)
@@ -118,7 +137,7 @@ cp = specific heat of air at constant pressure (1004 J/kg.deg C)
 D = multipliers that convert the unit of evaporation into mm /day(86.4 X 10^6)
 MTw = delta.Tw/delta.t = mean water temperature change during the time interval delta.t (deg c/time)
 zd = largest depth at the profile measurement (m).
-Zd = 1.5m ( Dutch water authority (RWS) has measured hourly water temperature at a depth of about 1.5 m (mentioned in detials of the downloaded data))
+Zd = 1.5m ( Dutch water authority (RWS) has measured hourly water temperature at a depth of about 1.5 m (mentioned in details of the downloaded data))
 #I am not sure about the zd Value so it can be used for calibration as well.
 
 
@@ -130,9 +149,6 @@ References:
 
 
 
-
-##########################################################################
-Description:
 
 
 

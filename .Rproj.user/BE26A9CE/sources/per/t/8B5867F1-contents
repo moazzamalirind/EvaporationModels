@@ -3,13 +3,13 @@ title: "Evaporation Estimation"
 author: "Moazzam Rind"
 date: "11/5/2021"
 output: pdf_document
-last updated: "12/13/2021"
+last updated: "12/16/2021"
 ---
 
 ## Class project CE-560 
 
 ### {Project Description}
-forteen commonly referred evaporation estimation models were used to perform the comparative study. The objective was to discuss details (assumptions and inputs) of each of the models and estimate evaporation. This comparative study can be helpful identify suitable model for a locality; specially this study can serve as a reference to water mangers, farmers, and researchers interested in Evaporation estimation.
+fourteen commonly referred evaporation estimation models were used to perform a comparative study. The objective was to discuss details (assumptions and inputs) of each of the models and estimate evaporation. This comparative study can be helpful to identify suitable model for a locality; specially this study can serve as a reference to water mangers, farmers, and researchers interested in Evaporation estimation.
 
 
 ### Evaporation Methods.
@@ -59,14 +59,14 @@ library(ggplot2)
 ####################
 #### Read data sets 
 ######################
+
 #Temporal coverage:
 ### September 2021
 
-
-#Delete extra text and spaces in the text file inorder to get proper table format data. Here, I have prepocced the data before uploading.
+#Delete extra text and spaces in the text file in order to get proper table format data. Here, I have pre-proceed the data before uploading.
 
 #Meteorological data
-Sept21_Met <- read.table("C:/Users/Mooz/OneDrive - Washington State University (email.wsu.edu)/Advanced Hydrology/Class_Project_Code/uurgeg_260_2011-2020/uurgeg_260_2021-2030.txt", sep=",", header=TRUE)
+Sept21_Met <- read.table("C:/Users/Mooz/Documents/GitHub/EvaporationModels/Data_2011-2020/uurgeg_260_2021-2030.txt", sep=",", header=TRUE)
 
 #The date format is YYYYMMDD so converting it to %y%m%d (normal format)
 
@@ -74,11 +74,11 @@ Sept21_Met$Date<- Sept21_Met$YYYYMMDD  #Make another column with name Date
 Sept21_Met$Date <- ymd(Sept21_Met$Date)
 
 
-
 #Water Temperature data
-Sep21_WaterTemp <- my_data <- read_excel("C:/Users/Mooz/OneDrive - Washington State University (email.wsu.edu)/Advanced Hydrology/Class_Project_Code/uurgeg_260_2011-2020/Sept_WaterTemp21.xlsx", sheet = "HourlyTemp")
+Sep21_WaterTemp <- read_excel("C:/Users/Mooz/Documents/GitHub/EvaporationModels/Data_2011-2020/Sept_WaterTemp21.xlsx", sheet = "HourlyTemp")
 
 #formatting Date
+
 Sep21_WaterTemp$time <- format(as.POSIXct(Sep21_WaterTemp$Date),    # Add time column
                     format = "%H:%M")
 Sep21_WaterTemp$Date <- as.Date(Sep21_WaterTemp$Date)
@@ -86,8 +86,9 @@ Sep21_WaterTemp$Date <- as.Date(Sep21_WaterTemp$Date)
 Sept21_TempWater<- subset(Sep21_WaterTemp,Date <"2021-12-6")
 
 
-##2019-2020, summer periods (1st of May - 31st of August)???????????????
+##2019-2020, summer periods (1st of May - 31st of August)??????????????? yet to be added once data will be available
 ```
+
 
 ############################################################################################################################
 ############################################################################################################################
@@ -100,6 +101,25 @@ Sept21_TempWater<- subset(Sep21_WaterTemp,Date <"2021-12-6")
 #parameters:
 E= Estimated Evaporation Rate (mm/day)
 Rn = net radiation (W/m2)
+Rn = Rs*(1-αs) + ε* R_ld - R_lu         #from Brutsaert's book " Hydrology an introduction" chapter 2  (2.6.1)
+RS= Short wave (global) radiations (w/m2)
+αs= surface albedo (for water the range is 0.04-0.08)
+ε= emissivity of the surface (Water 0.95)
+R_ld= downward long-wave or atmospheric radiation (w/m2) 
+R_ld = R_ldc* (1+ a1* m_c^b1)
+m_c = fractional cloudiness 
+a1  and b1 are constants who's values depends of cloud type. (here, a1= 0.0496 and b1= 2.45 used from Brutsaert's book chapter 2)
+R_ldc = ε_ac * k* Ta^4         #R_ldc is to figure out the vertical profile data of humidity and temperature. Ta agian must be in Kelvin
+ε_ac = a2(ea/Ta)^b2  
+a2 and b2 are constants whose values are: a2 = 0.980 and b2 = 1/7 respectively.
+ea = vapor pressure of air in hPa
+
+R_lu= Upward long-wave radiation (w/m2) 
+R_lu= ε* K* (Ts^4)
+here, K is Stefan-Boltzmann constant (5.6697*10^-8 W.m^-2 . k^-4)
+Ts and Ta are used interchangeable but the values used must be in absolute k
+
+
 DQ= heat storage change in the water body (W/m2)
 rw= water density (1000 kg/m3)
 Lt= Latent heat of Vaporization (2.45 x 10^6 J/ kg)
@@ -117,7 +137,7 @@ cp = specific heat of air at constant pressure (1004 J/kg.deg C)
 D = multipliers that convert the unit of evaporation into mm /day(86.4 X 10^6)
 MTw = delta.Tw/delta.t = mean water temperature change during the time interval delta.t (deg c/time)
 zd = largest depth at the profile measurement (m).
-Zd = 1.5m ( Dutch water authority (RWS) has measured hourly water temperature at a depth of about 1.5 m (mentioned in detials of the downloaded data))
+Zd = 1.5m ( Dutch water authority (RWS) has measured hourly water temperature at a depth of about 1.5 m (mentioned in details of the downloaded data))
 #I am not sure about the zd Value so it can be used for calibration as well.
 
 
@@ -129,9 +149,6 @@ References:
 
 
 
-
-##########################################################################
-Description:
 
 
 
@@ -388,7 +405,7 @@ U_2= wind velocity measured at 2m height
 e0= Saturated vapor pressure at the temperature of the water surface (millibars)
 ea= vapor pressure at temperature and relative humidity of the air, (millibars)
 
-citiation: Rosenberry, D. O., Stannard, D. I., Winter, T. C., & Martinez, M. L. (2004). Comparison of 13 equations for determining evapotranspiration from a prairie wetland, Cottonwood Lake area, North Dakota, USA. Wetlands, 24(3), 483-497.
+citiation: Parkhurst, R. S., Winter, T. C., Rosenberry, D. O., & Sturrock, A. M. (1998). Evaporation from a small prairie wetland in the Cottonwood Lake area, North Dakota—an energy-budget study. Wetlands, 18(2), 272-287.
 
 ```{r}
  N<- 0.00547 #parkhurst et al. (1998)

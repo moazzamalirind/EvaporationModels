@@ -1,0 +1,1632 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+]{article}
+\title{Evaporation Models}
+\author{Moazzam Rind}
+\date{1/23/2023}
+
+\usepackage{amsmath,amssymb}
+\usepackage{lmodern}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\hypersetup{
+  pdftitle={Evaporation Models},
+  pdfauthor={Moazzam Rind},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+\urlstyle{same} % disable monospaced font for URLs
+\usepackage[margin=1in]{geometry}
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.77,0.63,0.00}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\usepackage{graphicx}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+\ifLuaTeX
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+
+\begin{document}
+\maketitle
+
+\hypertarget{class-project-ce-560}{%
+\subsection{Class project CE-560}\label{class-project-ce-560}}
+
+\hypertarget{project-description}{%
+\subsubsection{\{Project Description}\label{project-description}}
+
+Eleven commonly referred evaporation estimation models were used for
+comparative study. The objectives were: 1. Discuss details
+(i.e.~assumptions and requirements of each models). 2. Estimate
+Evaporation
+
+Application:: We believe this comparative study can be used to identify
+suitable model for a locality; especially if someone is interested to
+evaluate performance of different models at area of interest.
+
+\hypertarget{evaporation-methods.}{%
+\subsubsection{Evaporation Methods.}\label{evaporation-methods.}}
+
+The selected methods are categorized into Three groups:
+
+\begin{enumerate}
+\def\labelenumi{\alph{enumi}.}
+\tightlist
+\item
+  Combination Methods: 1.Bowen-ratio energy budget, 2. Penman,
+  3.Priestly-Taylor, 4. DeBruin--Keijman, 5.Brutsaert--Stricker, and
+  6.DeBruin\\
+\item
+  Solar Radiation-based Methods: 7. Jensen--Haise and 8. Makkink
+\item
+  Dalton-based Methods: 9.Mass transfer, 10.Ryan--Harleman and 11. Bulk
+  Transfer Approach
+\item
+\end{enumerate}
+
+All the results are compared with direct estimation or estimation of LE.
+
+\hypertarget{study-location}{%
+\subsubsection{Study Location}\label{study-location}}
+
+For the case study, I am choosing Lake Ijssel, Netherlands. There are
+two locations (Stavoren and Trintelhaven) surrounding Lake Ijssel where
+evaporation is estimated by Jasen et al., (2021).
+
+Description: Time series of open water evaporation of Lake IJssel, the
+Netherlands. Data was collected at locations Stavoren and Trintelhaven
+at 7.5 m and 10.8 above land surface, respectively, from 2019 to 2020.
+Data was collected using the eddy covariance instrument of the type
+IRGASON at a sampling frequency of 20 Hz. Variables Tair and RH were
+collected using a separate HMP155A instrument at a height of 7.4 m and
+10.9 above surface in Stavoren and Trintelhaven, respectively. The eddy
+covariance data was processed using the EddyPro software at an averaging
+interval of 30-min.
+\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#
+
+\#\#Reference: Jansen, F. A., Uijlenhoet, R., Jacobs, C. M., \& Teuling,
+A. J. (2021). Evaporation from a large lowland reservoir--observed
+dynamics during a warm summer. Hydrology and Earth System Sciences
+Discussions, 1-28.
+
+\#```\{r\} install.packages(``r package'', repos =
+``\url{http://cran.us.r-project.org}'')
+
+\hypertarget{getting-started}{%
+\section{Getting started}\label{getting-started}}
+
+\hypertarget{remove-everything-from-rs-memory.}{%
+\section{Remove everything from R's
+memory.}\label{remove-everything-from-rs-memory.}}
+
+rm(list=ls())
+
+\#\#Packages required: install.packages(``sos'')
+install.packages(``leaps'') install.packages(``readxl'')
+install.packages(``Lubridate'') install.packages(``ggplot2'')
+install.packages(``zoo'')
+
+\begin{verbatim}
+
+
+
+
+
+#Load Installed packages
+
+
+```r
+library(sos)
+\end{verbatim}
+
+\begin{verbatim}
+## Warning: package 'sos' was built under R version 4.1.3
+\end{verbatim}
+
+\begin{verbatim}
+## Loading required package: brew
+\end{verbatim}
+
+\begin{verbatim}
+## Warning: package 'brew' was built under R version 4.1.3
+\end{verbatim}
+
+\begin{verbatim}
+## 
+## Attaching package: 'sos'
+\end{verbatim}
+
+\begin{verbatim}
+## The following object is masked from 'package:utils':
+## 
+##     ?
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(leaps)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Warning: package 'leaps' was built under R version 4.1.3
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{ (data.table)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Warning: package 'data.table' was built under R version 4.1.3
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{ (dplyr)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Warning: package 'dplyr' was built under R version 4.1.3
+\end{verbatim}
+
+\begin{verbatim}
+## 
+## Attaching package: 'dplyr'
+\end{verbatim}
+
+\begin{verbatim}
+## The following objects are masked from 'package:data.table':
+## 
+##     between, first, last
+\end{verbatim}
+
+\begin{verbatim}
+## The following object is masked from 'package:sos':
+## 
+##     matches
+\end{verbatim}
+
+\begin{verbatim}
+## The following objects are masked from 'package:stats':
+## 
+##     filter, lag
+\end{verbatim}
+
+\begin{verbatim}
+## The following objects are masked from 'package:base':
+## 
+##     intersect, setdiff, setequal, union
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{ (readxl)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Warning: package 'readxl' was built under R version 4.1.3
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{ (lubridate)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Warning: package 'lubridate' was built under R version 4.1.3
+\end{verbatim}
+
+\begin{verbatim}
+## 
+## Attaching package: 'lubridate'
+\end{verbatim}
+
+\begin{verbatim}
+## The following objects are masked from 'package:data.table':
+## 
+##     hour, isoweek, mday, minute, month, quarter, second, wday, week,
+##     yday, year
+\end{verbatim}
+
+\begin{verbatim}
+## The following objects are masked from 'package:base':
+## 
+##     date, intersect, setdiff, union
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(ggplot2)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Warning: package 'ggplot2' was built under R version 4.1.3
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(leaps)}
+\FunctionTok{library}\NormalTok{(tidyr)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Warning: package 'tidyr' was built under R version 4.1.3
+\end{verbatim}
+
+\begin{verbatim}
+## 
+## Attaching package: 'tidyr'
+\end{verbatim}
+
+\begin{verbatim}
+## The following object is masked from 'package:sos':
+## 
+##     matches
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(zoo)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Warning: package 'zoo' was built under R version 4.1.3
+\end{verbatim}
+
+\begin{verbatim}
+## 
+## Attaching package: 'zoo'
+\end{verbatim}
+
+\begin{verbatim}
+## The following objects are masked from 'package:base':
+## 
+##     as.Date, as.Date.numeric
+\end{verbatim}
+
+\hypertarget{set-working-directory}{%
+\section{Set working directory}\label{set-working-directory}}
+
+\#You should change the path to your saved data file path (using session
+drop down in the main bar)
+
+\hypertarget{read-data-sets}{%
+\paragraph{Read data sets}\label{read-data-sets}}
+
+\#Temporal coverage: summer periods 2019-2020 (1st May to 31 August)
+
+\hypertarget{variable-names}{%
+\paragraph{Variable names:}\label{variable-names}}
+
+\hypertarget{le-latent-heat-flux}{%
+\section{LE = latent heat flux}\label{le-latent-heat-flux}}
+
+\hypertarget{kin-global-radiation}{%
+\section{Kin = global radiation}\label{kin-global-radiation}}
+
+\hypertarget{u-wind-speed}{%
+\section{u = wind speed}\label{u-wind-speed}}
+
+\hypertarget{de-vapour-pressure-gradient}{%
+\section{De = vapour pressure
+gradient}\label{de-vapour-pressure-gradient}}
+
+\hypertarget{vpd-vapour-pressure-deficit}{%
+\section{VPD = vapour pressure
+deficit}\label{vpd-vapour-pressure-deficit}}
+
+\hypertarget{twater-sub-skin-water-temperature-obtained-from-meteosat-satellite}{%
+\section{Twater = sub-skin water temperature (obtained from Meteosat
+satellite)}\label{twater-sub-skin-water-temperature-obtained-from-meteosat-satellite}}
+
+There are extra columns in the given datasets. So removing extra columns
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{Sta\_daily\_2019 }\OtherTok{\textless{}{-}}\NormalTok{ Sta\_daily\_2019[, }\SpecialCharTok{{-}}\DecValTok{7}\SpecialCharTok{:{-}}\DecValTok{32}\NormalTok{]}
+\NormalTok{Sta\_daily\_2020 }\OtherTok{\textless{}{-}}\NormalTok{ Sta\_daily\_2020[, }\SpecialCharTok{{-}}\DecValTok{7}\SpecialCharTok{:{-}}\DecValTok{32}\NormalTok{]}
+\NormalTok{Sta\_Hourly\_2019 }\OtherTok{\textless{}{-}}\NormalTok{ Sta\_Hourly\_2019[, }\SpecialCharTok{{-}}\DecValTok{7}\SpecialCharTok{:{-}}\DecValTok{32}\NormalTok{]}
+\NormalTok{Sta\_Hourly\_2020 }\OtherTok{\textless{}{-}}\NormalTok{ Sta\_Hourly\_2020[, }\SpecialCharTok{{-}}\DecValTok{7}\SpecialCharTok{:{-}}\DecValTok{32}\NormalTok{]}
+
+\NormalTok{Tri\_daily\_2019 }\OtherTok{\textless{}{-}}\NormalTok{ Tri\_daily\_2019[, }\SpecialCharTok{{-}}\DecValTok{7}\SpecialCharTok{:{-}}\DecValTok{32}\NormalTok{]}
+\NormalTok{Tri\_daily\_2020 }\OtherTok{\textless{}{-}}\NormalTok{ Tri\_daily\_2020[, }\SpecialCharTok{{-}}\DecValTok{7}\SpecialCharTok{:{-}}\DecValTok{32}\NormalTok{]}
+\NormalTok{Tri\_Hourly\_2019 }\OtherTok{\textless{}{-}}\NormalTok{ Tri\_Hourly\_2019[, }\SpecialCharTok{{-}}\DecValTok{7}\SpecialCharTok{:{-}}\DecValTok{32}\NormalTok{]}
+\NormalTok{Tri\_Hourly\_2020 }\OtherTok{\textless{}{-}}\NormalTok{ Tri\_Hourly\_2020[, }\SpecialCharTok{{-}}\DecValTok{7}\SpecialCharTok{:{-}}\DecValTok{32}\NormalTok{]}
+\end{Highlighting}
+\end{Shaded}
+
+The given dataset are missing timescale. So adding time column
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{Sta\_daily\_2019}\SpecialCharTok{$}\NormalTok{Date }\OtherTok{\textless{}{-}} \FunctionTok{seq}\NormalTok{(}\FunctionTok{as.Date}\NormalTok{(}\StringTok{"2019{-}05{-}01"}\NormalTok{),}\AttributeTok{by=} \StringTok{"day"}\NormalTok{,}\AttributeTok{length.out=} \DecValTok{89}\NormalTok{)      }\CommentTok{\#Number of rows in dataframe = length.out}
+\NormalTok{Sta\_daily\_2020}\SpecialCharTok{$}\NormalTok{Date }\OtherTok{\textless{}{-}} \FunctionTok{seq}\NormalTok{(}\FunctionTok{as.Date}\NormalTok{(}\StringTok{"2020{-}05{-}01"}\NormalTok{),}\AttributeTok{by=} \StringTok{"day"}\NormalTok{,}\AttributeTok{length.out=} \DecValTok{86}\NormalTok{)}
+\NormalTok{Tri\_daily\_2019}\SpecialCharTok{$}\NormalTok{Date }\OtherTok{\textless{}{-}} \FunctionTok{seq}\NormalTok{(}\FunctionTok{as.Date}\NormalTok{(}\StringTok{"2019{-}05{-}01"}\NormalTok{),}\AttributeTok{by=} \StringTok{"day"}\NormalTok{,}\AttributeTok{length.out=} \DecValTok{113}\NormalTok{)}
+\NormalTok{Tri\_daily\_2020}\SpecialCharTok{$}\NormalTok{Date }\OtherTok{\textless{}{-}} \FunctionTok{seq}\NormalTok{(}\FunctionTok{as.Date}\NormalTok{(}\StringTok{"2020{-}05{-}01"}\NormalTok{),}\AttributeTok{by=} \StringTok{"day"}\NormalTok{,}\AttributeTok{length.out=} \DecValTok{113}\NormalTok{)}
+
+\NormalTok{Sta\_Hourly\_2019}\SpecialCharTok{$}\NormalTok{Date }\OtherTok{\textless{}{-}} \FunctionTok{seq}\NormalTok{(}\FunctionTok{as.POSIXct}\NormalTok{(}\StringTok{"2019{-}05{-}01 00:00"}\NormalTok{),}\AttributeTok{by=} \StringTok{"hour"}\NormalTok{, }\AttributeTok{length.out =} \DecValTok{2823}\NormalTok{)}
+\NormalTok{Sta\_Hourly\_2020}\SpecialCharTok{$}\NormalTok{Date }\OtherTok{\textless{}{-}} \FunctionTok{seq}\NormalTok{(}\FunctionTok{as.POSIXct}\NormalTok{(}\StringTok{"2020{-}05{-}01 00:00"}\NormalTok{),}\AttributeTok{by=} \StringTok{"hour"}\NormalTok{, }\AttributeTok{length.out =} \DecValTok{2872}\NormalTok{)}
+
+\NormalTok{Tri\_Hourly\_2019}\SpecialCharTok{$}\NormalTok{Date }\OtherTok{\textless{}{-}} \FunctionTok{seq}\NormalTok{(}\FunctionTok{as.POSIXct}\NormalTok{(}\StringTok{"2019{-}05{-}01 00:00"}\NormalTok{),}\AttributeTok{by=} \StringTok{"hour"}\NormalTok{, }\AttributeTok{length.out =} \DecValTok{2952}\NormalTok{)}
+\NormalTok{Tri\_Hourly\_2020}\SpecialCharTok{$}\NormalTok{Date }\OtherTok{\textless{}{-}} \FunctionTok{seq}\NormalTok{(}\FunctionTok{as.POSIXct}\NormalTok{(}\StringTok{"2020{-}05{-}01 00:00"}\NormalTok{),}\AttributeTok{by=} \StringTok{"hour"}\NormalTok{, }\AttributeTok{length.out =} \DecValTok{2952}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\#\#Ewater Data (i.e.~Data observed by Jasen et al., (2021) using flux
+towers) \#Temporal coverage: 2019 and 2020
+
+\hypertarget{variable-names-1}{%
+\paragraph{Variable names:}\label{variable-names-1}}
+
+YYYYmmddHHMM = Date (YYYY=year,mm=month,dd=day,HH=hour,MM=minute) LE =
+Latent heat flux {[}W/m2{]} H = Sensible heat flux {[}W/m2{]}
+wind\_speed = Wind speed {[}m/s{]} wind\_dir = Wind direction
+{[}degrees{]} air\_pressure = Air pressure {[}Pa{]} Tair = Air
+temperature {[}degrees Celsius{]} RH = Relative humidity {[}percents{]}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\#Uploading given data}
+
+\DocumentationTok{\#\#\#\#\#\#\#Stavoren Station (Sta)}
+\CommentTok{\#Daily}
+\NormalTok{Stra\_Ewater\_2019 }\OtherTok{=} \FunctionTok{read.table}\NormalTok{(}\StringTok{"C:/Users/Mooz/OneDrive {-} Washington State University (email.wsu.edu)/Qual Exam\_WSU/Evaporation Models/Data/Ewater\_Stavoren\_2019.txt"}\NormalTok{, }\AttributeTok{sep=}\StringTok{","}\NormalTok{, }\AttributeTok{header=}\ConstantTok{TRUE}\NormalTok{)}
+
+\NormalTok{Stra\_Ewater\_2020 }\OtherTok{=} \FunctionTok{read.table}\NormalTok{(}\StringTok{"C:/Users/Mooz/OneDrive {-} Washington State University (email.wsu.edu)/Qual Exam\_WSU/Evaporation Models/Data/Ewater\_Stavoren\_2020.txt"}\NormalTok{, }\AttributeTok{sep=}\StringTok{","}\NormalTok{, }\AttributeTok{header=}\ConstantTok{TRUE}\NormalTok{)}
+                              
+\NormalTok{Tri\_Ewater\_2019 }\OtherTok{=} \FunctionTok{read.table}\NormalTok{(}\StringTok{"C:/Users/Mooz/OneDrive {-} Washington State University (email.wsu.edu)/Qual Exam\_WSU/Evaporation Models/Data/Ewater\_Trintelhaven\_2019.txt"}\NormalTok{, }\AttributeTok{sep=}\StringTok{","}\NormalTok{, }\AttributeTok{header=}\ConstantTok{TRUE}\NormalTok{)}
+
+\NormalTok{Tri\_Ewater\_2020 }\OtherTok{=} \FunctionTok{read.table}\NormalTok{(}\StringTok{"C:/Users/Mooz/OneDrive {-} Washington State University (email.wsu.edu)/Qual Exam\_WSU/Evaporation Models/Data/Ewater\_Trintelhaven\_2019.txt"}\NormalTok{, }\AttributeTok{sep=}\StringTok{","}\NormalTok{, }\AttributeTok{header=}\ConstantTok{TRUE}\NormalTok{)                                                        }
+\end{Highlighting}
+\end{Shaded}
+
+\#Formating date column to readable format
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{Stra\_Ewater\_2019}\SpecialCharTok{$}\NormalTok{Date }\OtherTok{\textless{}{-}}\NormalTok{ Stra\_Ewater\_2019}\SpecialCharTok{$}\NormalTok{YYYYmmddHHMM}
+\NormalTok{Stra\_Ewater\_2019}\SpecialCharTok{$}\NormalTok{Date }\OtherTok{\textless{}{-}} \FunctionTok{as.POSIXct}\NormalTok{(}\FunctionTok{as.character}\NormalTok{(Stra\_Ewater\_2019[[}\StringTok{"Date"}\NormalTok{]]), }\AttributeTok{format =} \StringTok{"\%Y\%m\%d\%H\%M"}\NormalTok{)}
+
+\NormalTok{Stra\_Ewater\_2020}\SpecialCharTok{$}\NormalTok{Date }\OtherTok{\textless{}{-}}\NormalTok{ Stra\_Ewater\_2020}\SpecialCharTok{$}\NormalTok{YYYYmmddHHMM}
+\NormalTok{Stra\_Ewater\_2020}\SpecialCharTok{$}\NormalTok{Date }\OtherTok{\textless{}{-}} \FunctionTok{as.POSIXct}\NormalTok{(}\FunctionTok{as.character}\NormalTok{(Stra\_Ewater\_2020[[}\StringTok{"Date"}\NormalTok{]]), }\AttributeTok{format =} \StringTok{"\%Y\%m\%d\%H\%M"}\NormalTok{)}
+
+
+\NormalTok{Tri\_Ewater\_2019}\SpecialCharTok{$}\NormalTok{Date }\OtherTok{\textless{}{-}}\NormalTok{ Tri\_Ewater\_2019}\SpecialCharTok{$}\NormalTok{YYYYmmddHHMM}
+\NormalTok{Tri\_Ewater\_2019}\SpecialCharTok{$}\NormalTok{Date }\OtherTok{\textless{}{-}} \FunctionTok{as.POSIXct}\NormalTok{(}\FunctionTok{as.character}\NormalTok{(Tri\_Ewater\_2019[[}\StringTok{"Date"}\NormalTok{]]), }\AttributeTok{format =} \StringTok{"\%Y\%m\%d\%H\%M"}\NormalTok{)}
+
+\NormalTok{Tri\_Ewater\_2020}\SpecialCharTok{$}\NormalTok{Date }\OtherTok{\textless{}{-}}\NormalTok{ Tri\_Ewater\_2020}\SpecialCharTok{$}\NormalTok{YYYYmmddHHMM}
+\NormalTok{Tri\_Ewater\_2020}\SpecialCharTok{$}\NormalTok{Date }\OtherTok{\textless{}{-}} \FunctionTok{as.POSIXct}\NormalTok{(}\FunctionTok{as.character}\NormalTok{(Tri\_Ewater\_2020[[}\StringTok{"Date"}\NormalTok{]]), }\AttributeTok{format =} \StringTok{"\%Y\%m\%d\%H\%M"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\#Converting given Half hour data to Average hourly and daily datasets
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\#Hourly data }
+
+\DocumentationTok{\#\#\#Stravoren}
+
+\NormalTok{Group1 }\OtherTok{\textless{}{-}} \FunctionTok{list}\NormalTok{(}\FunctionTok{rep}\NormalTok{(}\DecValTok{1}\SpecialCharTok{:}\NormalTok{(}\FunctionTok{nrow}\NormalTok{(Stra\_Ewater\_2019) }\SpecialCharTok{\%/\%} \DecValTok{2} \SpecialCharTok{+} \DecValTok{1}\NormalTok{), }\AttributeTok{each =} \DecValTok{2}\NormalTok{, }\AttributeTok{len =} \FunctionTok{nrow}\NormalTok{(Stra\_Ewater\_2019))) }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{unlist}\NormalTok{()}
+\NormalTok{Stra\_Ewater\_Hr2019 }\OtherTok{\textless{}{-}}\NormalTok{Stra\_Ewater\_2019 }\SpecialCharTok{\%\textgreater{}\%} 
+  \FunctionTok{mutate}\NormalTok{(}\AttributeTok{Group =}\NormalTok{ Group1) }\SpecialCharTok{\%\textgreater{}\%} 
+  \FunctionTok{group\_by}\NormalTok{(Group) }\SpecialCharTok{\%\textgreater{}\%} 
+  \FunctionTok{summarise\_each}\NormalTok{(}\FunctionTok{funs}\NormalTok{(}\FunctionTok{mean}\NormalTok{(., }\AttributeTok{na.rm =} \ConstantTok{TRUE}\NormalTok{)))}\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{mutate}\NormalTok{(}\AttributeTok{Hour =}  \FunctionTok{as.POSIXlt}\NormalTok{(Date)}\SpecialCharTok{$}\NormalTok{hour)   }\CommentTok{\#each hour value gives average value for that hour.}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Warning: `summarise_each_()` was deprecated in dplyr 0.7.0.
+## i Please use `across()` instead.
+## i The deprecated feature was likely used in the dplyr package.
+##   Please report the issue at <https://github.com/tidyverse/dplyr/issues>.
+\end{verbatim}
+
+\begin{verbatim}
+## Warning: `funs()` was deprecated in dplyr 0.8.0.
+## i Please use a list of either functions or lambdas:
+## 
+## # Simple named list: list(mean = mean, median = median)
+## 
+## # Auto named with `tibble::lst()`: tibble::lst(mean, median)
+## 
+## # Using lambdas list(~ mean(., trim = .2), ~ median(., na.rm = TRUE))
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{Group2 }\OtherTok{\textless{}{-}} \FunctionTok{list}\NormalTok{(}\FunctionTok{rep}\NormalTok{(}\DecValTok{1}\SpecialCharTok{:}\NormalTok{(}\FunctionTok{nrow}\NormalTok{(Stra\_Ewater\_2020) }\SpecialCharTok{\%/\%} \DecValTok{2} \SpecialCharTok{+} \DecValTok{1}\NormalTok{), }\AttributeTok{each =} \DecValTok{2}\NormalTok{, }\AttributeTok{len =} \FunctionTok{nrow}\NormalTok{(Stra\_Ewater\_2020))) }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{unlist}\NormalTok{()}
+\NormalTok{Stra\_Ewater\_Hr2020 }\OtherTok{\textless{}{-}}\NormalTok{Stra\_Ewater\_2020 }\SpecialCharTok{\%\textgreater{}\%} 
+  \FunctionTok{mutate}\NormalTok{(}\AttributeTok{Group =}\NormalTok{ Group2) }\SpecialCharTok{\%\textgreater{}\%} 
+  \FunctionTok{group\_by}\NormalTok{(Group) }\SpecialCharTok{\%\textgreater{}\%} 
+  \FunctionTok{summarise\_each}\NormalTok{(}\FunctionTok{funs}\NormalTok{(}\FunctionTok{mean}\NormalTok{(., }\AttributeTok{na.rm =} \ConstantTok{TRUE}\NormalTok{)))}\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{mutate}\NormalTok{(}\AttributeTok{Hour =}  \FunctionTok{as.POSIXlt}\NormalTok{(Date)}\SpecialCharTok{$}\NormalTok{hour)   }\CommentTok{\#each hour value gives average value for that hour.}
+
+\DocumentationTok{\#\#Trintelhaven}
+
+\NormalTok{Group3 }\OtherTok{\textless{}{-}} \FunctionTok{list}\NormalTok{(}\FunctionTok{rep}\NormalTok{(}\DecValTok{1}\SpecialCharTok{:}\NormalTok{(}\FunctionTok{nrow}\NormalTok{(Tri\_Ewater\_2019) }\SpecialCharTok{\%/\%} \DecValTok{2} \SpecialCharTok{+} \DecValTok{1}\NormalTok{), }\AttributeTok{each =} \DecValTok{2}\NormalTok{, }\AttributeTok{len =} \FunctionTok{nrow}\NormalTok{(Tri\_Ewater\_2019))) }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{unlist}\NormalTok{()}
+\NormalTok{Tri\_Ewater\_Hr2019 }\OtherTok{\textless{}{-}}\NormalTok{Tri\_Ewater\_2019 }\SpecialCharTok{\%\textgreater{}\%} 
+  \FunctionTok{mutate}\NormalTok{(}\AttributeTok{Group =}\NormalTok{ Group3) }\SpecialCharTok{\%\textgreater{}\%} 
+  \FunctionTok{group\_by}\NormalTok{(Group) }\SpecialCharTok{\%\textgreater{}\%} 
+  \FunctionTok{summarise\_each}\NormalTok{(}\FunctionTok{funs}\NormalTok{(}\FunctionTok{mean}\NormalTok{(., }\AttributeTok{na.rm =} \ConstantTok{TRUE}\NormalTok{)))}\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{mutate}\NormalTok{(}\AttributeTok{Hour =}  \FunctionTok{as.POSIXlt}\NormalTok{(Date)}\SpecialCharTok{$}\NormalTok{hour)   }\CommentTok{\#each hour value gives average value for that hour.}
+
+\NormalTok{Group4 }\OtherTok{\textless{}{-}} \FunctionTok{list}\NormalTok{(}\FunctionTok{rep}\NormalTok{(}\DecValTok{1}\SpecialCharTok{:}\NormalTok{(}\FunctionTok{nrow}\NormalTok{(Tri\_Ewater\_2020) }\SpecialCharTok{\%/\%} \DecValTok{2} \SpecialCharTok{+} \DecValTok{1}\NormalTok{), }\AttributeTok{each =} \DecValTok{2}\NormalTok{, }\AttributeTok{len =} \FunctionTok{nrow}\NormalTok{(Tri\_Ewater\_2020))) }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{unlist}\NormalTok{()}
+\NormalTok{Tri\_Ewater\_Hr2020 }\OtherTok{\textless{}{-}}\NormalTok{Tri\_Ewater\_2020 }\SpecialCharTok{\%\textgreater{}\%} 
+  \FunctionTok{mutate}\NormalTok{(}\AttributeTok{Group =}\NormalTok{ Group4) }\SpecialCharTok{\%\textgreater{}\%} 
+  \FunctionTok{group\_by}\NormalTok{(Group) }\SpecialCharTok{\%\textgreater{}\%} 
+  \FunctionTok{summarise\_each}\NormalTok{(}\FunctionTok{funs}\NormalTok{(}\FunctionTok{mean}\NormalTok{(., }\AttributeTok{na.rm =} \ConstantTok{TRUE}\NormalTok{)))}\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{mutate}\NormalTok{(}\AttributeTok{Hour =}  \FunctionTok{as.POSIXlt}\NormalTok{(Date)}\SpecialCharTok{$}\NormalTok{hour)   }\CommentTok{\#each hour value gives average value for that hour.}
+
+
+\CommentTok{\#Daily data}
+
+\DocumentationTok{\#\#\#Stravoren}
+\NormalTok{Stra\_Ewater\_Daily2019 }\OtherTok{\textless{}{-}}\NormalTok{ Stra\_Ewater\_Hr2019  }\SpecialCharTok{\%\textgreater{}\%} 
+  \FunctionTok{mutate}\NormalTok{(}\AttributeTok{Date=} \FunctionTok{as.Date}\NormalTok{(Date)) }\SpecialCharTok{\%\textgreater{}\%} 
+  \FunctionTok{group\_by}\NormalTok{(Date) }\SpecialCharTok{\%\textgreater{}\%} 
+  \FunctionTok{summarise\_each}\NormalTok{(}\FunctionTok{funs}\NormalTok{(}\FunctionTok{mean}\NormalTok{(., }\AttributeTok{na.rm =} \ConstantTok{TRUE}\NormalTok{)))}
+
+\NormalTok{Stra\_Ewater\_Daily2020 }\OtherTok{\textless{}{-}}\NormalTok{ Stra\_Ewater\_Hr2020  }\SpecialCharTok{\%\textgreater{}\%} 
+  \FunctionTok{mutate}\NormalTok{(}\AttributeTok{Date=} \FunctionTok{as.Date}\NormalTok{(Date)) }\SpecialCharTok{\%\textgreater{}\%} 
+  \FunctionTok{group\_by}\NormalTok{(Date) }\SpecialCharTok{\%\textgreater{}\%} 
+  \FunctionTok{summarise\_each}\NormalTok{(}\FunctionTok{funs}\NormalTok{(}\FunctionTok{mean}\NormalTok{(., }\AttributeTok{na.rm =} \ConstantTok{TRUE}\NormalTok{)))}
+
+\DocumentationTok{\#\#Trintelhaven}
+\NormalTok{Tri\_Ewater\_Daily2019 }\OtherTok{\textless{}{-}}\NormalTok{ Tri\_Ewater\_Hr2019  }\SpecialCharTok{\%\textgreater{}\%} 
+  \FunctionTok{mutate}\NormalTok{(}\AttributeTok{Date=} \FunctionTok{as.Date}\NormalTok{(Date)) }\SpecialCharTok{\%\textgreater{}\%} 
+  \FunctionTok{group\_by}\NormalTok{(Date) }\SpecialCharTok{\%\textgreater{}\%} 
+  \FunctionTok{summarise\_each}\NormalTok{(}\FunctionTok{funs}\NormalTok{(}\FunctionTok{mean}\NormalTok{(., }\AttributeTok{na.rm =} \ConstantTok{TRUE}\NormalTok{)))}
+
+\NormalTok{Tri\_Ewater\_Daily2020 }\OtherTok{\textless{}{-}}\NormalTok{ Tri\_Ewater\_Hr2020  }\SpecialCharTok{\%\textgreater{}\%} 
+  \FunctionTok{mutate}\NormalTok{(}\AttributeTok{Date=} \FunctionTok{as.Date}\NormalTok{(Date)) }\SpecialCharTok{\%\textgreater{}\%} 
+  \FunctionTok{group\_by}\NormalTok{(Date) }\SpecialCharTok{\%\textgreater{}\%} 
+  \FunctionTok{summarise\_each}\NormalTok{(}\FunctionTok{funs}\NormalTok{(}\FunctionTok{mean}\NormalTok{(., }\AttributeTok{na.rm =} \ConstantTok{TRUE}\NormalTok{)))}
+\end{Highlighting}
+\end{Shaded}
+
+\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#Evaporation estimation
+
+\#\#\#\#\#Direct method (from Latent Heat flux LE).
+
+E = LE/(rw*lv) (Considering this as observed Evaporation)\\
+(Reference: Moreo, M. T., \& Swancar, A. (2013). Evaporation from Lake
+Mead, Nevada and Arizona, March 2010 through February 2012. US
+Geological Survey Scientific Investigations Report, 5229, 40.)
+
+where: E = Evaporation (mm/time) (e.g.~Time = day or hour)
+
+LE = latent heat flux (W/m2) Normally latent heat flux is difficult to
+measure and requires eddy covariance flux towers which measure gradient
+in vertical wind speed and specific humidity. For more information about
+dataset used in this exercise please refer Jasen et al., (2021).
+
+Lv= Latent heat of vaporization (MJ/Kg) Note: Latent heat of
+vaporization varies only slightly over normal temperature ranges,
+therefore is mostly taken constant i.e.~2.45 MJ/kg (for T = 20C). There
+is also an equation to estimate latent heat of vaporization given by FAO
+(\url{https://www.fao.org/3/x0490e/x0490e0k.htm\#annex\%203.\%20background\%20on\%20physical\%20parameters\%20used\%20in\%20evapotranspiration\%20computatio}).
+I am using here constant value of 2.45 MJ/kg while looking at my data.
+
+rw= density of water (1000 kg/m3)
+
+\#Assumptions 1. The dataset used in this study has already been
+prepossessed by Jasen et al., (2021) so here we are not considering any
+additional corrections, filling gaps or data quality control techniques.
+
+\#\#Reference: Jansen, F. A., Uijlenhoet, R., Jacobs, C. M., \& Teuling,
+A. J. (2021). Evaporation from a large lowland reservoir--observed
+dynamics during a warm summer. Hydrology and Earth System Sciences
+Discussions, 1-28.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\#Defining variables and constants and conversions}
+\CommentTok{\#With LE and Lv in units of MJ m{-}2 T{-}1 and MJ kg{-}1, respectively, ET is in units of kg m{-}2 T{-}1 which is equal to depth of water in mm T{-}1 (T=time)}
+\CommentTok{\#Density of water (1000 kg/m3) was used during conversion of  kg m{-}2 T{-}1 to mm T{-}1.}
+\NormalTok{Lv }\OtherTok{\textless{}{-}} \FloatTok{2.45}   \CommentTok{\#(MJ/kg)  }
+\CommentTok{\#LE data is given in W/m2 so converting it to MJ m{-}2 T{-}1}
+
+\CommentTok{\#for daily Conversion}
+\CommentTok{\# 1 w/M2 = 1 J/sm2 = 1 J *86400 / day m2 = 86400*10\^{}{-}6 MJ/m2 day}
+
+\NormalTok{Stra\_Ewater\_Daily2019}\SpecialCharTok{$}\NormalTok{LE\_MJ }\OtherTok{\textless{}{-}}\NormalTok{ Stra\_Ewater\_Daily2019}\SpecialCharTok{$}\NormalTok{LE }\SpecialCharTok{*}\NormalTok{ (}\DecValTok{86400}\SpecialCharTok{*}\DecValTok{10}\SpecialCharTok{\^{}{-}}\DecValTok{6}\NormalTok{)}
+\NormalTok{Stra\_Eobs\_daily2019 }\OtherTok{\textless{}{-}} \FunctionTok{data.frame}\NormalTok{(}\AttributeTok{Date=} \FunctionTok{seq}\NormalTok{(}\FunctionTok{as.Date}\NormalTok{(}\StringTok{"2019{-}01{-}01"}\NormalTok{),}\AttributeTok{by=} \StringTok{"day"}\NormalTok{,}\AttributeTok{length.out=} \DecValTok{366}\NormalTok{),}
+                                  \AttributeTok{Evap\_obs=}\NormalTok{Stra\_Ewater\_Daily2019}\SpecialCharTok{$}\NormalTok{LE\_MJ}\SpecialCharTok{/}\NormalTok{Lv) }
+
+\NormalTok{Stra\_Ewater\_Daily2020}\SpecialCharTok{$}\NormalTok{LE\_MJ }\OtherTok{\textless{}{-}}\NormalTok{ Stra\_Ewater\_Daily2020}\SpecialCharTok{$}\NormalTok{LE }\SpecialCharTok{*}\NormalTok{ (}\DecValTok{86400}\SpecialCharTok{*}\DecValTok{10}\SpecialCharTok{\^{}{-}}\DecValTok{6}\NormalTok{)}
+\NormalTok{Stra\_Eobs\_daily2020 }\OtherTok{\textless{}{-}} \FunctionTok{data.frame}\NormalTok{(}\AttributeTok{Date=} \FunctionTok{seq}\NormalTok{(}\FunctionTok{as.Date}\NormalTok{(}\StringTok{"2020{-}01{-}01"}\NormalTok{),}\AttributeTok{by=} \StringTok{"day"}\NormalTok{,}\AttributeTok{length.out=} \DecValTok{367}\NormalTok{),}
+                                  \AttributeTok{Evap\_obs=}\NormalTok{Stra\_Ewater\_Daily2020}\SpecialCharTok{$}\NormalTok{LE\_MJ}\SpecialCharTok{/}\NormalTok{Lv)}
+
+\NormalTok{Tri\_Ewater\_Daily2019}\SpecialCharTok{$}\NormalTok{LE\_MJ }\OtherTok{\textless{}{-}}\NormalTok{ Tri\_Ewater\_Daily2019}\SpecialCharTok{$}\NormalTok{LE }\SpecialCharTok{*}\NormalTok{ (}\DecValTok{86400}\SpecialCharTok{*}\DecValTok{10}\SpecialCharTok{\^{}{-}}\DecValTok{6}\NormalTok{)}
+\NormalTok{Tri\_Eobs\_daily2019 }\OtherTok{\textless{}{-}} \FunctionTok{data.frame}\NormalTok{(}\AttributeTok{Date=} \FunctionTok{seq}\NormalTok{(}\FunctionTok{as.Date}\NormalTok{(}\StringTok{"2019{-}01{-}01"}\NormalTok{),}\AttributeTok{by=} \StringTok{"day"}\NormalTok{,}\AttributeTok{length.out=} \DecValTok{236}\NormalTok{),}
+                                  \AttributeTok{Evap\_obs=}\NormalTok{Tri\_Ewater\_Daily2019}\SpecialCharTok{$}\NormalTok{LE\_MJ}\SpecialCharTok{/}\NormalTok{Lv) }
+
+\NormalTok{Tri\_Ewater\_Daily2020}\SpecialCharTok{$}\NormalTok{LE\_MJ }\OtherTok{\textless{}{-}}\NormalTok{ Tri\_Ewater\_Daily2020}\SpecialCharTok{$}\NormalTok{LE }\SpecialCharTok{*}\NormalTok{ (}\DecValTok{86400}\SpecialCharTok{*}\DecValTok{10}\SpecialCharTok{\^{}{-}}\DecValTok{6}\NormalTok{)}
+\NormalTok{Tri\_Eobs\_daily2020 }\OtherTok{\textless{}{-}} \FunctionTok{data.frame}\NormalTok{(}\AttributeTok{Date=} \FunctionTok{seq}\NormalTok{(}\FunctionTok{as.Date}\NormalTok{(}\StringTok{"2020{-}01{-}01"}\NormalTok{),}\AttributeTok{by=} \StringTok{"day"}\NormalTok{,}\AttributeTok{length.out=} \DecValTok{236}\NormalTok{),}
+                                  \AttributeTok{Evap\_obs=}\NormalTok{Tri\_Ewater\_Daily2020}\SpecialCharTok{$}\NormalTok{LE\_MJ}\SpecialCharTok{/}\NormalTok{Lv)}
+
+\CommentTok{\#For hourly Conversion}
+\CommentTok{\# 1 w/M2 = 1 J/s m2 = 1 J *3600 / hr m2 = 3600*10\^{}{-}6 MJ/m2 hr}
+
+\NormalTok{Stra\_Ewater\_Hr2019}\SpecialCharTok{$}\NormalTok{LE\_MJ }\OtherTok{\textless{}{-}}\NormalTok{ Stra\_Ewater\_Hr2019}\SpecialCharTok{$}\NormalTok{LE }\SpecialCharTok{*}\NormalTok{ (}\DecValTok{3600}\SpecialCharTok{*}\DecValTok{10}\SpecialCharTok{\^{}{-}}\DecValTok{6}\NormalTok{)}
+\NormalTok{Stra\_Eobs\_Hr2019 }\OtherTok{\textless{}{-}}\NormalTok{ Stra\_Ewater\_Hr2019}\SpecialCharTok{$}\NormalTok{LE\_MJ}\SpecialCharTok{/}\NormalTok{Lv}
+
+\NormalTok{Stra\_Ewater\_Hr2020}\SpecialCharTok{$}\NormalTok{LE\_MJ }\OtherTok{\textless{}{-}}\NormalTok{ Stra\_Ewater\_Hr2020}\SpecialCharTok{$}\NormalTok{LE }\SpecialCharTok{*}\NormalTok{ (}\DecValTok{3600}\SpecialCharTok{*}\DecValTok{10}\SpecialCharTok{\^{}{-}}\DecValTok{6}\NormalTok{)}
+\NormalTok{Stra\_Eobs\_Hr2020 }\OtherTok{\textless{}{-}}\NormalTok{ Stra\_Ewater\_Hr2020}\SpecialCharTok{$}\NormalTok{LE\_MJ}\SpecialCharTok{/}\NormalTok{Lv}
+
+\NormalTok{Tri\_Ewater\_Hr2019}\SpecialCharTok{$}\NormalTok{LE\_MJ }\OtherTok{\textless{}{-}}\NormalTok{ Tri\_Ewater\_Hr2019}\SpecialCharTok{$}\NormalTok{LE }\SpecialCharTok{*}\NormalTok{ (}\DecValTok{3600}\SpecialCharTok{*}\DecValTok{10}\SpecialCharTok{\^{}{-}}\DecValTok{6}\NormalTok{)}
+\NormalTok{Tri\_Eobs\_Hr2019 }\OtherTok{\textless{}{-}}\NormalTok{ Tri\_Ewater\_Hr2019}\SpecialCharTok{$}\NormalTok{LE\_MJ}\SpecialCharTok{/}\NormalTok{Lv}
+
+\NormalTok{Tri\_Ewater\_Hr2020}\SpecialCharTok{$}\NormalTok{LE\_MJ }\OtherTok{\textless{}{-}}\NormalTok{ Tri\_Ewater\_Hr2020}\SpecialCharTok{$}\NormalTok{LE }\SpecialCharTok{*}\NormalTok{ (}\DecValTok{3600}\SpecialCharTok{*}\DecValTok{10}\SpecialCharTok{\^{}{-}}\DecValTok{6}\NormalTok{)}
+\NormalTok{Tri\_Eobs\_Hr2020 }\OtherTok{\textless{}{-}}\NormalTok{ Tri\_Ewater\_Hr2020}\SpecialCharTok{$}\NormalTok{LE\_MJ}\SpecialCharTok{/}\NormalTok{Lv}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{here-we-need-data-from-both-ewater-and-initial-datasets-and-for-dates-when-data-in-both-data-sets-is-available.}{%
+\subsubsection{Here We need data from both (Ewater and initial datasets)
+and for dates when data in both data sets is
+available.}\label{here-we-need-data-from-both-ewater-and-initial-datasets-and-for-dates-when-data-in-both-data-sets-is-available.}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{Summer\_Stra\_Daily2019 }\OtherTok{\textless{}{-}}\FunctionTok{merge}\NormalTok{(Sta\_daily\_2019,Stra\_Ewater\_Daily2019,}\AttributeTok{by=} \StringTok{"Date"}\NormalTok{)}
+\CommentTok{\#Remove some extra columns. Here I am mainly considering Ewater data as preference}
+\NormalTok{Summer\_Stra\_Daily2019 }\OtherTok{\textless{}{-}}\NormalTok{ Summer\_Stra\_Daily2019 [, }\SpecialCharTok{{-}}\FunctionTok{which}\NormalTok{(}\FunctionTok{names}\NormalTok{(Summer\_Stra\_Daily2019) }\SpecialCharTok{\%in\%} \FunctionTok{c}\NormalTok{(}\StringTok{"LE.x"}\NormalTok{,}\StringTok{"u"}\NormalTok{,}\StringTok{"Group"}\NormalTok{,}\StringTok{"YYYYmmddHHMM"}\NormalTok{,}\StringTok{"Hour"}\NormalTok{))]}
+
+\NormalTok{Summer\_Stra\_Daily2020 }\OtherTok{\textless{}{-}}\FunctionTok{merge}\NormalTok{(Sta\_daily\_2020,Stra\_Ewater\_Daily2020,}\AttributeTok{by=} \StringTok{"Date"}\NormalTok{)}
+\CommentTok{\#Remove some extra columns. Here I am mainly considering Ewater data as preference}
+\NormalTok{Summer\_Stra\_Daily2020 }\OtherTok{\textless{}{-}}\NormalTok{ Summer\_Stra\_Daily2020 [, }\SpecialCharTok{{-}}\FunctionTok{which}\NormalTok{(}\FunctionTok{names}\NormalTok{(Summer\_Stra\_Daily2020) }\SpecialCharTok{\%in\%} \FunctionTok{c}\NormalTok{(}\StringTok{"LE.x"}\NormalTok{,}\StringTok{"u"}\NormalTok{,}\StringTok{"Group"}\NormalTok{,}\StringTok{"YYYYmmddHHMM"}\NormalTok{,}\StringTok{"Hour"}\NormalTok{))]}
+
+\NormalTok{Summer\_Tri\_Daily2019 }\OtherTok{\textless{}{-}}\FunctionTok{merge}\NormalTok{(Tri\_daily\_2019,Tri\_Ewater\_Daily2019,}\AttributeTok{by=} \StringTok{"Date"}\NormalTok{)}
+\CommentTok{\#Remove some extra columns. Here I am mainly considering Ewater data as preference}
+\NormalTok{Summer\_Tri\_Daily2019 }\OtherTok{\textless{}{-}}\NormalTok{ Summer\_Tri\_Daily2019 [, }\SpecialCharTok{{-}}\FunctionTok{which}\NormalTok{(}\FunctionTok{names}\NormalTok{(Summer\_Tri\_Daily2019) }\SpecialCharTok{\%in\%} \FunctionTok{c}\NormalTok{(}\StringTok{"LE.x"}\NormalTok{,}\StringTok{"u"}\NormalTok{,}\StringTok{"Group"}\NormalTok{,}\StringTok{"YYYYmmddHHMM"}\NormalTok{,}\StringTok{"Hour"}\NormalTok{))]}
+
+\NormalTok{Summer\_Tri\_Daily2020 }\OtherTok{\textless{}{-}}\FunctionTok{merge}\NormalTok{(Tri\_daily\_2020,Stra\_Ewater\_Daily2020,}\AttributeTok{by=} \StringTok{"Date"}\NormalTok{)}
+\CommentTok{\#Remove some extra columns. Here I am mainly considering Ewater data as preference}
+\NormalTok{Summer\_Tri\_Daily2020 }\OtherTok{\textless{}{-}}\NormalTok{ Summer\_Tri\_Daily2020 [, }\SpecialCharTok{{-}}\FunctionTok{which}\NormalTok{(}\FunctionTok{names}\NormalTok{(Summer\_Tri\_Daily2020) }\SpecialCharTok{\%in\%} \FunctionTok{c}\NormalTok{(}\StringTok{"LE.x"}\NormalTok{,}\StringTok{"u"}\NormalTok{,}\StringTok{"Group"}\NormalTok{,}\StringTok{"YYYYmmddHHMM"}\NormalTok{,}\StringTok{"Hour"}\NormalTok{))]}
+\end{Highlighting}
+\end{Shaded}
+
+I am creating dataframes with respect to year and location where
+evaporation (mm/T) from different models will populate. I am here only
+focusing summer months and daily evaporation:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\DocumentationTok{\#\#Stavoren station}
+
+\NormalTok{Stra\_Evap\_Daily\_2019 }\OtherTok{\textless{}{-}} \FunctionTok{data.frame}\NormalTok{(}\StringTok{\textquotesingle{}Date\textquotesingle{}} \OtherTok{=}\NormalTok{ Summer\_Stra\_Daily2019}\SpecialCharTok{$}\NormalTok{Date)}
+\NormalTok{Stra\_Evap\_Daily\_2020 }\OtherTok{\textless{}{-}} \FunctionTok{data.frame}\NormalTok{(}\StringTok{\textquotesingle{}Date\textquotesingle{}} \OtherTok{=}\NormalTok{ Summer\_Stra\_Daily2020}\SpecialCharTok{$}\NormalTok{Date)}
+
+\DocumentationTok{\#\#Trintelhaven station}
+
+\NormalTok{Tri\_Evap\_Daily\_2019 }\OtherTok{\textless{}{-}} \FunctionTok{data.frame}\NormalTok{ (}\StringTok{\textquotesingle{}Date\textquotesingle{}} \OtherTok{=}\NormalTok{ Summer\_Tri\_Daily2019}\SpecialCharTok{$}\NormalTok{Date)}
+\NormalTok{Tri\_Evap\_Daily\_2020 }\OtherTok{\textless{}{-}} \FunctionTok{data.frame}\NormalTok{ (}\StringTok{\textquotesingle{}Date\textquotesingle{}} \OtherTok{=}\NormalTok{ Summer\_Tri\_Daily2020}\SpecialCharTok{$}\NormalTok{Date)}
+\end{Highlighting}
+\end{Shaded}
+
+\#\#\#\#\#\#\#\#\#11. Bulk transfer approach:
+
+E = Ce * rW * U * (qs - qair)
+
+Benefit: The main practical advantage of this mass-transfer approach,
+usually with a constant-known coefficient Ce, lies in the fact that it
+can be applied on a routine basis with regular and easily obtainable
+data of mean wind speed, water surface temperature and humidity of the
+air ((Brutsaert, 2005))
+
+E = Evaporation (mm/time) Ce = Water vapor transfer coefficient. Here we
+are talking Ce = 1.2*10\^{}(-3) as constant (refer brutsaert for further
+details about this constant). u = wind speed (m/s) rw= density of water
+(1000 kg/m3) qs = specific humidity at the water surface qair = specific
+humidity in air
+
+\#\#Reference Brutsaert,W.(2005). Hydrology : an introduction.United
+Kingdom:Cambridge University Press. Refer: section 4.2.2.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{Ce }\OtherTok{\textless{}{-}} \FloatTok{1.2}\SpecialCharTok{*}\DecValTok{10}\SpecialCharTok{\^{}}\NormalTok{(}\SpecialCharTok{{-}}\DecValTok{3}\NormalTok{)}
+\NormalTok{rw }\OtherTok{\textless{}{-}} \DecValTok{1000} \CommentTok{\#(kg/m3)}
+
+
+\CommentTok{\# calculating specific humidity of air and water from temperatures (air and water)}
+ 
+\CommentTok{\#vapor pressures are in Kpa}
+
+\CommentTok{\#Formula : saturated vapor pressure  e = 0.611 \^{} \{(17.27 * T)/(273.3 + T)\}}
+
+\DocumentationTok{\#\#\#\#\#\#\#\#\#\#\#\#air}
+
+\NormalTok{esat\_air\_Stra2019 }\OtherTok{\textless{}{-}} \FloatTok{0.611}\SpecialCharTok{\^{}}\NormalTok{((}\FloatTok{17.27}\SpecialCharTok{*}\NormalTok{Summer\_Stra\_Daily2019}\SpecialCharTok{$}\NormalTok{Tair)}\SpecialCharTok{/}\NormalTok{(}\FloatTok{237.3}\SpecialCharTok{+}\NormalTok{Summer\_Stra\_Daily2019}\SpecialCharTok{$}\NormalTok{Tair))}
+\NormalTok{esat\_air\_Stra2020 }\OtherTok{\textless{}{-}} \FloatTok{0.611}\SpecialCharTok{\^{}}\NormalTok{((}\FloatTok{17.27}\SpecialCharTok{*}\NormalTok{Summer\_Stra\_Daily2020}\SpecialCharTok{$}\NormalTok{Tair)}\SpecialCharTok{/}\NormalTok{(}\FloatTok{237.3}\SpecialCharTok{+}\NormalTok{Summer\_Stra\_Daily2020}\SpecialCharTok{$}\NormalTok{Tair))}
+
+\NormalTok{esat\_air\_Tri2019 }\OtherTok{\textless{}{-}} \FloatTok{0.611}\SpecialCharTok{\^{}}\NormalTok{((}\FloatTok{17.27}\SpecialCharTok{*}\NormalTok{Summer\_Tri\_Daily2019}\SpecialCharTok{$}\NormalTok{Tair)}\SpecialCharTok{/}\NormalTok{(}\FloatTok{237.3}\SpecialCharTok{+}\NormalTok{Summer\_Tri\_Daily2019}\SpecialCharTok{$}\NormalTok{Tair))}
+\NormalTok{esat\_air\_Tri2020 }\OtherTok{\textless{}{-}} \FloatTok{0.611}\SpecialCharTok{\^{}}\NormalTok{((}\FloatTok{17.27}\SpecialCharTok{*}\NormalTok{Summer\_Tri\_Daily2020}\SpecialCharTok{$}\NormalTok{Tair)}\SpecialCharTok{/}\NormalTok{(}\FloatTok{237.3}\SpecialCharTok{+}\NormalTok{Summer\_Tri\_Daily2020}\SpecialCharTok{$}\NormalTok{Tair))}
+
+\CommentTok{\#Vapor pressure : e = esat *(Rh/100) }
+\CommentTok{\#Rh= Relative humidity (\%)}
+
+\NormalTok{e\_air\_Stra2019 }\OtherTok{\textless{}{-}}\NormalTok{ esat\_air\_Stra2019 }\SpecialCharTok{*}\NormalTok{ (Summer\_Stra\_Daily2019}\SpecialCharTok{$}\NormalTok{RH }\SpecialCharTok{/}\DecValTok{100}\NormalTok{)}
+\NormalTok{e\_air\_Stra2020 }\OtherTok{\textless{}{-}}\NormalTok{ esat\_air\_Stra2020 }\SpecialCharTok{*}\NormalTok{ (Summer\_Stra\_Daily2020}\SpecialCharTok{$}\NormalTok{RH }\SpecialCharTok{/}\DecValTok{100}\NormalTok{)}
+\NormalTok{e\_air\_Tri2019 }\OtherTok{\textless{}{-}}\NormalTok{ esat\_air\_Tri2019 }\SpecialCharTok{*}\NormalTok{ (Summer\_Tri\_Daily2019}\SpecialCharTok{$}\NormalTok{RH }\SpecialCharTok{/}\DecValTok{100}\NormalTok{)}
+\NormalTok{e\_air\_Tri2020 }\OtherTok{\textless{}{-}}\NormalTok{ esat\_air\_Tri2020 }\SpecialCharTok{*}\NormalTok{ (Summer\_Tri\_Daily2020}\SpecialCharTok{$}\NormalTok{RH }\SpecialCharTok{/}\DecValTok{100}\NormalTok{)}
+
+\CommentTok{\#Specific humidity q = 0.622 * (e/p) }
+\CommentTok{\# p = atmospheric pressure (101 kpa)}
+
+\NormalTok{p }\OtherTok{\textless{}{-}} \FloatTok{101.32} \CommentTok{\#(Kpa)}
+
+\NormalTok{q\_air\_Stra2019 }\OtherTok{\textless{}{-}} \FloatTok{0.622} \SpecialCharTok{*}\NormalTok{ (e\_air\_Stra2019}\SpecialCharTok{/}\NormalTok{p)}
+\NormalTok{q\_air\_Stra2020 }\OtherTok{\textless{}{-}} \FloatTok{0.622} \SpecialCharTok{*}\NormalTok{ (e\_air\_Stra2020}\SpecialCharTok{/}\NormalTok{p)}
+
+\NormalTok{q\_air\_Tri2019 }\OtherTok{\textless{}{-}} \FloatTok{0.622} \SpecialCharTok{*}\NormalTok{ (e\_air\_Tri2019}\SpecialCharTok{/}\NormalTok{p)}
+\NormalTok{q\_air\_Tri2020 }\OtherTok{\textless{}{-}} \FloatTok{0.622} \SpecialCharTok{*}\NormalTok{ (e\_air\_Tri2020}\SpecialCharTok{/}\NormalTok{p)}
+
+\DocumentationTok{\#\#\#\#\#\#\#\#\#\#\#\#Water}
+
+
+\NormalTok{esat\_water\_Stra2019 }\OtherTok{\textless{}{-}} \FloatTok{0.611}\SpecialCharTok{\^{}}\NormalTok{((}\FloatTok{17.27}\SpecialCharTok{*}\NormalTok{Summer\_Stra\_Daily2019}\SpecialCharTok{$}\NormalTok{Twater)}\SpecialCharTok{/}\NormalTok{(}\FloatTok{237.3}\SpecialCharTok{+}\NormalTok{Summer\_Stra\_Daily2019}\SpecialCharTok{$}\NormalTok{Twater))}
+\NormalTok{esat\_water\_Stra2020 }\OtherTok{\textless{}{-}} \FloatTok{0.611}\SpecialCharTok{\^{}}\NormalTok{((}\FloatTok{17.27}\SpecialCharTok{*}\NormalTok{Summer\_Stra\_Daily2020}\SpecialCharTok{$}\NormalTok{Twater)}\SpecialCharTok{/}\NormalTok{(}\FloatTok{237.3}\SpecialCharTok{+}\NormalTok{Summer\_Stra\_Daily2020}\SpecialCharTok{$}\NormalTok{Twater))}
+
+\NormalTok{esat\_water\_Tri2019 }\OtherTok{\textless{}{-}} \FloatTok{0.611}\SpecialCharTok{\^{}}\NormalTok{((}\FloatTok{17.27}\SpecialCharTok{*}\NormalTok{Summer\_Tri\_Daily2019}\SpecialCharTok{$}\NormalTok{Twater)}\SpecialCharTok{/}\NormalTok{(}\FloatTok{237.3}\SpecialCharTok{+}\NormalTok{Summer\_Tri\_Daily2019}\SpecialCharTok{$}\NormalTok{Twater))}
+\NormalTok{esat\_water\_Tri2020 }\OtherTok{\textless{}{-}} \FloatTok{0.611}\SpecialCharTok{\^{}}\NormalTok{((}\FloatTok{17.27}\SpecialCharTok{*}\NormalTok{Summer\_Tri\_Daily2020}\SpecialCharTok{$}\NormalTok{Twater)}\SpecialCharTok{/}\NormalTok{(}\FloatTok{237.3}\SpecialCharTok{+}\NormalTok{Summer\_Tri\_Daily2020}\SpecialCharTok{$}\NormalTok{Twater))}
+
+\CommentTok{\# For water.... saturated vapor pressure equals to vapor pressure}
+
+\NormalTok{q\_water\_Stra2019 }\OtherTok{\textless{}{-}} \FloatTok{0.622} \SpecialCharTok{*}\NormalTok{ (esat\_water\_Stra2019}\SpecialCharTok{/}\NormalTok{p)}
+\NormalTok{q\_water\_Stra2020 }\OtherTok{\textless{}{-}} \FloatTok{0.622} \SpecialCharTok{*}\NormalTok{ (esat\_water\_Stra2020}\SpecialCharTok{/}\NormalTok{p)}
+
+\NormalTok{q\_water\_Tri2019 }\OtherTok{\textless{}{-}} \FloatTok{0.622} \SpecialCharTok{*}\NormalTok{ (esat\_water\_Tri2019}\SpecialCharTok{/}\NormalTok{p)}
+\NormalTok{q\_water\_Tri2020 }\OtherTok{\textless{}{-}} \FloatTok{0.622} \SpecialCharTok{*}\NormalTok{ (esat\_water\_Tri2020}\SpecialCharTok{/}\NormalTok{p)}
+
+\CommentTok{\#Evaporation }
+\CommentTok{\#Density of water (1000 kg/m3) was used during conversion of  kg m{-}2 T{-}1 to mm T{-}1.}
+\CommentTok{\#U is in m/s so covert in m/day by multiplying 60*60*24 =86400}
+
+\CommentTok{\#E \textless{}{-} Ce * U * (qs {-} qair) * 86400}
+
+\NormalTok{Stra\_Evap\_Daily\_2019}\SpecialCharTok{$}\NormalTok{E\_BT }\OtherTok{\textless{}{-}}\NormalTok{ Ce }\SpecialCharTok{*}\NormalTok{ Summer\_Stra\_Daily2019}\SpecialCharTok{$}\NormalTok{wind\_speed}\SpecialCharTok{*}\NormalTok{ (q\_water\_Stra2019 }\SpecialCharTok{{-}}\NormalTok{ q\_air\_Stra2019) }\SpecialCharTok{*} \DecValTok{86400}
+\NormalTok{Stra\_Evap\_Daily\_2020}\SpecialCharTok{$}\NormalTok{E\_BT }\OtherTok{\textless{}{-}}\NormalTok{ Ce }\SpecialCharTok{*}\NormalTok{ Summer\_Stra\_Daily2020}\SpecialCharTok{$}\NormalTok{wind\_speed}\SpecialCharTok{*}\NormalTok{ (q\_water\_Stra2020 }\SpecialCharTok{{-}}\NormalTok{ q\_air\_Stra2020) }\SpecialCharTok{*} \DecValTok{86400}
+
+\NormalTok{Tri\_Evap\_Daily\_2019}\SpecialCharTok{$}\NormalTok{E\_BT }\OtherTok{\textless{}{-}}\NormalTok{ Ce }\SpecialCharTok{*}\NormalTok{ Summer\_Tri\_Daily2019}\SpecialCharTok{$}\NormalTok{wind\_speed}\SpecialCharTok{*}\NormalTok{ (q\_water\_Tri2019 }\SpecialCharTok{{-}}\NormalTok{ q\_air\_Tri2019) }\SpecialCharTok{*} \DecValTok{86400}
+\NormalTok{Tri\_Evap\_Daily\_2020}\SpecialCharTok{$}\NormalTok{E\_BT }\OtherTok{\textless{}{-}}\NormalTok{ Ce }\SpecialCharTok{*}\NormalTok{ Summer\_Tri\_Daily2020}\SpecialCharTok{$}\NormalTok{wind\_speed}\SpecialCharTok{*}\NormalTok{ (q\_water\_Tri2020 }\SpecialCharTok{{-}}\NormalTok{ q\_air\_Tri2020) }\SpecialCharTok{*} \DecValTok{86400}
+\end{Highlighting}
+\end{Shaded}
+
+\#Joining observed and estimated datasets
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{Stra\_Evap\_Daily\_2019 }\OtherTok{\textless{}{-}}\NormalTok{ Stra\_Evap\_Daily\_2019 }\SpecialCharTok{\%\textgreater{}\%} 
+  \FunctionTok{inner\_join}\NormalTok{(.,Stra\_Eobs\_daily2019,}\AttributeTok{by=}\StringTok{"Date"}\NormalTok{)}
+
+\NormalTok{Stra\_Evap\_Daily\_2020 }\OtherTok{\textless{}{-}}\NormalTok{ Stra\_Evap\_Daily\_2020 }\SpecialCharTok{\%\textgreater{}\%} 
+  \FunctionTok{inner\_join}\NormalTok{(.,Stra\_Eobs\_daily2020,}\AttributeTok{by=}\StringTok{"Date"}\NormalTok{)}
+
+\NormalTok{Tri\_Evap\_Daily\_2019 }\OtherTok{\textless{}{-}}\NormalTok{ Tri\_Evap\_Daily\_2019 }\SpecialCharTok{\%\textgreater{}\%} 
+  \FunctionTok{inner\_join}\NormalTok{(.,Tri\_Eobs\_daily2019,}\AttributeTok{by=}\StringTok{"Date"}\NormalTok{)}
+
+\NormalTok{Tri\_Evap\_Daily\_2020 }\OtherTok{\textless{}{-}}\NormalTok{ Tri\_Evap\_Daily\_2020 }\SpecialCharTok{\%\textgreater{}\%} 
+  \FunctionTok{inner\_join}\NormalTok{(.,Tri\_Eobs\_daily2020,}\AttributeTok{by=}\StringTok{"Date"}\NormalTok{) }
+\end{Highlighting}
+\end{Shaded}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Bowen-Ratio Energy Budget
+\end{enumerate}
+
+\#Formula\\
+E = Q\_ne/(1+B)
+
+Q\_ne = Q/Lv
+
+B= cp\emph{(θ1 -θ2)/ (Lv } (q1-q2))
+
+cp = specific head of water θ = Potential temperature. According to
+Brutsaert,W.(2005) : ``The difference between T and θ is usually rather
+small, especially in the lower layers of the air near the ground
+surface, where most measurements are made. Therefore in many situations,
+when the height difference of the temperature measurements is only a few
+meters, the use of the actual temperature T is allowed; otherwise θ must
+be used in heat transfer formulations''
+
+So: B= cp\emph{(T1 -T2)/ (Lv } (q1-q2))
+
+\#Assumptions \#\#1. The energy transfer coefficients for latent heat
+and sensible heat fluxes are equal\{1\}. \#\#2. A basic criterion of
+this method is that the air temperature and water vapor pressure are
+measured (above an evaporating surface) at such heights that the
+horizontal gradient of air temperature and water vapor pressure can be
+neglected \{1\}. \#\#3.The equality assumption (coefficients for latent
+heat = coefficients for sensible heat) has been proven to be valid for a
+range of field and vegetation surfaces in various climates. But not
+valid for some heterogeneous vegetation surfaces \{1\}
+
+``It should be clearly noted that, although Lake IJssel is a lake that
+is several metres deep, we have neglected G in the following analyses
+for the following two reasons: (1) we were not able to measure it, and
+(2) we wished to adhere to how Penman's equation is typically employed
+for shallow water surfaces'' (Jasen et al., (2021))
+
+\#\#Reference: \{1\} Irmak, S., Skaggs, K. E., \& Chatterjee, S. (2014).
+A review of the Bowen ratio surface energy balance method for
+quantifying evapo-transpiration and other energy fluxes. Transactions of
+the ASABE, 57(6), 1657-1674.
+
+Jansen, F. A., Uijlenhoet, R., Jacobs, C. M., \& Teuling, A. J. (2021).
+Evaporation from a large lowland reservoir--observed dynamics during a
+warm summer. Hydrology and Earth System Sciences Discussions, 1-28.
+
+Brutsaert,W.(2005). Hydrology : an introduction.United Kingdom:Cambridge
+University Press.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{cp  }\OtherTok{=} \DecValTok{4182}   \CommentTok{\#j/kg C  at 20C of water}
+\NormalTok{Lv1 }\OtherTok{=} \DecValTok{2450000}  \CommentTok{\#J/kg}
+
+\NormalTok{B\_Stra\_2019 }\OtherTok{=}\NormalTok{ cp}\SpecialCharTok{*}\NormalTok{(Summer\_Stra\_Daily2019}\SpecialCharTok{$}\NormalTok{Twater }\SpecialCharTok{{-}}\NormalTok{Summer\_Stra\_Daily2019}\SpecialCharTok{$}\NormalTok{Tair)}\SpecialCharTok{/}\NormalTok{ (Lv1 }\SpecialCharTok{*}\NormalTok{ (q\_water\_Stra2019}\SpecialCharTok{{-}}\NormalTok{q\_air\_Stra2019))}
+\NormalTok{B\_Stra\_2020 }\OtherTok{=}\NormalTok{ cp}\SpecialCharTok{*}\NormalTok{(Summer\_Stra\_Daily2020}\SpecialCharTok{$}\NormalTok{Twater }\SpecialCharTok{{-}}\NormalTok{Summer\_Stra\_Daily2020}\SpecialCharTok{$}\NormalTok{Tair)}\SpecialCharTok{/}\NormalTok{ (Lv1 }\SpecialCharTok{*}\NormalTok{ (q\_water\_Stra2020}\SpecialCharTok{{-}}\NormalTok{q\_air\_Stra2020))}
+
+\NormalTok{B\_Tri\_2019 }\OtherTok{=}\NormalTok{ cp}\SpecialCharTok{*}\NormalTok{(Summer\_Tri\_Daily2019}\SpecialCharTok{$}\NormalTok{Twater }\SpecialCharTok{{-}}\NormalTok{Summer\_Tri\_Daily2019}\SpecialCharTok{$}\NormalTok{Tair)}\SpecialCharTok{/}\NormalTok{ (Lv1 }\SpecialCharTok{*}\NormalTok{ (q\_water\_Tri2019}\SpecialCharTok{{-}}\NormalTok{q\_air\_Tri2019))}
+\NormalTok{B\_Tri\_2020 }\OtherTok{=}\NormalTok{ cp}\SpecialCharTok{*}\NormalTok{(Summer\_Tri\_Daily2020}\SpecialCharTok{$}\NormalTok{Twater }\SpecialCharTok{{-}}\NormalTok{Summer\_Tri\_Daily2020}\SpecialCharTok{$}\NormalTok{Tair)}\SpecialCharTok{/}\NormalTok{ (Lv1 }\SpecialCharTok{*}\NormalTok{ (q\_water\_Tri2020}\SpecialCharTok{{-}}\NormalTok{q\_air\_Tri2020))}
+
+\NormalTok{Lv }\OtherTok{\textless{}{-}} \FloatTok{2.45}   \CommentTok{\#(MJ/kg) }
+\CommentTok{\#Q\_ne = Q/lv    where q is in W/m2 and Lv is in Mj/kg.}
+\CommentTok{\# 1 w/M2 = 1 J/sm2 = 1 J *86400 / day m2 = 86400*10\^{}{-}6 MJ/m2 day}
+\CommentTok{\#With Q and Lv in units of MJ m{-}2 d{-}1 and MJ kg{-}1, respectively, ET is in units of kg m{-}2 d{-}1 which is equal to depth of water in mm d{-}1 (d=day)}
+\NormalTok{Q\_ne\_Stra\_19 }\OtherTok{=}\NormalTok{ Summer\_Stra\_Daily2019}\SpecialCharTok{$}\NormalTok{Kin }\SpecialCharTok{*}\NormalTok{(}\DecValTok{86400}\SpecialCharTok{*}\DecValTok{10}\SpecialCharTok{\^{}{-}}\DecValTok{6}\NormalTok{)}\SpecialCharTok{/}\NormalTok{Lv}
+\NormalTok{Q\_ne\_Stra\_20 }\OtherTok{=}\NormalTok{ Summer\_Stra\_Daily2020}\SpecialCharTok{$}\NormalTok{Kin }\SpecialCharTok{*}\NormalTok{(}\DecValTok{86400}\SpecialCharTok{*}\DecValTok{10}\SpecialCharTok{\^{}{-}}\DecValTok{6}\NormalTok{)}\SpecialCharTok{/}\NormalTok{Lv}
+
+\NormalTok{Q\_ne\_Tri\_19 }\OtherTok{=}\NormalTok{ Summer\_Tri\_Daily2019}\SpecialCharTok{$}\NormalTok{Kin }\SpecialCharTok{*}\NormalTok{(}\DecValTok{86400}\SpecialCharTok{*}\DecValTok{10}\SpecialCharTok{\^{}{-}}\DecValTok{6}\NormalTok{)}\SpecialCharTok{/}\NormalTok{Lv}
+\NormalTok{Q\_ne\_Tri\_20 }\OtherTok{=}\NormalTok{ Summer\_Tri\_Daily2020}\SpecialCharTok{$}\NormalTok{Kin }\SpecialCharTok{*}\NormalTok{(}\DecValTok{86400}\SpecialCharTok{*}\DecValTok{10}\SpecialCharTok{\^{}{-}}\DecValTok{6}\NormalTok{)}\SpecialCharTok{/}\NormalTok{Lv}
+
+
+\CommentTok{\# Evaporation in mm/d}
+
+\NormalTok{Stra\_Evap\_Daily\_2019}\SpecialCharTok{$}\NormalTok{E\_BR }\OtherTok{\textless{}{-}}\NormalTok{ Q\_ne\_Stra\_19 }\SpecialCharTok{/}\NormalTok{(}\DecValTok{1}\SpecialCharTok{+}\NormalTok{B\_Stra\_2019)}
+\NormalTok{Stra\_Evap\_Daily\_2020}\SpecialCharTok{$}\NormalTok{E\_BR }\OtherTok{\textless{}{-}}\NormalTok{ Q\_ne\_Stra\_20 }\SpecialCharTok{/}\NormalTok{(}\DecValTok{1}\SpecialCharTok{+}\NormalTok{B\_Stra\_2020)}
+\NormalTok{Tri\_Evap\_Daily\_2019}\SpecialCharTok{$}\NormalTok{E\_BR }\OtherTok{\textless{}{-}}\NormalTok{ Q\_ne\_Tri\_19}\SpecialCharTok{/}\NormalTok{(}\DecValTok{1}\SpecialCharTok{+}\NormalTok{B\_Tri\_2019)}
+\NormalTok{Tri\_Evap\_Daily\_2020}\SpecialCharTok{$}\NormalTok{E\_BR }\OtherTok{\textless{}{-}}\NormalTok{ Q\_ne\_Tri\_20}\SpecialCharTok{/}\NormalTok{(}\DecValTok{1}\SpecialCharTok{+}\NormalTok{B\_Tri\_2020)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{1}
+\tightlist
+\item
+  Penman Method\\
+  \#Assumptions ``When the surface is wet, the surface specific humidity
+  may be assumed to be the saturation value at the surface temperature,
+  i.e.~qs = q∗ (Ts). This allows an approximation, first introduced by
+  Penman (1948) and given in Equation (4.20) below; the main advantage
+  of this approximation is that it eliminates the need for measurements
+  of q, u and θ at two levels, as in the profile methods (Section 4.2.2)
+  and standard energy budget methods (Section 4.3.1) and that
+  measurements at one level suffice'' (Brutsaert, 2005)
+\end{enumerate}
+
+\#Assumptions: (1) closed energy balance at water surface (2) esat at
+surface decreases linearly to esat at observation height (3) ra can be
+estimated by a wind function (Refer: Jasen et al., (2021)
+
+\#formula LE = (Delta/(Delta+Pc))* Q + (Pc/(Delta+Pc)) *E\_A \#latent
+heat flux (W m-2)
+
+E = LE/Lv i.e latent heat flux by latent heat of vaporization (mm/day)
+(similar to Direct method)
+
+\#Where: Delta = Slope of saturated vapor pressure at air temperature
+(kPa/ Oc), Pc= psychometric constant (kPa/ Oc),
+
+EA = f\_u *(eair\_sat - eair) \#eair\_sat-eair is vapor pressure deficit
+(VPD) at 2 m height given in the data (Jasen et al., (2021)) f\_U = Wind
+function = 37 + 40 U \#{[}W m−2 kPa−1{]} (Refer: Jasen et al., (2021))\\
+U = wind speed at the measurement height of 2m (m/s).
+
+\#\#Reference Brutsaert,W.(2005). Hydrology : an introduction.United
+Kingdom:Cambridge University Press. Refer: section 4.3.2.
+
+Jansen, F. A., Uijlenhoet, R., Jacobs, C. M., \& Teuling, A. J. (2021).
+Evaporation from a large lowland reservoir--observed dynamics during a
+warm summer. Hydrology and Earth System Sciences Discussions, 1-28.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\#Delta \textless{}{-} \{\{4098*eair\_sat)\}/\{Tair + 237.2\}\^{}2\}  \#(kPa/ Oc)}
+
+\NormalTok{Delta\_Stra\_2019 }\OtherTok{\textless{}{-}}\NormalTok{ \{}\DecValTok{4098}\SpecialCharTok{*}\NormalTok{esat\_air\_Stra2019\}}\SpecialCharTok{/}\NormalTok{\{Summer\_Stra\_Daily2019}\SpecialCharTok{$}\NormalTok{Tair}\SpecialCharTok{+} \FloatTok{237.2}\NormalTok{\}}\SpecialCharTok{\^{}}\DecValTok{2}
+\NormalTok{Delta\_Stra\_2020 }\OtherTok{\textless{}{-}}\NormalTok{ \{}\DecValTok{4098}\SpecialCharTok{*}\NormalTok{esat\_air\_Stra2020\}}\SpecialCharTok{/}\NormalTok{\{Summer\_Stra\_Daily2020}\SpecialCharTok{$}\NormalTok{Tair}\SpecialCharTok{+} \FloatTok{237.2}\NormalTok{\}}\SpecialCharTok{\^{}}\DecValTok{2}
+
+\NormalTok{Delta\_Tri\_2019 }\OtherTok{\textless{}{-}}\NormalTok{ \{}\DecValTok{4098}\SpecialCharTok{*}\NormalTok{esat\_air\_Tri2019\}}\SpecialCharTok{/}\NormalTok{\{Summer\_Tri\_Daily2019}\SpecialCharTok{$}\NormalTok{Tair}\SpecialCharTok{+} \FloatTok{237.2}\NormalTok{\}}\SpecialCharTok{\^{}}\DecValTok{2}
+\NormalTok{Delta\_Tri\_2020 }\OtherTok{\textless{}{-}}\NormalTok{ \{}\DecValTok{4098}\SpecialCharTok{*}\NormalTok{esat\_air\_Tri2020\}}\SpecialCharTok{/}\NormalTok{\{Summer\_Tri\_Daily2020}\SpecialCharTok{$}\NormalTok{Tair}\SpecialCharTok{+} \FloatTok{237.2}\NormalTok{\}}\SpecialCharTok{\^{}}\DecValTok{2}
+
+\CommentTok{\#Pc = (cp *p) /(0.622*Lt)}
+\CommentTok{\#When T is assumed 20 Oc}
+\CommentTok{\#Cp = Specific heat capacity of water = 4182 J/kg Oc  = 4182*10\^{}{-}6 MJ/kg Oc }
+\CommentTok{\#Lt = Latent heat of vaporization 2.453 MJ/kg }
+\CommentTok{\#p = atmospheric pressure  101.325 KPa}
+
+\NormalTok{Pc }\OtherTok{\textless{}{-}}\NormalTok{ ((}\DecValTok{4182}\SpecialCharTok{*}\DecValTok{10}\SpecialCharTok{\^{}{-}}\DecValTok{6}\NormalTok{)}\SpecialCharTok{*}\FloatTok{101.325}\NormalTok{)}\SpecialCharTok{/}\NormalTok{ (}\FloatTok{0.622}\SpecialCharTok{*}\FloatTok{2.45}\NormalTok{)              }\CommentTok{\# [Kpa/ oc]}
+
+\CommentTok{\#wind function from Paper by Jasen et al., (2021) }
+\NormalTok{fu\_Stra\_2019 }\OtherTok{\textless{}{-}}  \DecValTok{37} \SpecialCharTok{+} \DecValTok{40} \SpecialCharTok{*}\NormalTok{ Summer\_Stra\_Daily2019}\SpecialCharTok{$}\NormalTok{wind\_speed      }\CommentTok{\#[W m−2 kPa−1]  }
+\NormalTok{fu\_Stra\_2020 }\OtherTok{\textless{}{-}} \DecValTok{37} \SpecialCharTok{+} \DecValTok{40} \SpecialCharTok{*}\NormalTok{ Summer\_Stra\_Daily2020}\SpecialCharTok{$}\NormalTok{wind\_speed       }\CommentTok{\#[W m−2 kPa−1] }
+
+\NormalTok{fu\_Tri\_2019 }\OtherTok{\textless{}{-}}  \DecValTok{37} \SpecialCharTok{+} \DecValTok{40} \SpecialCharTok{*}\NormalTok{ Summer\_Tri\_Daily2019}\SpecialCharTok{$}\NormalTok{wind\_speed      }\CommentTok{\#[W m−2 kPa−1]  }
+\NormalTok{fu\_Tri\_2020 }\OtherTok{\textless{}{-}} \DecValTok{37} \SpecialCharTok{+} \DecValTok{40} \SpecialCharTok{*}\NormalTok{ Summer\_Tri\_Daily2020}\SpecialCharTok{$}\NormalTok{wind\_speed       }\CommentTok{\#[W m−2 kPa−1] }
+
+\NormalTok{EA\_Stra\_2019 }\OtherTok{\textless{}{-}}\NormalTok{ fu\_Stra\_2019 }\SpecialCharTok{*}\NormalTok{Summer\_Stra\_Daily2019}\SpecialCharTok{$}\NormalTok{VPD        }\CommentTok{\#[W m−2]}
+\NormalTok{EA\_Stra\_2020 }\OtherTok{\textless{}{-}}\NormalTok{ fu\_Stra\_2020 }\SpecialCharTok{*}\NormalTok{Summer\_Stra\_Daily2020}\SpecialCharTok{$}\NormalTok{VPD        }\CommentTok{\#[W m−2] }
+
+\NormalTok{EA\_Tri\_2019 }\OtherTok{\textless{}{-}}\NormalTok{ fu\_Tri\_2019 }\SpecialCharTok{*}\NormalTok{Summer\_Tri\_Daily2019}\SpecialCharTok{$}\NormalTok{VPD           }\CommentTok{\#[W m−2] }
+\NormalTok{EA\_Tri\_2020 }\OtherTok{\textless{}{-}}\NormalTok{ fu\_Tri\_2020 }\SpecialCharTok{*}\NormalTok{Summer\_Tri\_Daily2020}\SpecialCharTok{$}\NormalTok{VPD           }\CommentTok{\#[W m−2]}
+  
+\NormalTok{LE\_pen\_Stra\_2019 }\OtherTok{\textless{}{-}}\NormalTok{ (Delta\_Stra\_2019}\SpecialCharTok{/}\NormalTok{(Delta\_Stra\_2019}\SpecialCharTok{+}\NormalTok{Pc))}\SpecialCharTok{*}\NormalTok{ Summer\_Stra\_Daily2019}\SpecialCharTok{$}\NormalTok{Kin }\SpecialCharTok{+}\NormalTok{ (Pc}\SpecialCharTok{/}\NormalTok{(Delta\_Stra\_2019}\SpecialCharTok{+}\NormalTok{Pc)) }\SpecialCharTok{*}\NormalTok{ EA\_Stra\_2019           }\CommentTok{\#[W m−2]}
+\NormalTok{LE\_pen\_Stra\_2020 }\OtherTok{\textless{}{-}}\NormalTok{ (Delta\_Stra\_2020}\SpecialCharTok{/}\NormalTok{(Delta\_Stra\_2020}\SpecialCharTok{+}\NormalTok{Pc))}\SpecialCharTok{*}\NormalTok{ Summer\_Stra\_Daily2020}\SpecialCharTok{$}\NormalTok{Kin }\SpecialCharTok{+}\NormalTok{ (Pc}\SpecialCharTok{/}\NormalTok{(Delta\_Stra\_2020}\SpecialCharTok{+}\NormalTok{Pc)) }\SpecialCharTok{*}\NormalTok{ EA\_Stra\_2020           }\CommentTok{\#[W m−2]}
+
+\NormalTok{LE\_pen\_Tri\_2019 }\OtherTok{\textless{}{-}}\NormalTok{ (Delta\_Tri\_2019}\SpecialCharTok{/}\NormalTok{(Delta\_Tri\_2019}\SpecialCharTok{+}\NormalTok{Pc))}\SpecialCharTok{*}\NormalTok{ Summer\_Tri\_Daily2019}\SpecialCharTok{$}\NormalTok{Kin }\SpecialCharTok{+}\NormalTok{ (Pc}\SpecialCharTok{/}\NormalTok{(Delta\_Tri\_2019}\SpecialCharTok{+}\NormalTok{Pc)) }\SpecialCharTok{*}\NormalTok{ EA\_Tri\_2019               }\CommentTok{\#[W m−2]}
+\NormalTok{LE\_pen\_Tri\_2020 }\OtherTok{\textless{}{-}}\NormalTok{ (Delta\_Tri\_2020}\SpecialCharTok{/}\NormalTok{(Delta\_Tri\_2020}\SpecialCharTok{+}\NormalTok{Pc))}\SpecialCharTok{*}\NormalTok{ Summer\_Tri\_Daily2020}\SpecialCharTok{$}\NormalTok{Kin }\SpecialCharTok{+}\NormalTok{ (Pc}\SpecialCharTok{/}\NormalTok{(Delta\_Tri\_2020}\SpecialCharTok{+}\NormalTok{Pc)) }\SpecialCharTok{*}\NormalTok{ EA\_Tri\_2020               }\CommentTok{\#[W m−2]}
+
+\CommentTok{\#LE data is given in W/m2 so converting it to MJ m{-}2 T{-}1}
+\CommentTok{\#for daily Conversion}
+\CommentTok{\# 1 w/M2 = 1 J/sm2 = 1 J *86400 / day m2 = 86400*10\^{}{-}6 MJ/m2 day}
+\NormalTok{LE\_pen\_Stra\_19 }\OtherTok{\textless{}{-}}\NormalTok{ LE\_pen\_Stra\_2019 }\SpecialCharTok{*}\NormalTok{(}\DecValTok{86400}\SpecialCharTok{*}\DecValTok{10}\SpecialCharTok{\^{}{-}}\DecValTok{6}\NormalTok{)}
+\NormalTok{LE\_pen\_Stra\_20}\OtherTok{\textless{}{-}}\NormalTok{ LE\_pen\_Stra\_2020 }\SpecialCharTok{*}\NormalTok{(}\DecValTok{86400}\SpecialCharTok{*}\DecValTok{10}\SpecialCharTok{\^{}{-}}\DecValTok{6}\NormalTok{)}
+\NormalTok{LE\_pen\_Tri\_19 }\OtherTok{\textless{}{-}}\NormalTok{ LE\_pen\_Tri\_2019 }\SpecialCharTok{*}\NormalTok{(}\DecValTok{86400}\SpecialCharTok{*}\DecValTok{10}\SpecialCharTok{\^{}{-}}\DecValTok{6}\NormalTok{)}
+\NormalTok{LE\_pen\_Tri\_20 }\OtherTok{\textless{}{-}}\NormalTok{ LE\_pen\_Tri\_2020 }\SpecialCharTok{*}\NormalTok{(}\DecValTok{86400}\SpecialCharTok{*}\DecValTok{10}\SpecialCharTok{\^{}{-}}\DecValTok{6}\NormalTok{)}
+
+\CommentTok{\#With LE and Lv in units of MJ m{-}2 d{-}1 and MJ kg{-}1, respectively, ET is in units of kg m{-}2 d{-}1 which is equal to depth of water in mm d{-}1 (d=day)}
+\CommentTok{\#Density of water (1000 kg/m3) was used during conversion of  kg m{-}2 d{-}1 to mm d{-}1.}
+\NormalTok{Lv }\OtherTok{\textless{}{-}} \FloatTok{2.45}   \CommentTok{\#(MJ/kg)  }
+
+\CommentTok{\# Evaporation in mm/d}
+
+\NormalTok{Stra\_Evap\_Daily\_2019}\SpecialCharTok{$}\NormalTok{E\_PEN }\OtherTok{\textless{}{-}}\NormalTok{ LE\_pen\_Stra\_19 }\SpecialCharTok{/}\NormalTok{Lv}
+\NormalTok{Stra\_Evap\_Daily\_2020}\SpecialCharTok{$}\NormalTok{E\_PEN }\OtherTok{\textless{}{-}}\NormalTok{ LE\_pen\_Stra\_20 }\SpecialCharTok{/}\NormalTok{Lv}
+\NormalTok{Tri\_Evap\_Daily\_2019}\SpecialCharTok{$}\NormalTok{E\_PEN }\OtherTok{\textless{}{-}}\NormalTok{ LE\_pen\_Tri\_19}\SpecialCharTok{/}\NormalTok{Lv}
+\NormalTok{Tri\_Evap\_Daily\_2020}\SpecialCharTok{$}\NormalTok{E\_PEN }\OtherTok{\textless{}{-}}\NormalTok{ LE\_pen\_Tri\_20}\SpecialCharTok{/}\NormalTok{Lv}
+\end{Highlighting}
+\end{Shaded}
+
+For comparsion, I am re estimating evaporation from penman but this time
+with more commonly used wind function (refer Brutsaert,W.(2005) and
+Rosenberry et al., 2004 )
+
+\#Reference: Brutsaert,W.(2005). Hydrology : an introduction.United
+Kingdom:Cambridge University Press. Brutsaert used : f\_u = 0.26 (1+
+0.54U)
+
+where u2 is the mean wind speed at 2 m above the surface in m s−1, and
+the constants require that EA in Equation (4.24) is in mm d−1 and the
+vapor pressure is in hPa.
+
+Rosenberry, D. O., Stannard, D. I., Winter, T. C., \& Martinez, M. L.
+(2004). Comparison of 13 equations for determining evapotranspiration
+from a prairie wetland, Cottonwood Lake area, North Dakota, USA.
+Wetlands, 24(3), 483-497. Rosenberry used: f\_u = 0.26 (0.5 + 0.54U)
+
+I am using here Brutsaert formula:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\#wind function }
+\NormalTok{fu2\_Stra\_2019 }\OtherTok{\textless{}{-}}  \FloatTok{0.26} \SpecialCharTok{*}\NormalTok{(}\DecValTok{1}\SpecialCharTok{+} \FloatTok{0.54} \SpecialCharTok{*}\NormalTok{ Summer\_Stra\_Daily2019}\SpecialCharTok{$}\NormalTok{wind\_speed)       }
+\NormalTok{fu2\_Stra\_2020 }\OtherTok{\textless{}{-}} \FloatTok{0.26} \SpecialCharTok{*}\NormalTok{(}\DecValTok{1}\SpecialCharTok{+} \FloatTok{0.54} \SpecialCharTok{*}\NormalTok{ Summer\_Stra\_Daily2020}\SpecialCharTok{$}\NormalTok{wind\_speed)        }
+
+\NormalTok{fu2\_Tri\_2019 }\OtherTok{\textless{}{-}}  \FloatTok{0.26} \SpecialCharTok{*}\NormalTok{(}\DecValTok{1}\SpecialCharTok{+} \FloatTok{0.54} \SpecialCharTok{*}\NormalTok{ Summer\_Tri\_Daily2019}\SpecialCharTok{$}\NormalTok{wind\_speed)        }
+\NormalTok{fu2\_Tri\_2020 }\OtherTok{\textless{}{-}} \FloatTok{0.26} \SpecialCharTok{*}\NormalTok{(}\DecValTok{1}\SpecialCharTok{+} \FloatTok{0.54}\SpecialCharTok{*}\NormalTok{ Summer\_Tri\_Daily2020}\SpecialCharTok{$}\NormalTok{wind\_speed)   }
+
+\CommentTok{\# vpd is kpa and function will be in W M{-}2 Kpa{-}1. To convert from W m{-}2 to mm/d we have to multiply by (86400*10\^{}{-}6) and divide by LV}
+\CommentTok{\#EA2\_Stra\_2019 \textless{}{-} fu\_Stra\_2019 *((Summer\_Stra\_Daily2019$VPD))*(86400*10\^{}{-}6)/Lv          \#mm/day}
+\CommentTok{\#EA2\_Stra\_2020 \textless{}{-} fu\_Stra\_2020 *((Summer\_Stra\_Daily2020$VPD))*(86400*10\^{}{-}6)/Lv         \#mm/day }
+
+\CommentTok{\#EA2\_Tri\_2019 \textless{}{-} fu\_Tri\_2019 *((Summer\_Tri\_Daily2019$VPD))*(86400*10\^{}{-}6)/Lv             \#mm/day}
+\CommentTok{\#EA2\_Tri\_2020 \textless{}{-} fu\_Tri\_2020 *((Summer\_Tri\_Daily2020$VPD))*(86400*10\^{}{-}6)/Lv             \#mm/day}
+
+\CommentTok{\#Following four lines are used as per Brutsaert (no conversion is required)}
+\NormalTok{EA2\_Stra\_2019 }\OtherTok{\textless{}{-}}\NormalTok{ fu2\_Stra\_2019 }\SpecialCharTok{*}\NormalTok{((Summer\_Stra\_Daily2019}\SpecialCharTok{$}\NormalTok{VPD))          }\CommentTok{\#mm/day}
+\NormalTok{EA2\_Stra\_2020 }\OtherTok{\textless{}{-}}\NormalTok{ fu2\_Stra\_2020 }\SpecialCharTok{*}\NormalTok{((Summer\_Stra\_Daily2020}\SpecialCharTok{$}\NormalTok{VPD))         }\CommentTok{\#mm/day }
+\NormalTok{EA2\_Tri\_2019 }\OtherTok{\textless{}{-}}\NormalTok{ fu2\_Tri\_2019 }\SpecialCharTok{*}\NormalTok{((Summer\_Tri\_Daily2019}\SpecialCharTok{$}\NormalTok{VPD))             }\CommentTok{\#mm/day}
+\NormalTok{EA2\_Tri\_2020 }\OtherTok{\textless{}{-}}\NormalTok{ fu2\_Tri\_2020 }\SpecialCharTok{*}\NormalTok{((Summer\_Tri\_Daily2020}\SpecialCharTok{$}\NormalTok{VPD))             }\CommentTok{\#mm/day}
+
+\CommentTok{\# Formula : E = (Delta/(Delta+Pc))* Q\_ne + (Pc/(Delta+Pc)) *E\_A }
+\NormalTok{Lv }\OtherTok{\textless{}{-}} \FloatTok{2.45}   \CommentTok{\#(MJ/kg) }
+\CommentTok{\#Q\_ne = Q/lv    where q is in W/m2 and Lv is in Mj/kg.}
+\CommentTok{\# 1 w/M2 = 1 J/sm2 = 1 J *86400 / day m2 = 86400*10\^{}{-}6 MJ/m2 day}
+\CommentTok{\#With Q and Lv in units of MJ m{-}2 d{-}1 and MJ kg{-}1, respectively, ET is in units of kg m{-}2 d{-}1 which is equal to depth of water in mm d{-}1 (d=day)}
+\NormalTok{Qne\_pen\_Stra\_19 }\OtherTok{\textless{}{-}}\NormalTok{ Summer\_Stra\_Daily2019}\SpecialCharTok{$}\NormalTok{Kin }\SpecialCharTok{*}\NormalTok{(}\DecValTok{86400}\SpecialCharTok{*}\DecValTok{10}\SpecialCharTok{\^{}{-}}\DecValTok{6}\NormalTok{)}\SpecialCharTok{/}\NormalTok{Lv}
+\NormalTok{Qne\_pen\_Stra\_20}\OtherTok{\textless{}{-}}\NormalTok{ Summer\_Stra\_Daily2020}\SpecialCharTok{$}\NormalTok{Kin }\SpecialCharTok{*}\NormalTok{(}\DecValTok{86400}\SpecialCharTok{*}\DecValTok{10}\SpecialCharTok{\^{}{-}}\DecValTok{6}\NormalTok{)}\SpecialCharTok{/}\NormalTok{Lv}
+\NormalTok{Qne\_pen\_Tri\_19 }\OtherTok{\textless{}{-}}\NormalTok{ Summer\_Tri\_Daily2019}\SpecialCharTok{$}\NormalTok{Kin }\SpecialCharTok{*}\NormalTok{(}\DecValTok{86400}\SpecialCharTok{*}\DecValTok{10}\SpecialCharTok{\^{}{-}}\DecValTok{6}\NormalTok{)}\SpecialCharTok{/}\NormalTok{Lv}
+\NormalTok{Qne\_pen\_Tri\_20 }\OtherTok{\textless{}{-}}\NormalTok{ Summer\_Tri\_Daily2020}\SpecialCharTok{$}\NormalTok{Kin }\SpecialCharTok{*}\NormalTok{(}\DecValTok{86400}\SpecialCharTok{*}\DecValTok{10}\SpecialCharTok{\^{}{-}}\DecValTok{6}\NormalTok{)}\SpecialCharTok{/}\NormalTok{Lv}
+
+
+\NormalTok{Stra\_Evap\_Daily\_2019}\SpecialCharTok{$}\NormalTok{E\_PEN2 }\OtherTok{\textless{}{-}}\NormalTok{ \{(Delta\_Stra\_2019}\SpecialCharTok{/}\NormalTok{(Delta\_Stra\_2019}\SpecialCharTok{+}\NormalTok{Pc))}\SpecialCharTok{*}\NormalTok{ (Qne\_pen\_Stra\_19)\} }\SpecialCharTok{+}\NormalTok{ \{(Pc}\SpecialCharTok{/}\NormalTok{(Delta\_Stra\_2019}\SpecialCharTok{+}\NormalTok{Pc)) }\SpecialCharTok{*}\NormalTok{ EA2\_Stra\_2019 \}  }\CommentTok{\#\{mm/day\}}
+\NormalTok{Stra\_Evap\_Daily\_2020}\SpecialCharTok{$}\NormalTok{E\_PEN2 }\OtherTok{\textless{}{-}}\NormalTok{ (Delta\_Stra\_2020}\SpecialCharTok{/}\NormalTok{(Delta\_Stra\_2020}\SpecialCharTok{+}\NormalTok{Pc))}\SpecialCharTok{*}\NormalTok{(Qne\_pen\_Stra\_20) }\SpecialCharTok{+}\NormalTok{ (Pc}\SpecialCharTok{/}\NormalTok{(Delta\_Stra\_2020}\SpecialCharTok{+}\NormalTok{Pc)) }\SpecialCharTok{*}\NormalTok{ EA2\_Stra\_2020           }\CommentTok{\#\{mm/day\}}
+
+\NormalTok{Tri\_Evap\_Daily\_2019}\SpecialCharTok{$}\NormalTok{E\_PEN2 }\OtherTok{\textless{}{-}}\NormalTok{ (Delta\_Tri\_2019}\SpecialCharTok{/}\NormalTok{(Delta\_Tri\_2019}\SpecialCharTok{+}\NormalTok{Pc))}\SpecialCharTok{*}\NormalTok{ (Qne\_pen\_Tri\_19) }\SpecialCharTok{+}\NormalTok{ (Pc}\SpecialCharTok{/}\NormalTok{(Delta\_Tri\_2019}\SpecialCharTok{+}\NormalTok{Pc)) }\SpecialCharTok{*}\NormalTok{ EA2\_Tri\_2019                }\CommentTok{\#\{mm/day\}}
+\NormalTok{Tri\_Evap\_Daily\_2020}\SpecialCharTok{$}\NormalTok{E\_PEN2}\OtherTok{\textless{}{-}}\NormalTok{ (Delta\_Tri\_2020}\SpecialCharTok{/}\NormalTok{(Delta\_Tri\_2020}\SpecialCharTok{+}\NormalTok{Pc))}\SpecialCharTok{*}\NormalTok{ (Qne\_pen\_Tri\_20) }\SpecialCharTok{+}\NormalTok{ (Pc}\SpecialCharTok{/}\NormalTok{(Delta\_Tri\_2020}\SpecialCharTok{+}\NormalTok{Pc)) }\SpecialCharTok{*}\NormalTok{ EA2\_Tri\_2020                 }\CommentTok{\#\{mm/day\}}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{2}
+\tightlist
+\item
+  Priestley--Taylor Method (refer: Brutsaert,W.(2005)) \#Assumptions
+  evaporation from a wet surface under conditions of minimal advection
+  (Transfer of heat by the flow of a fluid e.g.~air (horizontal
+  movement)).
+\end{enumerate}
+
+LE = Alpha * (Delta/(Delta+Pc))* Q
+
+\#Additional Parameters Alpha = Priestley--Taylor empirical constant (
+value = 1.26)
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{Alpha }\OtherTok{\textless{}{-}} \FloatTok{1.26} 
+
+\NormalTok{LE\_PT\_Stra\_2019 }\OtherTok{\textless{}{-}}\NormalTok{ Alpha }\SpecialCharTok{*}\NormalTok{ (Delta\_Stra\_2019}\SpecialCharTok{/}\NormalTok{(Delta\_Stra\_2019}\SpecialCharTok{+}\NormalTok{Pc))}\SpecialCharTok{*}\NormalTok{ Summer\_Stra\_Daily2019}\SpecialCharTok{$}\NormalTok{Kin                }\CommentTok{\#[W m−2]}
+\NormalTok{LE\_PT\_Stra\_2020 }\OtherTok{\textless{}{-}}\NormalTok{ Alpha }\SpecialCharTok{*}\NormalTok{ (Delta\_Stra\_2020}\SpecialCharTok{/}\NormalTok{(Delta\_Stra\_2020}\SpecialCharTok{+}\NormalTok{Pc))}\SpecialCharTok{*}\NormalTok{ Summer\_Stra\_Daily2020}\SpecialCharTok{$}\NormalTok{Kin                }\CommentTok{\#[W m−2]}
+
+\NormalTok{LE\_PT\_Tri\_2019 }\OtherTok{\textless{}{-}}\NormalTok{ Alpha }\SpecialCharTok{*}\NormalTok{ (Delta\_Tri\_2019}\SpecialCharTok{/}\NormalTok{(Delta\_Tri\_2019}\SpecialCharTok{+}\NormalTok{Pc))}\SpecialCharTok{*}\NormalTok{ Summer\_Tri\_Daily2019}\SpecialCharTok{$}\NormalTok{Kin                    }\CommentTok{\#[W m−2]}
+\NormalTok{LE\_PT\_Tri\_2020 }\OtherTok{\textless{}{-}}\NormalTok{  Alpha }\SpecialCharTok{*}\NormalTok{ (Delta\_Tri\_2020}\SpecialCharTok{/}\NormalTok{(Delta\_Tri\_2020}\SpecialCharTok{+}\NormalTok{Pc))}\SpecialCharTok{*}\NormalTok{ Summer\_Tri\_Daily2020}\SpecialCharTok{$}\NormalTok{Kin                   }\CommentTok{\#[W m−2]}
+
+\CommentTok{\#LE data is given in W/m2 so converting it to MJ m{-}2 T{-}1}
+\CommentTok{\#for daily Conversion}
+\CommentTok{\# 1 w/M2 = 1 J/sm2 = 1 J *86400 / day m2 = 86400*10\^{}{-}6 MJ/m2 day}
+\NormalTok{LE\_PT\_Stra\_19 }\OtherTok{\textless{}{-}}\NormalTok{ LE\_PT\_Stra\_2019 }\SpecialCharTok{*}\NormalTok{(}\DecValTok{86400}\SpecialCharTok{*}\DecValTok{10}\SpecialCharTok{\^{}{-}}\DecValTok{6}\NormalTok{)}
+\NormalTok{LE\_PT\_Stra\_20}\OtherTok{\textless{}{-}}\NormalTok{ LE\_PT\_Stra\_2020 }\SpecialCharTok{*}\NormalTok{(}\DecValTok{86400}\SpecialCharTok{*}\DecValTok{10}\SpecialCharTok{\^{}{-}}\DecValTok{6}\NormalTok{)}
+\NormalTok{LE\_PT\_Tri\_19 }\OtherTok{\textless{}{-}}\NormalTok{ LE\_PT\_Tri\_2019 }\SpecialCharTok{*}\NormalTok{(}\DecValTok{86400}\SpecialCharTok{*}\DecValTok{10}\SpecialCharTok{\^{}{-}}\DecValTok{6}\NormalTok{)}
+\NormalTok{LE\_PT\_Tri\_20 }\OtherTok{\textless{}{-}}\NormalTok{ LE\_PT\_Tri\_2020 }\SpecialCharTok{*}\NormalTok{(}\DecValTok{86400}\SpecialCharTok{*}\DecValTok{10}\SpecialCharTok{\^{}{-}}\DecValTok{6}\NormalTok{)}
+
+\CommentTok{\#With LE and Lv in units of MJ m{-}2 T{-}1 and MJ kg{-}1, respectively, ET is in units of kg m{-}2 d{-}1 which is equal to depth of water in mm d{-}1 (d=day)}
+\CommentTok{\#Density of water (1000 kg/m3) was used during conversion of  kg m{-}2 d{-}1 to mm d{-}1.}
+\NormalTok{Lv }\OtherTok{\textless{}{-}} \FloatTok{2.45}   \CommentTok{\#(MJ/kg)  }
+
+\CommentTok{\# Evaporation in mm/d}
+
+\NormalTok{Stra\_Evap\_Daily\_2019}\SpecialCharTok{$}\NormalTok{E\_PT }\OtherTok{\textless{}{-}}\NormalTok{ LE\_PT\_Stra\_19 }\SpecialCharTok{/}\NormalTok{Lv}
+\NormalTok{Stra\_Evap\_Daily\_2020}\SpecialCharTok{$}\NormalTok{E\_PT }\OtherTok{\textless{}{-}}\NormalTok{ LE\_PT\_Stra\_20 }\SpecialCharTok{/}\NormalTok{Lv}
+\NormalTok{Tri\_Evap\_Daily\_2019}\SpecialCharTok{$}\NormalTok{E\_PT }\OtherTok{\textless{}{-}}\NormalTok{ LE\_PT\_Tri\_19}\SpecialCharTok{/}\NormalTok{Lv}
+\NormalTok{Tri\_Evap\_Daily\_2020}\SpecialCharTok{$}\NormalTok{E\_PT }\OtherTok{\textless{}{-}}\NormalTok{ LE\_PT\_Tri\_20}\SpecialCharTok{/}\NormalTok{Lv}
+\end{Highlighting}
+\end{Shaded}
+
+4.DeBruin--Keijman method (Jansen and Teuling, 2020)
+
+\#Assumptions (1) constant proportionality between radiation and
+aerodynamic term (2) aerodynamic term can be described by a constant,
+assuming no explicit wind effects (3) Heat storage often assumed to be
+negligible.
+
+LE = Alpha\_Bk * (Delta/(Delta+Pc))* Q + Beta\_Bk Empirically derived
+constants (Alpha\_Bk and Beta\_Bk)
+
+\#Reference: Jansen, F. A., \& Teuling, A. J. (2020). Evaporation from a
+large lowland reservoir--(dis) agreement between evaporation models from
+hourly to decadal timescales. Hydrology and Earth System Sciences,
+24(3), 1055-1072.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{Alpha\_Bk }\OtherTok{\textless{}{-}} \FloatTok{1.1}
+\NormalTok{Beta\_Bk }\OtherTok{\textless{}{-}} \DecValTok{10}       \CommentTok{\# [w m{-}2]}
+
+\NormalTok{LE\_BK\_Stra\_2019 }\OtherTok{\textless{}{-}}\NormalTok{ Alpha\_Bk }\SpecialCharTok{*}\NormalTok{ (Delta\_Stra\_2019}\SpecialCharTok{/}\NormalTok{(Delta\_Stra\_2019}\SpecialCharTok{+}\NormalTok{Pc))}\SpecialCharTok{*}\NormalTok{ Summer\_Stra\_Daily2019}\SpecialCharTok{$}\NormalTok{Kin }\SpecialCharTok{+}\NormalTok{ Beta\_Bk               }\CommentTok{\#[W m−2]}
+\NormalTok{LE\_BK\_Stra\_2020 }\OtherTok{\textless{}{-}}\NormalTok{ Alpha\_Bk }\SpecialCharTok{*}\NormalTok{ (Delta\_Stra\_2020}\SpecialCharTok{/}\NormalTok{(Delta\_Stra\_2020}\SpecialCharTok{+}\NormalTok{Pc))}\SpecialCharTok{*}\NormalTok{ Summer\_Stra\_Daily2020}\SpecialCharTok{$}\NormalTok{Kin }\SpecialCharTok{+}\NormalTok{ Beta\_Bk               }\CommentTok{\#[W m−2]}
+
+\NormalTok{LE\_BK\_Tri\_2019 }\OtherTok{\textless{}{-}}\NormalTok{ Alpha\_Bk }\SpecialCharTok{*}\NormalTok{ (Delta\_Tri\_2019}\SpecialCharTok{/}\NormalTok{(Delta\_Tri\_2019}\SpecialCharTok{+}\NormalTok{Pc))}\SpecialCharTok{*}\NormalTok{ Summer\_Tri\_Daily2019}\SpecialCharTok{$}\NormalTok{Kin  }\SpecialCharTok{+}\NormalTok{ Beta\_Bk                  }\CommentTok{\#[W m−2]}
+\NormalTok{LE\_BK\_Tri\_2020 }\OtherTok{\textless{}{-}}\NormalTok{  Alpha\_Bk }\SpecialCharTok{*}\NormalTok{ (Delta\_Tri\_2020}\SpecialCharTok{/}\NormalTok{(Delta\_Tri\_2020}\SpecialCharTok{+}\NormalTok{Pc))}\SpecialCharTok{*}\NormalTok{ Summer\_Tri\_Daily2020}\SpecialCharTok{$}\NormalTok{Kin }\SpecialCharTok{+}\NormalTok{ Beta\_Bk                  }\CommentTok{\#[W m−2]}
+
+\CommentTok{\#LE data is given in W/m2 so converting it to MJ m{-}2 T{-}1}
+\CommentTok{\#for daily Conversion}
+\CommentTok{\# 1 w/M2 = 1 J/sm2 = 1 J *86400 / day m2 = 86400*10\^{}{-}6 MJ/m2 day}
+\NormalTok{LE\_BK\_Stra\_19 }\OtherTok{\textless{}{-}}\NormalTok{ LE\_BK\_Stra\_2019 }\SpecialCharTok{*}\NormalTok{(}\DecValTok{86400}\SpecialCharTok{*}\DecValTok{10}\SpecialCharTok{\^{}{-}}\DecValTok{6}\NormalTok{)}
+\NormalTok{LE\_BK\_Stra\_20}\OtherTok{\textless{}{-}}\NormalTok{ LE\_BK\_Stra\_2020 }\SpecialCharTok{*}\NormalTok{(}\DecValTok{86400}\SpecialCharTok{*}\DecValTok{10}\SpecialCharTok{\^{}{-}}\DecValTok{6}\NormalTok{)}
+\NormalTok{LE\_BK\_Tri\_19 }\OtherTok{\textless{}{-}}\NormalTok{ LE\_BK\_Tri\_2019 }\SpecialCharTok{*}\NormalTok{(}\DecValTok{86400}\SpecialCharTok{*}\DecValTok{10}\SpecialCharTok{\^{}{-}}\DecValTok{6}\NormalTok{)}
+\NormalTok{LE\_BK\_Tri\_20 }\OtherTok{\textless{}{-}}\NormalTok{ LE\_BK\_Tri\_2020 }\SpecialCharTok{*}\NormalTok{(}\DecValTok{86400}\SpecialCharTok{*}\DecValTok{10}\SpecialCharTok{\^{}{-}}\DecValTok{6}\NormalTok{)}
+
+\CommentTok{\#With LE and Lv in units of MJ m{-}2 T{-}1 and MJ kg{-}1, respectively, ET is in units of kg m{-}2 d{-}1 which is equal to deBKh of water in mm d{-}1 (d=day)}
+\CommentTok{\#Density of water (1000 kg/m3) was used during conversion of  kg m{-}2 d{-}1 to mm d{-}1.}
+\NormalTok{Lv }\OtherTok{\textless{}{-}} \FloatTok{2.45}   \CommentTok{\#(MJ/kg)  }
+
+\CommentTok{\# Evaporation in mm/d}
+
+\NormalTok{Stra\_Evap\_Daily\_2019}\SpecialCharTok{$}\NormalTok{E\_DK }\OtherTok{\textless{}{-}}\NormalTok{ LE\_BK\_Stra\_19}\SpecialCharTok{/}\NormalTok{Lv}
+\NormalTok{Stra\_Evap\_Daily\_2020}\SpecialCharTok{$}\NormalTok{E\_DK }\OtherTok{\textless{}{-}}\NormalTok{ LE\_BK\_Stra\_20}\SpecialCharTok{/}\NormalTok{Lv}
+\NormalTok{Tri\_Evap\_Daily\_2019}\SpecialCharTok{$}\NormalTok{E\_DK }\OtherTok{\textless{}{-}}\NormalTok{ LE\_BK\_Tri\_19}\SpecialCharTok{/}\NormalTok{Lv}
+\NormalTok{Tri\_Evap\_Daily\_2020}\SpecialCharTok{$}\NormalTok{E\_DK }\OtherTok{\textless{}{-}}\NormalTok{ LE\_BK\_Tri\_20}\SpecialCharTok{/}\NormalTok{Lv}
+\end{Highlighting}
+\end{Shaded}
+
+5.Brutsaert--Stricker method (Brutsaert,W.(2005)) equation 4.49
+
+\hypertarget{formula-e-2alpha-1deltadeltapc-q_ne---pcdeltapcceuq_sat-q}{%
+\section{\texorpdfstring{Formula : E =
+(2\emph{alpha-1)}(Delta/(Delta+Pc))* Q\_ne -
+(Pc/(Delta+Pc))\emph{Ce}U*(q\_sat-q)}{Formula : E = (2alpha-1)(Delta/(Delta+Pc))* Q\_ne - (Pc/(Delta+Pc))CeU*(q\_sat-q)}}\label{formula-e-2alpha-1deltadeltapc-q_ne---pcdeltapcceuq_sat-q}}
+
+\#Assumption: -Follow penman's template but different constant values.
+-Aplha constant is emperical and yet require a physical explanation
+-Here I am using alpha = 1.26 (refer: Rosenberry et al., 2004 )
+
+\#advantage -Only need meteorological parameters only instead of soil
+moisture, canopy resistance and other measures of aridity. -The approach
+appears to perform best under conditions with relatively mild advection.
+However, under strongly advective conditions with large saturation
+humidity deficits, it seems that the validity of the assumptions on
+which it is based become questionable.
+
+\#Reference: Brutsaert,W.(2005). Hydrology : an introduction.United
+Kingdom:Cambridge University Press.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{qsat\_Stra\_2019}\OtherTok{\textless{}{-}} \FloatTok{0.622}\SpecialCharTok{*}\NormalTok{(esat\_air\_Stra2019}\SpecialCharTok{/}\NormalTok{p)}
+\NormalTok{qsat\_Stra\_2020}\OtherTok{\textless{}{-}} \FloatTok{0.622}\SpecialCharTok{*}\NormalTok{(esat\_air\_Stra2020}\SpecialCharTok{/}\NormalTok{p)}
+\NormalTok{qsat\_Tri\_2019}\OtherTok{\textless{}{-}} \FloatTok{0.622}\SpecialCharTok{*}\NormalTok{(esat\_air\_Tri2019}\SpecialCharTok{/}\NormalTok{p)}
+\NormalTok{qsat\_Tri\_2020}\OtherTok{\textless{}{-}} \FloatTok{0.622}\SpecialCharTok{*}\NormalTok{(esat\_air\_Tri2020}\SpecialCharTok{/}\NormalTok{p)}
+
+\NormalTok{Stra\_Evap\_Daily\_2019}\SpecialCharTok{$}\NormalTok{E\_BS }\OtherTok{\textless{}{-}}\NormalTok{ (}\DecValTok{2}\SpecialCharTok{*}\NormalTok{Alpha }\SpecialCharTok{{-}}\DecValTok{1}\NormalTok{)}\SpecialCharTok{*}\NormalTok{(Delta\_Stra\_2019}\SpecialCharTok{/}\NormalTok{(Delta\_Stra\_2019}\SpecialCharTok{+}\NormalTok{Pc))}\SpecialCharTok{*}\NormalTok{ (Qne\_pen\_Stra\_19) }\SpecialCharTok{{-}}\NormalTok{ (Pc}\SpecialCharTok{/}\NormalTok{(Delta\_Stra\_2019}\SpecialCharTok{+}\NormalTok{Pc)) }\SpecialCharTok{*}\NormalTok{ \{Ce}\SpecialCharTok{*}\NormalTok{Summer\_Stra\_Daily2019}\SpecialCharTok{$}\NormalTok{wind\_speed}\SpecialCharTok{*}\DecValTok{1000}\SpecialCharTok{*}\NormalTok{(qsat\_Stra\_2019}\SpecialCharTok{{-}}\NormalTok{q\_air\_Stra2019)\}           }\CommentTok{\#\{mm/day\}}
+\NormalTok{Stra\_Evap\_Daily\_2020}\SpecialCharTok{$}\NormalTok{E\_BS }\OtherTok{\textless{}{-}}\NormalTok{ (}\DecValTok{2}\SpecialCharTok{*}\NormalTok{Alpha }\SpecialCharTok{{-}}\DecValTok{1}\NormalTok{)}\SpecialCharTok{*}\NormalTok{(Delta\_Stra\_2020}\SpecialCharTok{/}\NormalTok{(Delta\_Stra\_2020}\SpecialCharTok{+}\NormalTok{Pc))}\SpecialCharTok{*}\NormalTok{ (Qne\_pen\_Stra\_20) }\SpecialCharTok{{-}}\NormalTok{ (Pc}\SpecialCharTok{/}\NormalTok{(Delta\_Stra\_2020}\SpecialCharTok{+}\NormalTok{Pc)) }\SpecialCharTok{*}\NormalTok{ \{Ce}\SpecialCharTok{*}\NormalTok{Summer\_Stra\_Daily2020}\SpecialCharTok{$}\NormalTok{wind\_speed}\SpecialCharTok{*}\DecValTok{1000}\SpecialCharTok{*}\NormalTok{(qsat\_Stra\_2020}\SpecialCharTok{{-}}\NormalTok{q\_air\_Stra2020)\}           }\CommentTok{\#\{mm/day\}}
+
+\NormalTok{Tri\_Evap\_Daily\_2019}\SpecialCharTok{$}\NormalTok{E\_BS }\OtherTok{\textless{}{-}}\NormalTok{ (}\DecValTok{2}\SpecialCharTok{*}\NormalTok{Alpha }\SpecialCharTok{{-}}\DecValTok{1}\NormalTok{)}\SpecialCharTok{*}\NormalTok{(Delta\_Tri\_2019}\SpecialCharTok{/}\NormalTok{(Delta\_Tri\_2019}\SpecialCharTok{+}\NormalTok{Pc))}\SpecialCharTok{*}\NormalTok{ (Qne\_pen\_Tri\_19) }\SpecialCharTok{{-}}\NormalTok{ (Pc}\SpecialCharTok{/}\NormalTok{(Delta\_Tri\_2019}\SpecialCharTok{+}\NormalTok{Pc)) }\SpecialCharTok{*}\NormalTok{ \{Ce}\SpecialCharTok{*}\NormalTok{Summer\_Tri\_Daily2019}\SpecialCharTok{$}\NormalTok{wind\_speed}\SpecialCharTok{*}\DecValTok{1000}\SpecialCharTok{*}\NormalTok{(qsat\_Tri\_2019}\SpecialCharTok{{-}}\NormalTok{q\_air\_Tri2019)\}           }\CommentTok{\#\{mm/day\}}
+\NormalTok{Tri\_Evap\_Daily\_2020}\SpecialCharTok{$}\NormalTok{E\_BS}\OtherTok{\textless{}{-}}\NormalTok{ (}\DecValTok{2}\SpecialCharTok{*}\NormalTok{Alpha }\SpecialCharTok{{-}}\DecValTok{1}\NormalTok{)}\SpecialCharTok{*}\NormalTok{(Delta\_Tri\_2020}\SpecialCharTok{/}\NormalTok{(Delta\_Tri\_2020}\SpecialCharTok{+}\NormalTok{Pc))}\SpecialCharTok{*}\NormalTok{ (Qne\_pen\_Tri\_20) }\SpecialCharTok{{-}}\NormalTok{ (Pc}\SpecialCharTok{/}\NormalTok{(Delta\_Tri\_2020}\SpecialCharTok{+}\NormalTok{Pc)) }\SpecialCharTok{*}\NormalTok{ \{Ce}\SpecialCharTok{*}\NormalTok{Summer\_Tri\_Daily2020}\SpecialCharTok{$}\NormalTok{wind\_speed}\SpecialCharTok{*}\DecValTok{1000}\SpecialCharTok{*}\NormalTok{(qsat\_Tri\_2020}\SpecialCharTok{{-}}\NormalTok{q\_air\_Tri2020)\}           }\CommentTok{\#\{mm/day\}}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{5}
+\tightlist
+\item
+  DeBruin (DB) Method (Used for 10 days average or more) \# (refer:
+  Rosenberry et al., 2004 or Althoff et al., 2019 ) \#Formula
+\end{enumerate}
+
+E = 1.192\emph{(alpha/(alph-1))}(Delta/(Delta+Pc))* \{(2.9 +2.1\emph{U)}
+VPD /LV\} (Althoff et al., 2019)
+
+\#Assumptions Based on Penman template but ignored the energy budget
+form (Potential Evaporation) Aplha value being empirical (using same
+1.26 alpha from Priestley-Taylor)
+
+\#Reference: Rosenberry, D. O., Stannard, D. I., Winter, T. C., \&
+Martinez, M. L. (2004). Comparison of 13 equations for determining
+evapotranspiration from a prairie wetland, Cottonwood Lake area, North
+Dakota, USA. Wetlands, 24(3), 483-497.
+
+Althoff, D., Rodrigues, L. N., \& da Silva, D. D. (2019). Evaluating
+evaporation methods for estimating small reservoir water surface
+evaporation in the Brazilian savannah. Water, 11(9), 1942.
+
+\#It should be noted that the constant values varies within literature
+and it requires calibration. Here I am just using constants given in
+Althoff without any calibration.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{Stra\_Evap\_Daily\_2019}\SpecialCharTok{$}\NormalTok{E\_D}\OtherTok{\textless{}{-}} \FloatTok{1.192}\SpecialCharTok{*}\NormalTok{(Alpha}\SpecialCharTok{/}\NormalTok{(Alpha}\DecValTok{{-}1}\NormalTok{))}\SpecialCharTok{*}\NormalTok{(Delta\_Stra\_2019}\SpecialCharTok{/}\NormalTok{(Delta\_Stra\_2019}\SpecialCharTok{+}\NormalTok{Pc))}\SpecialCharTok{*}\NormalTok{\{(}\FloatTok{2.9+2.1}\SpecialCharTok{*}\NormalTok{Summer\_Stra\_Daily2019}\SpecialCharTok{$}\NormalTok{wind\_speed)}\SpecialCharTok{*}\NormalTok{ Summer\_Stra\_Daily2019}\SpecialCharTok{$}\NormalTok{VPD\}}\SpecialCharTok{*}\NormalTok{(}\DecValTok{86400}\SpecialCharTok{*}\DecValTok{10}\SpecialCharTok{\^{}{-}}\DecValTok{6}\NormalTok{)}\SpecialCharTok{/}\NormalTok{Lv                                               }\CommentTok{\#\{mm/day\}}
+
+\NormalTok{Stra\_Evap\_Daily\_2020}\SpecialCharTok{$}\NormalTok{E\_D}\OtherTok{\textless{}{-}} \FloatTok{1.192}\SpecialCharTok{*}\NormalTok{(Alpha}\SpecialCharTok{/}\NormalTok{(Alpha}\DecValTok{{-}1}\NormalTok{))}\SpecialCharTok{*}\NormalTok{(Delta\_Stra\_2020}\SpecialCharTok{/}\NormalTok{(Delta\_Stra\_2020}\SpecialCharTok{+}\NormalTok{Pc))}\SpecialCharTok{*}\NormalTok{\{(}\FloatTok{2.9+2.1}\SpecialCharTok{*}\NormalTok{Summer\_Stra\_Daily2020}\SpecialCharTok{$}\NormalTok{wind\_speed)}\SpecialCharTok{*}\NormalTok{ Summer\_Stra\_Daily2020}\SpecialCharTok{$}\NormalTok{VPD\}}\SpecialCharTok{*}\NormalTok{(}\DecValTok{86400}\SpecialCharTok{*}\DecValTok{10}\SpecialCharTok{\^{}{-}}\DecValTok{6}\NormalTok{)}\SpecialCharTok{/}\NormalTok{Lv                                               }\CommentTok{\#\{mm/day\}}
+
+\NormalTok{Tri\_Evap\_Daily\_2019}\SpecialCharTok{$}\NormalTok{E\_D}\OtherTok{\textless{}{-}} \FloatTok{1.192}\SpecialCharTok{*}\NormalTok{(Alpha}\SpecialCharTok{/}\NormalTok{(Alpha}\DecValTok{{-}1}\NormalTok{))}\SpecialCharTok{*}\NormalTok{(Delta\_Tri\_2019}\SpecialCharTok{/}\NormalTok{(Delta\_Tri\_2019}\SpecialCharTok{+}\NormalTok{Pc))}\SpecialCharTok{*}\NormalTok{\{(}\FloatTok{2.9+2.1}\SpecialCharTok{*}\NormalTok{Summer\_Tri\_Daily2019}\SpecialCharTok{$}\NormalTok{wind\_speed)}\SpecialCharTok{*}\NormalTok{ Summer\_Tri\_Daily2019}\SpecialCharTok{$}\NormalTok{VPD\}}\SpecialCharTok{*}\NormalTok{(}\DecValTok{86400}\SpecialCharTok{*}\DecValTok{10}\SpecialCharTok{\^{}{-}}\DecValTok{6}\NormalTok{)}\SpecialCharTok{/}\NormalTok{Lv                                               }\CommentTok{\#\{mm/day\}}
+
+\NormalTok{Tri\_Evap\_Daily\_2020}\SpecialCharTok{$}\NormalTok{E\_D}\OtherTok{\textless{}{-}} \FloatTok{1.192}\SpecialCharTok{*}\NormalTok{(Alpha}\SpecialCharTok{/}\NormalTok{(Alpha}\DecValTok{{-}1}\NormalTok{))}\SpecialCharTok{*}\NormalTok{(Delta\_Tri\_2020}\SpecialCharTok{/}\NormalTok{(Delta\_Tri\_2020}\SpecialCharTok{+}\NormalTok{Pc))}\SpecialCharTok{*}\NormalTok{\{(}\FloatTok{2.9+2.1}\SpecialCharTok{*}\NormalTok{Summer\_Tri\_Daily2020}\SpecialCharTok{$}\NormalTok{wind\_speed)}\SpecialCharTok{*}\NormalTok{ Summer\_Tri\_Daily2020}\SpecialCharTok{$}\NormalTok{VPD\}}\SpecialCharTok{*}\NormalTok{(}\DecValTok{86400}\SpecialCharTok{*}\DecValTok{10}\SpecialCharTok{\^{}{-}}\DecValTok{6}\NormalTok{)}\SpecialCharTok{/}\NormalTok{Lv                                               }\CommentTok{\#\{mm/day\}}
+\end{Highlighting}
+\end{Shaded}
+
+7.Jensen--Haise method (Daily) Formula: E = (0.0014\emph{Ta -0.37)}
+(3.523\emph{10\^{}(-2) } Qs) \#refer Althoff et al., (2019)
+
+Qs = Incoming radiations (W m-2) Ta should be in F (Farenheit)
+\#Assumptions constant values require calibration
+
+\#Reference Althoff, D., Rodrigues, L. N., \& da Silva, D. D. (2019).
+Evaluating evaporation methods for estimating small reservoir water
+surface evaporation in the Brazilian savannah. Water, 11(9), 1942.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+ \CommentTok{\#1c = (1 *9/5) +32 = 33.8f       \#Conversion}
+
+\NormalTok{Stra\_Evap\_Daily\_2019}\SpecialCharTok{$}\NormalTok{E\_JH}\OtherTok{\textless{}{-}}\NormalTok{ \{}\FloatTok{0.014}\SpecialCharTok{*}\NormalTok{\{(Summer\_Stra\_Daily2019}\SpecialCharTok{$}\NormalTok{Tair}\SpecialCharTok{*}\NormalTok{(}\DecValTok{9}\SpecialCharTok{/}\DecValTok{5}\NormalTok{))}\SpecialCharTok{+}\DecValTok{32}\NormalTok{\} }\SpecialCharTok{{-}}\FloatTok{0.37}\NormalTok{\}}\SpecialCharTok{*}\NormalTok{ (}\FloatTok{3.523}\SpecialCharTok{*}\DecValTok{10}\SpecialCharTok{\^{}}\NormalTok{(}\SpecialCharTok{{-}}\DecValTok{2}\NormalTok{) }\SpecialCharTok{*}\NormalTok{ Summer\_Stra\_Daily2019}\SpecialCharTok{$}\NormalTok{Kin)}
+\NormalTok{Stra\_Evap\_Daily\_2020}\SpecialCharTok{$}\NormalTok{E\_JH}\OtherTok{\textless{}{-}}\NormalTok{ \{}\FloatTok{0.014}\SpecialCharTok{*}\NormalTok{\{(Summer\_Stra\_Daily2020}\SpecialCharTok{$}\NormalTok{Tair}\SpecialCharTok{*}\NormalTok{(}\DecValTok{9}\SpecialCharTok{/}\DecValTok{5}\NormalTok{))}\SpecialCharTok{+}\DecValTok{32}\NormalTok{\} }\SpecialCharTok{{-}}\FloatTok{0.37}\NormalTok{\}}\SpecialCharTok{*}\NormalTok{ (}\FloatTok{3.523}\SpecialCharTok{*}\DecValTok{10}\SpecialCharTok{\^{}}\NormalTok{(}\SpecialCharTok{{-}}\DecValTok{2}\NormalTok{) }\SpecialCharTok{*}\NormalTok{ Summer\_Stra\_Daily2020}\SpecialCharTok{$}\NormalTok{Kin)}
+
+\NormalTok{Tri\_Evap\_Daily\_2019}\SpecialCharTok{$}\NormalTok{E\_JH}\OtherTok{\textless{}{-}}\NormalTok{ \{}\FloatTok{0.014}\SpecialCharTok{*}\NormalTok{\{(Summer\_Tri\_Daily2019}\SpecialCharTok{$}\NormalTok{Tair}\SpecialCharTok{*}\NormalTok{(}\DecValTok{9}\SpecialCharTok{/}\DecValTok{5}\NormalTok{))}\SpecialCharTok{+}\DecValTok{32}\NormalTok{\} }\SpecialCharTok{{-}}\FloatTok{0.37}\NormalTok{\}}\SpecialCharTok{*}\NormalTok{ (}\FloatTok{3.523}\SpecialCharTok{*}\DecValTok{10}\SpecialCharTok{\^{}}\NormalTok{(}\SpecialCharTok{{-}}\DecValTok{2}\NormalTok{) }\SpecialCharTok{*}\NormalTok{ Summer\_Tri\_Daily2019}\SpecialCharTok{$}\NormalTok{Kin)}
+\NormalTok{Tri\_Evap\_Daily\_2020}\SpecialCharTok{$}\NormalTok{E\_JH}\OtherTok{\textless{}{-}}\NormalTok{ \{}\FloatTok{0.014}\SpecialCharTok{*}\NormalTok{\{(Summer\_Tri\_Daily2020}\SpecialCharTok{$}\NormalTok{Tair}\SpecialCharTok{*}\NormalTok{(}\DecValTok{9}\SpecialCharTok{/}\DecValTok{5}\NormalTok{))}\SpecialCharTok{+}\DecValTok{32}\NormalTok{\} }\SpecialCharTok{{-}}\FloatTok{0.37}\NormalTok{\}}\SpecialCharTok{*}\NormalTok{ (}\FloatTok{3.523}\SpecialCharTok{*}\DecValTok{10}\SpecialCharTok{\^{}}\NormalTok{(}\SpecialCharTok{{-}}\DecValTok{2}\NormalTok{) }\SpecialCharTok{*}\NormalTok{ Summer\_Tri\_Daily2020}\SpecialCharTok{$}\NormalTok{Kin)}
+\end{Highlighting}
+\end{Shaded}
+
+8.Makkink method (PET monthly) \# (refer: Rosenberry et al., 2004 or
+Althoff et al., 2019 )
+
+\#Formula: E= \{52.6 * (Delta/(Delta+Pc)* (Q/(Lv*Rho)\}- 0.12 \#Althoff
+et al., 2019
+
+\#Assumptions Requires calibration of the constants. \#Additional
+Parameters Rs= Incoming solar radiation (W/m2)
+
+\#Reference: Rosenberry, D. O., Stannard, D. I., Winter, T. C., \&
+Martinez, M. L. (2004). Comparison of 13 equations for determining
+evapotranspiration from a prairie wetland, Cottonwood Lake area, North
+Dakota, USA. Wetlands, 24(3), 483-497.
+
+Althoff, D., Rodrigues, L. N., \& da Silva, D. D. (2019). Evaluating
+evaporation methods for estimating small reservoir water surface
+evaporation in the Brazilian savannah. Water, 11(9), 1942.
+
+\#It should be noted that the constant values varies within literature
+and it requires calibration. Here I am just using constants given in
+Althoff without any calibration.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{Rho  }\OtherTok{\textless{}{-}} \DecValTok{1000}   \CommentTok{\#(Kg/m3)}
+
+\NormalTok{Stra\_Evap\_Daily\_2019}\SpecialCharTok{$}\NormalTok{E\_M }\OtherTok{\textless{}{-}}\NormalTok{ \{}\FloatTok{52.6} \SpecialCharTok{*}\NormalTok{ (Delta\_Stra\_2019}\SpecialCharTok{/}\NormalTok{(Delta\_Stra\_2019}\SpecialCharTok{+}\NormalTok{Pc))}\SpecialCharTok{*}\NormalTok{ (Summer\_Stra\_Daily2019}\SpecialCharTok{$}\NormalTok{Kin}\SpecialCharTok{/}\NormalTok{(Lv}\SpecialCharTok{*}\NormalTok{Rho))\}}\SpecialCharTok{{-}} \FloatTok{0.12}   
+\NormalTok{Stra\_Evap\_Daily\_2020}\SpecialCharTok{$}\NormalTok{E\_M }\OtherTok{\textless{}{-}}\NormalTok{ \{}\FloatTok{52.6} \SpecialCharTok{*}\NormalTok{ (Delta\_Stra\_2020}\SpecialCharTok{/}\NormalTok{(Delta\_Stra\_2020}\SpecialCharTok{+}\NormalTok{Pc))}\SpecialCharTok{*}\NormalTok{ (Summer\_Stra\_Daily2020}\SpecialCharTok{$}\NormalTok{Kin}\SpecialCharTok{/}\NormalTok{(Lv}\SpecialCharTok{*}\NormalTok{Rho))\}}\SpecialCharTok{{-}} \FloatTok{0.12} 
+
+\NormalTok{Tri\_Evap\_Daily\_2019}\SpecialCharTok{$}\NormalTok{E\_M }\OtherTok{\textless{}{-}}\NormalTok{ \{}\FloatTok{52.6} \SpecialCharTok{*}\NormalTok{ (Delta\_Tri\_2019}\SpecialCharTok{/}\NormalTok{(Delta\_Tri\_2019}\SpecialCharTok{+}\NormalTok{Pc))}\SpecialCharTok{*}\NormalTok{ (Summer\_Tri\_Daily2019}\SpecialCharTok{$}\NormalTok{Kin}\SpecialCharTok{/}\NormalTok{(Lv}\SpecialCharTok{*}\NormalTok{Rho))\}}\SpecialCharTok{{-}} \FloatTok{0.12} 
+\NormalTok{Tri\_Evap\_Daily\_2019}\SpecialCharTok{$}\NormalTok{E\_M }\OtherTok{\textless{}{-}}\NormalTok{ \{}\FloatTok{52.6} \SpecialCharTok{*}\NormalTok{ (Delta\_Tri\_2019}\SpecialCharTok{/}\NormalTok{(Delta\_Tri\_2019}\SpecialCharTok{+}\NormalTok{Pc))}\SpecialCharTok{*}\NormalTok{ (Summer\_Tri\_Daily2019}\SpecialCharTok{$}\NormalTok{Kin}\SpecialCharTok{/}\NormalTok{(Lv}\SpecialCharTok{*}\NormalTok{Rho))\}}\SpecialCharTok{{-}} \FloatTok{0.12} 
+\end{Highlighting}
+\end{Shaded}
+
+9.Ryan--Harleman method
+
+\#Formula : E= \{(2.7* \{(Ts-Ta)\^{}(1/3)\} + 3.1 \emph{u )/ (lv}Rho)\}
+* VPD \emph{10 }D
+
+D is the multipliers that convert the unit of evaporation into mm d−1
+(86.4 × 10\^{}6)
+
+\#Assumptions The RyH method considered the two main evaporation-driven
+processes: free convection caused by buoyancy and forced convection
+caused by wind (Meng et al ., 2020)
+
+Constants require Calibration.
+
+\#Reference: Meng, X., Liu, H., Du, Q., Xu, L., \& Liu, Y. (2020).
+Evaluation of the performance of different methods for estimating
+evaporation over a highland open freshwater lake in mountainous area.
+Water, 12(12), 3491.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{D }\OtherTok{\textless{}{-}} \FloatTok{86.4}\SpecialCharTok{*} \DecValTok{10}\SpecialCharTok{\^{}}\DecValTok{6}  
+\NormalTok{L }\OtherTok{\textless{}{-}} \FloatTok{2.45} \SpecialCharTok{*}\DecValTok{10}\SpecialCharTok{\^{}}\DecValTok{6}      \CommentTok{\#j/kg Latent heat of vaporization}
+
+\NormalTok{Stra\_Evap\_Daily\_2019}\SpecialCharTok{$}\NormalTok{E\_RH }\OtherTok{\textless{}{-}}\NormalTok{ \{(}\FloatTok{2.7}\SpecialCharTok{*}\NormalTok{ \{(Summer\_Stra\_Daily2019}\SpecialCharTok{$}\NormalTok{Twater}\SpecialCharTok{{-}}\NormalTok{Summer\_Stra\_Daily2019}\SpecialCharTok{$}\NormalTok{Tair)}\SpecialCharTok{\^{}}\NormalTok{(}\DecValTok{1}\SpecialCharTok{/}\DecValTok{3}\NormalTok{)\} }\SpecialCharTok{+} \FloatTok{3.1} \SpecialCharTok{*}\NormalTok{Summer\_Stra\_Daily2019}\SpecialCharTok{$}\NormalTok{wind\_speed)}\SpecialCharTok{/}\NormalTok{ (L}\SpecialCharTok{*}\NormalTok{Rho)\} }\SpecialCharTok{*}\NormalTok{ Summer\_Stra\_Daily2019}\SpecialCharTok{$}\NormalTok{VPD }\SpecialCharTok{*}\DecValTok{10}\SpecialCharTok{*}\NormalTok{D            }\CommentTok{\#mm/day}
+
+\NormalTok{Stra\_Evap\_Daily\_2020}\SpecialCharTok{$}\NormalTok{E\_RH }\OtherTok{\textless{}{-}}\NormalTok{ \{(}\FloatTok{2.7}\SpecialCharTok{*}\NormalTok{ \{(Summer\_Stra\_Daily2020}\SpecialCharTok{$}\NormalTok{Twater}\SpecialCharTok{{-}}\NormalTok{Summer\_Stra\_Daily2020}\SpecialCharTok{$}\NormalTok{Tair)}\SpecialCharTok{\^{}}\NormalTok{(}\DecValTok{1}\SpecialCharTok{/}\DecValTok{3}\NormalTok{)\} }\SpecialCharTok{+} \FloatTok{3.1} \SpecialCharTok{*}\NormalTok{Summer\_Stra\_Daily2020}\SpecialCharTok{$}\NormalTok{wind\_speed)}\SpecialCharTok{/}\NormalTok{ (L}\SpecialCharTok{*}\NormalTok{Rho)\} }\SpecialCharTok{*}\NormalTok{ Summer\_Stra\_Daily2020}\SpecialCharTok{$}\NormalTok{VPD }\SpecialCharTok{*}\DecValTok{10}\SpecialCharTok{*}\NormalTok{D            }\CommentTok{\#mm/day}
+
+\NormalTok{Tri\_Evap\_Daily\_2019}\SpecialCharTok{$}\NormalTok{E\_RH }\OtherTok{\textless{}{-}}\NormalTok{ \{(}\FloatTok{2.7}\SpecialCharTok{*}\NormalTok{ \{(Summer\_Tri\_Daily2019}\SpecialCharTok{$}\NormalTok{Twater}\SpecialCharTok{{-}}\NormalTok{Summer\_Tri\_Daily2019}\SpecialCharTok{$}\NormalTok{Tair)}\SpecialCharTok{\^{}}\NormalTok{(}\DecValTok{1}\SpecialCharTok{/}\DecValTok{3}\NormalTok{)\} }\SpecialCharTok{+} \FloatTok{3.1} \SpecialCharTok{*}\NormalTok{Summer\_Tri\_Daily2019}\SpecialCharTok{$}\NormalTok{wind\_speed)}\SpecialCharTok{/}\NormalTok{ (L}\SpecialCharTok{*}\NormalTok{Rho)\} }\SpecialCharTok{*}\NormalTok{ Summer\_Tri\_Daily2019}\SpecialCharTok{$}\NormalTok{VPD }\SpecialCharTok{*}\DecValTok{10}\SpecialCharTok{*}\NormalTok{D            }\CommentTok{\#mm/day}
+
+\NormalTok{Tri\_Evap\_Daily\_2020}\SpecialCharTok{$}\NormalTok{E\_RH }\OtherTok{\textless{}{-}}\NormalTok{ \{(}\FloatTok{2.7}\SpecialCharTok{*}\NormalTok{ \{(Summer\_Tri\_Daily2020}\SpecialCharTok{$}\NormalTok{Twater}\SpecialCharTok{{-}}\NormalTok{Summer\_Tri\_Daily2020}\SpecialCharTok{$}\NormalTok{Tair)}\SpecialCharTok{\^{}}\NormalTok{(}\DecValTok{1}\SpecialCharTok{/}\DecValTok{3}\NormalTok{)\} }\SpecialCharTok{+} \FloatTok{3.1} \SpecialCharTok{*}\NormalTok{Summer\_Tri\_Daily2020}\SpecialCharTok{$}\NormalTok{wind\_speed)}\SpecialCharTok{/}\NormalTok{ (L}\SpecialCharTok{*}\NormalTok{Rho)\} }\SpecialCharTok{*}\NormalTok{ Summer\_Tri\_Daily2020}\SpecialCharTok{$}\NormalTok{VPD }\SpecialCharTok{*}\DecValTok{10}\SpecialCharTok{*}\NormalTok{D            }\CommentTok{\#mm/day}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{9}
+\tightlist
+\item
+  Mass Transfer \#(refer (Meng et al ., 2020))
+\end{enumerate}
+
+\#Formula E= N\emph{U}VPD *1000 N= 0.00338/(As\^{}0.05)
+
+As= Area of the lake in Acre.
+
+Area of lake Ijssel Netherlands = 1100 KM2 = 271816 acres \#Refer: Jasen
+and Teuling (2020)
+
+\#Assumption Empirical relation based on wind speed and vapor pressure
+deficit Need calibration
+
+\#Reference: Meng, X., Liu, H., Du, Q., Xu, L., \& Liu, Y. (2020).
+Evaluation of the performance of different methods for estimating
+evaporation over a highland open freshwater lake in mountainous area.
+Water, 12(12), 3491.
+
+Jansen, F. A., \& Teuling, A. J. (2020). Evaporation from a large
+lowland reservoir--(dis) agreement between evaporation models from
+hourly to decadal timescales. Hydrology and Earth System Sciences,
+24(3), 1055-1072.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{As }\OtherTok{=} \DecValTok{271816}           \CommentTok{\#acres}
+\NormalTok{N}\OtherTok{=} \FloatTok{0.00338}\SpecialCharTok{/}\NormalTok{(As}\SpecialCharTok{\^{}}\FloatTok{0.05}\NormalTok{)}
+
+\NormalTok{Stra\_Evap\_Daily\_2019}\SpecialCharTok{$}\NormalTok{E\_MT }\OtherTok{\textless{}{-}}\NormalTok{ N}\SpecialCharTok{*}\NormalTok{Summer\_Stra\_Daily2019}\SpecialCharTok{$}\NormalTok{wind\_speed}\SpecialCharTok{*}\NormalTok{Summer\_Stra\_Daily2019}\SpecialCharTok{$}\NormalTok{VPD}\SpecialCharTok{*}\DecValTok{1000}
+\NormalTok{Stra\_Evap\_Daily\_2020}\SpecialCharTok{$}\NormalTok{E\_MT }\OtherTok{\textless{}{-}}\NormalTok{ N}\SpecialCharTok{*}\NormalTok{Summer\_Stra\_Daily2020}\SpecialCharTok{$}\NormalTok{wind\_speed}\SpecialCharTok{*}\NormalTok{Summer\_Stra\_Daily2020}\SpecialCharTok{$}\NormalTok{VPD}\SpecialCharTok{*}\DecValTok{1000}
+
+\NormalTok{Tri\_Evap\_Daily\_2019}\SpecialCharTok{$}\NormalTok{E\_MT }\OtherTok{\textless{}{-}}\NormalTok{ N}\SpecialCharTok{*}\NormalTok{Summer\_Tri\_Daily2019}\SpecialCharTok{$}\NormalTok{wind\_speed}\SpecialCharTok{*}\NormalTok{Summer\_Tri\_Daily2019}\SpecialCharTok{$}\NormalTok{VPD}\SpecialCharTok{*}\DecValTok{1000}
+\NormalTok{Tri\_Evap\_Daily\_2020}\SpecialCharTok{$}\NormalTok{E\_MT }\OtherTok{\textless{}{-}}\NormalTok{ N}\SpecialCharTok{*}\NormalTok{Summer\_Tri\_Daily2020}\SpecialCharTok{$}\NormalTok{wind\_speed}\SpecialCharTok{*}\NormalTok{Summer\_Tri\_Daily2020}\SpecialCharTok{$}\NormalTok{VPD}\SpecialCharTok{*}\DecValTok{1000}
+\end{Highlighting}
+\end{Shaded}
+
+Now cleaning up the data.. Due to various reasons (e.g.~errors with
+data) some of the evaporation estimates are negative. I am considering
+negative evaporation as NA
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{Evaporation\_Stra2019 }\OtherTok{\textless{}{-}}\NormalTok{ Stra\_Evap\_Daily\_2019 }\SpecialCharTok{\%\textgreater{}\%} 
+                         \FunctionTok{mutate\_each}\NormalTok{(}\FunctionTok{funs}\NormalTok{(}\FunctionTok{replace}\NormalTok{(., .}\SpecialCharTok{\textless{}}\DecValTok{0}\NormalTok{, }\ConstantTok{NA}\NormalTok{)))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Warning: `mutate_each_()` was deprecated in dplyr 0.7.0.
+## i Please use `across()` instead.
+## i The deprecated feature was likely used in the dplyr package.
+##   Please report the issue at <https://github.com/tidyverse/dplyr/issues>.
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{Evaporation\_Stra2020 }\OtherTok{\textless{}{-}}\NormalTok{ Stra\_Evap\_Daily\_2020 }\SpecialCharTok{\%\textgreater{}\%} 
+                         \FunctionTok{mutate\_each}\NormalTok{(}\FunctionTok{funs}\NormalTok{(}\FunctionTok{replace}\NormalTok{(., .}\SpecialCharTok{\textless{}}\DecValTok{0}\NormalTok{, }\ConstantTok{NA}\NormalTok{)))}
+
+
+\NormalTok{Evaporation\_Tri2019 }\OtherTok{\textless{}{-}}\NormalTok{ Tri\_Evap\_Daily\_2019 }\SpecialCharTok{\%\textgreater{}\%} 
+                         \FunctionTok{mutate\_each}\NormalTok{(}\FunctionTok{funs}\NormalTok{(}\FunctionTok{replace}\NormalTok{(., .}\SpecialCharTok{\textless{}}\DecValTok{0}\NormalTok{, }\ConstantTok{NA}\NormalTok{)))}
+
+\NormalTok{Evaporation\_Tri2020 }\OtherTok{\textless{}{-}}\NormalTok{ Tri\_Evap\_Daily\_2020 }\SpecialCharTok{\%\textgreater{}\%} 
+                         \FunctionTok{mutate\_each}\NormalTok{(}\FunctionTok{funs}\NormalTok{(}\FunctionTok{replace}\NormalTok{(., .}\SpecialCharTok{\textless{}}\DecValTok{0}\NormalTok{, }\ConstantTok{NA}\NormalTok{)))}
+
+\CommentTok{\#Rounding off up to 2 decimals}
+
+\NormalTok{Evaporation\_Stra2019[,}\SpecialCharTok{{-}}\DecValTok{1}\NormalTok{]}\OtherTok{\textless{}{-}} \FunctionTok{round}\NormalTok{(Evaporation\_Stra2019[,}\SpecialCharTok{{-}}\DecValTok{1}\NormalTok{], }\DecValTok{2}\NormalTok{)             }\CommentTok{\#the "{-}1" excludes column 1 }
+\NormalTok{Evaporation\_Stra2020[,}\SpecialCharTok{{-}}\DecValTok{1}\NormalTok{]}\OtherTok{\textless{}{-}} \FunctionTok{round}\NormalTok{(Evaporation\_Stra2020[,}\SpecialCharTok{{-}}\DecValTok{1}\NormalTok{], }\DecValTok{2}\NormalTok{)  }
+
+\NormalTok{Evaporation\_Tri2019[,}\SpecialCharTok{{-}}\DecValTok{1}\NormalTok{]}\OtherTok{\textless{}{-}} \FunctionTok{round}\NormalTok{(Evaporation\_Tri2019[,}\SpecialCharTok{{-}}\DecValTok{1}\NormalTok{], }\DecValTok{2}\NormalTok{)             }
+\NormalTok{Evaporation\_Tri2020[,}\SpecialCharTok{{-}}\DecValTok{1}\NormalTok{]}\OtherTok{\textless{}{-}} \FunctionTok{round}\NormalTok{(Evaporation\_Tri2020[,}\SpecialCharTok{{-}}\DecValTok{1}\NormalTok{], }\DecValTok{2}\NormalTok{) }
+\end{Highlighting}
+\end{Shaded}
+
+Plotting the data
+
+\#Stra\_2019
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{Stra2019\_plot }\OtherTok{\textless{}{-}}\NormalTok{ Evaporation\_Stra2019 }\SpecialCharTok{\%\textgreater{}\%} 
+ \FunctionTok{melt}\NormalTok{(.,}\AttributeTok{id=}\StringTok{"Date"}\NormalTok{)}\SpecialCharTok{\%\textgreater{}\%} 
+  \CommentTok{\#filter(value \textless{} 10) \%\textgreater{}\%               \#lines to filter results}
+  \FunctionTok{filter}\NormalTok{(variable }\SpecialCharTok{!=} \StringTok{"E\_MT"}\NormalTok{)}\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{filter}\NormalTok{(variable }\SpecialCharTok{!=} \StringTok{"E\_PEN"}\NormalTok{)}\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{filter}\NormalTok{(variable }\SpecialCharTok{!=} \StringTok{"E\_RH"}\NormalTok{)}\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{filter}\NormalTok{(variable }\SpecialCharTok{!=} \StringTok{"E\_D"}\NormalTok{)}\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{filter}\NormalTok{(variable }\SpecialCharTok{!=} \StringTok{"E\_M"}\NormalTok{)}\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{filter}\NormalTok{(variable }\SpecialCharTok{!=} \StringTok{"E\_BR"}\NormalTok{)}\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{filter}\NormalTok{(variable }\SpecialCharTok{!=} \StringTok{"E\_PT"}\NormalTok{)}\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{filter}\NormalTok{(variable }\SpecialCharTok{!=} \StringTok{"E\_BT"}\NormalTok{)}\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{filter}\NormalTok{(variable }\SpecialCharTok{!=} \StringTok{"E\_DK"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Warning in melt(., id = "Date"): The melt generic in data.table has been passed
+## a data.frame and will attempt to redirect to the relevant reshape2 method;
+## please note that reshape2 is deprecated, and this redirection is now deprecated
+## as well. To continue using melt methods from reshape2 while both libraries are
+## attached, e.g. melt.list, you can prepend the namespace like reshape2::melt(.).
+## In the next version, this warning will become an error.
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{P}\OtherTok{\textless{}{-}} \FunctionTok{ggplot}\NormalTok{()}\SpecialCharTok{+}
+  \FunctionTok{geom\_point}\NormalTok{(Stra2019\_plot,}\AttributeTok{mapping =} \FunctionTok{aes}\NormalTok{(}\AttributeTok{x=}\NormalTok{ Date, }\AttributeTok{y=}\NormalTok{ value,  }\AttributeTok{group =}\NormalTok{ variable,}\AttributeTok{color =}\NormalTok{ variable), }\AttributeTok{size =}\DecValTok{2}\NormalTok{)}\SpecialCharTok{+}
+  \FunctionTok{theme\_bw}\NormalTok{()}\SpecialCharTok{+}
+  \FunctionTok{labs}\NormalTok{(}\AttributeTok{y =} \StringTok{"Evaporation (mm/day)"}\NormalTok{)}\SpecialCharTok{+}
+  \FunctionTok{theme}\NormalTok{(}\AttributeTok{axis.title =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{size =} \DecValTok{14}\NormalTok{, }\AttributeTok{face =} \StringTok{"bold"}\NormalTok{,}\AttributeTok{colour =} \StringTok{"black"}\NormalTok{),}
+        \AttributeTok{axis.text  =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{size =} \DecValTok{12}\NormalTok{, }\AttributeTok{face =} \StringTok{"bold"}\NormalTok{,}\AttributeTok{colour =} \StringTok{"black"}\NormalTok{))}\SpecialCharTok{+}
+  \FunctionTok{scale\_color\_manual}\NormalTok{(}\AttributeTok{name =} \StringTok{"Evaporation Methods"}\NormalTok{,}
+                     \AttributeTok{values =} \FunctionTok{c}\NormalTok{(}\StringTok{"E\_BT"} \OtherTok{=} \StringTok{"\#A6CEE3"}\NormalTok{,}
+                                \StringTok{"E\_BR"} \OtherTok{=} \StringTok{"\#1F78B4"}\NormalTok{,}
+                                \StringTok{"E\_PEN"} \OtherTok{=} \StringTok{"\#B2DF8A"}\NormalTok{,}
+                                \StringTok{"E\_PEN2"}\OtherTok{=} \StringTok{"\#33A02C"}\NormalTok{,}
+                                \StringTok{"E\_PT"} \OtherTok{=} \StringTok{"\#FB9A99"}\NormalTok{,}
+                                \StringTok{"E\_DK"} \OtherTok{=} \StringTok{"\#E31A1C"}\NormalTok{,}
+                                \StringTok{"E\_BS"} \OtherTok{=} \StringTok{"\#FFFF99"}\NormalTok{,}
+                                 \StringTok{"E\_D"} \OtherTok{=} \StringTok{"\#FDBF6F"}\NormalTok{,                     }
+                                \StringTok{"E\_JH"} \OtherTok{=} \StringTok{"\#FF7F00"}\NormalTok{,  }
+                               \StringTok{"E\_M"} \OtherTok{=} \StringTok{"\#CAB2D6"}\NormalTok{,}
+                               \StringTok{"E\_RH"} \OtherTok{=} \StringTok{"\#6A3D9A"}\NormalTok{,                     }
+                                \StringTok{"E\_MT"} \OtherTok{=} \StringTok{"\#B15928"}\NormalTok{,}
+                               \StringTok{"Evap\_obs"} \OtherTok{=} \StringTok{"black"}\NormalTok{))}
+\FunctionTok{print}\NormalTok{ (P)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Warning: Removed 16 rows containing missing values (`geom_point()`).
+\end{verbatim}
+
+\includegraphics{Code_files/figure-latex/unnamed-chunk-25-1.pdf}
+
+\#Stra\_2020
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{Stra2020\_plot }\OtherTok{\textless{}{-}}\NormalTok{ Evaporation\_Stra2020 }\SpecialCharTok{\%\textgreater{}\%} 
+ \FunctionTok{melt}\NormalTok{(.,}\AttributeTok{id=}\StringTok{"Date"}\NormalTok{)}\SpecialCharTok{\%\textgreater{}\%} 
+   \CommentTok{\#filter(value \textless{} 10) \%\textgreater{}\%               \#lines to filter results}
+  \FunctionTok{filter}\NormalTok{(variable }\SpecialCharTok{!=} \StringTok{"E\_MT"}\NormalTok{)}\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{filter}\NormalTok{(variable }\SpecialCharTok{!=} \StringTok{"E\_PEN"}\NormalTok{)}\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{filter}\NormalTok{(variable }\SpecialCharTok{!=} \StringTok{"E\_RH"}\NormalTok{)}\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{filter}\NormalTok{(variable }\SpecialCharTok{!=} \StringTok{"E\_D"}\NormalTok{)}\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{filter}\NormalTok{(variable }\SpecialCharTok{!=} \StringTok{"E\_M"}\NormalTok{)}\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{filter}\NormalTok{(variable }\SpecialCharTok{!=} \StringTok{"E\_BR"}\NormalTok{)}\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{filter}\NormalTok{(variable }\SpecialCharTok{!=} \StringTok{"E\_PT"}\NormalTok{)}\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{filter}\NormalTok{(variable }\SpecialCharTok{!=} \StringTok{"E\_BT"}\NormalTok{)}\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{filter}\NormalTok{(variable }\SpecialCharTok{!=} \StringTok{"E\_DK"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Warning in melt(., id = "Date"): The melt generic in data.table has been passed
+## a data.frame and will attempt to redirect to the relevant reshape2 method;
+## please note that reshape2 is deprecated, and this redirection is now deprecated
+## as well. To continue using melt methods from reshape2 while both libraries are
+## attached, e.g. melt.list, you can prepend the namespace like reshape2::melt(.).
+## In the next version, this warning will become an error.
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{P}\OtherTok{\textless{}{-}} \FunctionTok{ggplot}\NormalTok{()}\SpecialCharTok{+}
+  \FunctionTok{geom\_point}\NormalTok{(Stra2020\_plot,}\AttributeTok{mapping =} \FunctionTok{aes}\NormalTok{(}\AttributeTok{x=}\NormalTok{ Date, }\AttributeTok{y=}\NormalTok{ value,  }\AttributeTok{group =}\NormalTok{ variable,}\AttributeTok{color =}\NormalTok{ variable), }\AttributeTok{size =}\DecValTok{2}\NormalTok{)}\SpecialCharTok{+}
+  \FunctionTok{theme\_bw}\NormalTok{()}\SpecialCharTok{+}
+  \FunctionTok{labs}\NormalTok{(}\AttributeTok{y =} \StringTok{"Evaporation (mm/day)"}\NormalTok{)}\SpecialCharTok{+}
+  \FunctionTok{theme}\NormalTok{(}\AttributeTok{axis.title =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{size =} \DecValTok{14}\NormalTok{, }\AttributeTok{face =} \StringTok{"bold"}\NormalTok{,}\AttributeTok{colour =} \StringTok{"black"}\NormalTok{),}
+        \AttributeTok{axis.text  =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{size =} \DecValTok{12}\NormalTok{, }\AttributeTok{face =} \StringTok{"bold"}\NormalTok{,}\AttributeTok{colour =} \StringTok{"black"}\NormalTok{))}\SpecialCharTok{+}
+  \FunctionTok{scale\_color\_manual}\NormalTok{(}\AttributeTok{name =} \StringTok{"Evaporation Methods"}\NormalTok{,}
+                     \AttributeTok{values =} \FunctionTok{c}\NormalTok{(}\StringTok{"E\_BT"} \OtherTok{=} \StringTok{"\#A6CEE3"}\NormalTok{,}
+                                \StringTok{"E\_BR"} \OtherTok{=} \StringTok{"\#1F78B4"}\NormalTok{,}
+                                \StringTok{"E\_PEN"} \OtherTok{=} \StringTok{"\#B2DF8A"}\NormalTok{,}
+                                \StringTok{"E\_PEN2"}\OtherTok{=} \StringTok{"\#33A02C"}\NormalTok{,}
+                                \StringTok{"E\_PT"} \OtherTok{=} \StringTok{"\#FB9A99"}\NormalTok{,}
+                                \StringTok{"E\_DK"} \OtherTok{=} \StringTok{"\#E31A1C"}\NormalTok{,}
+                                \StringTok{"E\_BS"} \OtherTok{=} \StringTok{"\#FFFF99"}\NormalTok{,}
+                                 \StringTok{"E\_D"} \OtherTok{=} \StringTok{"\#FDBF6F"}\NormalTok{,                     }
+                                \StringTok{"E\_JH"} \OtherTok{=} \StringTok{"\#FF7F00"}\NormalTok{,  }
+                               \StringTok{"E\_M"} \OtherTok{=} \StringTok{"\#CAB2D6"}\NormalTok{,}
+                               \StringTok{"E\_RH"} \OtherTok{=} \StringTok{"\#6A3D9A"}\NormalTok{,                     }
+                                \StringTok{"E\_MT"} \OtherTok{=} \StringTok{"\#B15928"}\NormalTok{,}
+                               \StringTok{"Evap\_obs"} \OtherTok{=} \StringTok{"black"}\NormalTok{))}
+\FunctionTok{print}\NormalTok{ (P)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Warning: Removed 33 rows containing missing values (`geom_point()`).
+\end{verbatim}
+
+\includegraphics{Code_files/figure-latex/unnamed-chunk-26-1.pdf}
+
+\#Tri\_2019
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{Tri2019\_plot }\OtherTok{\textless{}{-}}\NormalTok{ Evaporation\_Tri2019 }\SpecialCharTok{\%\textgreater{}\%} 
+  \FunctionTok{melt}\NormalTok{(.,}\AttributeTok{id=}\StringTok{"Date"}\NormalTok{)}\SpecialCharTok{\%\textgreater{}\%} 
+ \CommentTok{\# filter(value \textless{} 10) \%\textgreater{}\%               \#lines to filter results}
+  \FunctionTok{filter}\NormalTok{(variable }\SpecialCharTok{!=} \StringTok{"E\_MT"}\NormalTok{)}\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{filter}\NormalTok{(variable }\SpecialCharTok{!=} \StringTok{"E\_PEN"}\NormalTok{)}\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{filter}\NormalTok{(variable }\SpecialCharTok{!=} \StringTok{"E\_RH"}\NormalTok{)}\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{filter}\NormalTok{(variable }\SpecialCharTok{!=} \StringTok{"E\_JH"}\NormalTok{)}\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{filter}\NormalTok{(variable }\SpecialCharTok{!=} \StringTok{"E\_BR"}\NormalTok{)}\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{filter}\NormalTok{(variable }\SpecialCharTok{!=} \StringTok{"E\_D"}\NormalTok{)}\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{filter}\NormalTok{(variable }\SpecialCharTok{!=} \StringTok{"E\_M"}\NormalTok{)}\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{filter}\NormalTok{(variable }\SpecialCharTok{!=} \StringTok{"E\_PEN2"}\NormalTok{)}\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{filter}\NormalTok{(variable }\SpecialCharTok{!=} \StringTok{"E\_BS"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Warning in melt(., id = "Date"): The melt generic in data.table has been passed
+## a data.frame and will attempt to redirect to the relevant reshape2 method;
+## please note that reshape2 is deprecated, and this redirection is now deprecated
+## as well. To continue using melt methods from reshape2 while both libraries are
+## attached, e.g. melt.list, you can prepend the namespace like reshape2::melt(.).
+## In the next version, this warning will become an error.
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{P}\OtherTok{\textless{}{-}} \FunctionTok{ggplot}\NormalTok{()}\SpecialCharTok{+}
+  \FunctionTok{geom\_point}\NormalTok{(Tri2019\_plot,}\AttributeTok{mapping =} \FunctionTok{aes}\NormalTok{(}\AttributeTok{x=}\NormalTok{ Date, }\AttributeTok{y=}\NormalTok{ value,  }\AttributeTok{group =}\NormalTok{ variable,}\AttributeTok{color =}\NormalTok{ variable), }\AttributeTok{size =}\DecValTok{2}\NormalTok{)}\SpecialCharTok{+}
+  \FunctionTok{theme\_bw}\NormalTok{()}\SpecialCharTok{+}
+  \FunctionTok{labs}\NormalTok{(}\AttributeTok{y =} \StringTok{"Evaporation (mm/day)"}\NormalTok{)}\SpecialCharTok{+}
+  \FunctionTok{theme}\NormalTok{(}\AttributeTok{axis.title =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{size =} \DecValTok{14}\NormalTok{, }\AttributeTok{face =} \StringTok{"bold"}\NormalTok{,}\AttributeTok{colour =} \StringTok{"black"}\NormalTok{),}
+        \AttributeTok{axis.text  =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{size =} \DecValTok{12}\NormalTok{, }\AttributeTok{face =} \StringTok{"bold"}\NormalTok{,}\AttributeTok{colour =} \StringTok{"black"}\NormalTok{))}\SpecialCharTok{+}
+  \FunctionTok{scale\_color\_manual}\NormalTok{(}\AttributeTok{name =} \StringTok{"Evaporation Methods"}\NormalTok{,}
+                     \AttributeTok{values =} \FunctionTok{c}\NormalTok{(}\StringTok{"E\_BT"} \OtherTok{=} \StringTok{"\#A6CEE3"}\NormalTok{,}
+                                \StringTok{"E\_BR"} \OtherTok{=} \StringTok{"\#1F78B4"}\NormalTok{,}
+                                \StringTok{"E\_PEN"} \OtherTok{=} \StringTok{"\#B2DF8A"}\NormalTok{,}
+                                \StringTok{"E\_PEN2"}\OtherTok{=} \StringTok{"\#33A02C"}\NormalTok{,}
+                                \StringTok{"E\_PT"} \OtherTok{=} \StringTok{"\#FB9A99"}\NormalTok{,}
+                                \StringTok{"E\_DK"} \OtherTok{=} \StringTok{"\#E31A1C"}\NormalTok{,}
+                                \StringTok{"E\_BS"} \OtherTok{=} \StringTok{"\#FFFF99"}\NormalTok{,}
+                                 \StringTok{"E\_D"} \OtherTok{=} \StringTok{"\#FDBF6F"}\NormalTok{,                     }
+                                \StringTok{"E\_JH"} \OtherTok{=} \StringTok{"\#FF7F00"}\NormalTok{,  }
+                               \StringTok{"E\_M"} \OtherTok{=} \StringTok{"\#CAB2D6"}\NormalTok{,}
+                               \StringTok{"E\_RH"} \OtherTok{=} \StringTok{"\#6A3D9A"}\NormalTok{,                     }
+                                \StringTok{"E\_MT"} \OtherTok{=} \StringTok{"\#B15928"}\NormalTok{,}
+                               \StringTok{"Evap\_obs"} \OtherTok{=} \StringTok{"black"}\NormalTok{))}
+\FunctionTok{print}\NormalTok{ (P)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Warning: Removed 243 rows containing missing values (`geom_point()`).
+\end{verbatim}
+
+\includegraphics{Code_files/figure-latex/unnamed-chunk-27-1.pdf}
+
+\#Tri\_2020
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{Tri2020\_plot }\OtherTok{\textless{}{-}}\NormalTok{ Evaporation\_Tri2020 }\SpecialCharTok{\%\textgreater{}\%} 
+  \FunctionTok{melt}\NormalTok{(.,}\AttributeTok{id=}\StringTok{"Date"}\NormalTok{)}\SpecialCharTok{\%\textgreater{}\%} 
+  \CommentTok{\#filter(value \textless{} 10) \%\textgreater{}\%               \#lines to filter results}
+  \FunctionTok{filter}\NormalTok{(variable }\SpecialCharTok{!=} \StringTok{"E\_MT"}\NormalTok{)}\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{filter}\NormalTok{(variable }\SpecialCharTok{!=} \StringTok{"E\_PEN"}\NormalTok{)}\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{filter}\NormalTok{(variable }\SpecialCharTok{!=} \StringTok{"E\_RH"}\NormalTok{)}\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{filter}\NormalTok{(variable }\SpecialCharTok{!=} \StringTok{"E\_JH"}\NormalTok{)}\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{filter}\NormalTok{(variable }\SpecialCharTok{!=} \StringTok{"E\_BR"}\NormalTok{)}\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{filter}\NormalTok{(variable }\SpecialCharTok{!=} \StringTok{"E\_D"}\NormalTok{)}\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{filter}\NormalTok{(variable }\SpecialCharTok{!=} \StringTok{"E\_M"}\NormalTok{)}\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{filter}\NormalTok{(variable }\SpecialCharTok{!=} \StringTok{"E\_PEN2"}\NormalTok{)}\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{filter}\NormalTok{(variable }\SpecialCharTok{!=} \StringTok{"E\_BS"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Warning in melt(., id = "Date"): The melt generic in data.table has been passed
+## a data.frame and will attempt to redirect to the relevant reshape2 method;
+## please note that reshape2 is deprecated, and this redirection is now deprecated
+## as well. To continue using melt methods from reshape2 while both libraries are
+## attached, e.g. melt.list, you can prepend the namespace like reshape2::melt(.).
+## In the next version, this warning will become an error.
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{P}\OtherTok{\textless{}{-}} \FunctionTok{ggplot}\NormalTok{()}\SpecialCharTok{+}
+  \FunctionTok{geom\_point}\NormalTok{(Tri2020\_plot,}\AttributeTok{mapping =} \FunctionTok{aes}\NormalTok{(}\AttributeTok{x=}\NormalTok{ Date, }\AttributeTok{y=}\NormalTok{ value,  }\AttributeTok{group =}\NormalTok{ variable,}\AttributeTok{color =}\NormalTok{ variable), }\AttributeTok{size =}\DecValTok{2}\NormalTok{)}\SpecialCharTok{+}
+  \FunctionTok{theme\_bw}\NormalTok{()}\SpecialCharTok{+}
+  \FunctionTok{labs}\NormalTok{(}\AttributeTok{y =} \StringTok{"Evaporation (mm/day)"}\NormalTok{)}\SpecialCharTok{+}
+  \FunctionTok{theme}\NormalTok{(}\AttributeTok{axis.title =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{size =} \DecValTok{14}\NormalTok{, }\AttributeTok{face =} \StringTok{"bold"}\NormalTok{,}\AttributeTok{colour =} \StringTok{"black"}\NormalTok{),}
+        \AttributeTok{axis.text  =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{size =} \DecValTok{12}\NormalTok{, }\AttributeTok{face =} \StringTok{"bold"}\NormalTok{,}\AttributeTok{colour =} \StringTok{"black"}\NormalTok{))}\SpecialCharTok{+}
+  \FunctionTok{scale\_color\_manual}\NormalTok{(}\AttributeTok{name =} \StringTok{"Evaporation Methods"}\NormalTok{,}
+                     \AttributeTok{values =} \FunctionTok{c}\NormalTok{(}\StringTok{"E\_BT"} \OtherTok{=} \StringTok{"\#A6CEE3"}\NormalTok{,}
+                                \StringTok{"E\_BR"} \OtherTok{=} \StringTok{"\#1F78B4"}\NormalTok{,}
+                                \StringTok{"E\_PEN"} \OtherTok{=} \StringTok{"\#B2DF8A"}\NormalTok{,}
+                                \StringTok{"E\_PEN2"}\OtherTok{=} \StringTok{"\#33A02C"}\NormalTok{,}
+                                \StringTok{"E\_PT"} \OtherTok{=} \StringTok{"\#FB9A99"}\NormalTok{,}
+                                \StringTok{"E\_DK"} \OtherTok{=} \StringTok{"\#E31A1C"}\NormalTok{,}
+                                \StringTok{"E\_BS"} \OtherTok{=} \StringTok{"\#FFFF99"}\NormalTok{,}
+                                 \StringTok{"E\_D"} \OtherTok{=} \StringTok{"\#FDBF6F"}\NormalTok{,                     }
+                                \StringTok{"E\_JH"} \OtherTok{=} \StringTok{"\#FF7F00"}\NormalTok{,  }
+                               \StringTok{"E\_M"} \OtherTok{=} \StringTok{"\#CAB2D6"}\NormalTok{,}
+                               \StringTok{"E\_RH"} \OtherTok{=} \StringTok{"\#6A3D9A"}\NormalTok{,                     }
+                                \StringTok{"E\_MT"} \OtherTok{=} \StringTok{"\#B15928"}\NormalTok{,}
+                               \StringTok{"Evap\_obs"} \OtherTok{=} \StringTok{"black"}\NormalTok{))}
+\FunctionTok{print}\NormalTok{ (P)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Warning: Removed 124 rows containing missing values (`geom_point()`).
+\end{verbatim}
+
+\includegraphics{Code_files/figure-latex/unnamed-chunk-28-1.pdf}
+
+\end{document}

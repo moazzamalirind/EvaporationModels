@@ -47,8 +47,7 @@ The eddy covariance data was processed using the EddyPro software at an averagin
 Jansen, F. A., Uijlenhoet, R., Jacobs, C. M., & Teuling, A. J. (2021). Evaporation from a large lowland reservoir–observed dynamics during a warm summer. Hydrology and Earth System Sciences Discussions, 1-28.
 
 
-#```{r}
-install.packages("r package", repos = "http://cran.us.r-project.org")
+```{r}
 
 #################
 # Getting started 

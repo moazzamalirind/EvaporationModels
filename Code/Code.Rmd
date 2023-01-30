@@ -104,22 +104,22 @@ library(zoo)
 
 #######Stavoren Station (Sta)
 #Daily
-Sta_daily_2019 = read.table("C:/Users/Mooz/OneDrive - Washington State University (email.wsu.edu)/Qual Exam_WSU/Evaporation Models/Data/Stavoren_daily_2019_revised.txt", sep="\t", header=TRUE)
-Sta_daily_2020 = read.table("C:/Users/Mooz/OneDrive - Washington State University (email.wsu.edu)/Qual Exam_WSU/Evaporation Models/Data/Stavoren_daily_2020_revised.txt", sep="\t", header=TRUE)
+Sta_daily_2019 = read.table("Data/Stavoren_daily_2019_revised.txt", sep="\t", header=TRUE)
+Sta_daily_2020 = read.table("Data/Stavoren_daily_2020_revised.txt", sep="\t", header=TRUE)
 
 #Hourly
-Sta_Hourly_2019 = read.table("C:/Users/Mooz/OneDrive - Washington State University (email.wsu.edu)/Qual Exam_WSU/Evaporation Models/Data/Stavoren_hourly_2019_revised.txt", sep="\t", header=TRUE)
-Sta_Hourly_2020 = read.table("C:/Users/Mooz/OneDrive - Washington State University (email.wsu.edu)/Qual Exam_WSU/Evaporation Models/Data/Stavoren_hourly_2020_revised.txt", sep="\t", header=TRUE)
+Sta_Hourly_2019 = read.table("Data/Stavoren_hourly_2019_revised.txt", sep="\t", header=TRUE)
+Sta_Hourly_2020 = read.table("Data/Stavoren_hourly_2020_revised.txt", sep="\t", header=TRUE)
 
 ######Trintelhaven Station (Tri)
 
 #Daily
-Tri_daily_2019 = read.table("C:/Users/Mooz/OneDrive - Washington State University (email.wsu.edu)/Qual Exam_WSU/Evaporation Models/Data/Trintelhaven_daily_2019_revised.txt", sep="\t", header=TRUE)
-Tri_daily_2020 = read.table("C:/Users/Mooz/OneDrive - Washington State University (email.wsu.edu)/Qual Exam_WSU/Evaporation Models/Data/Trintelhaven_daily_2020_revised.txt", sep="\t", header=TRUE)
+Tri_daily_2019 = read.table("Data/Trintelhaven_daily_2019_revised.txt", sep="\t", header=TRUE)
+Tri_daily_2020 = read.table("Data/Trintelhaven_daily_2020_revised.txt", sep="\t", header=TRUE)
 
 #Hourly
-Tri_Hourly_2019 = read.table("C:/Users/Mooz/OneDrive - Washington State University (email.wsu.edu)/Qual Exam_WSU/Evaporation Models/Data/Trintelhaven_hourly_2019_revised.txt", sep="\t", header=TRUE)
-Tri_Hourly_2020 = read.table("C:/Users/Mooz/OneDrive - Washington State University (email.wsu.edu)/Qual Exam_WSU/Evaporation Models/Data/Trintelhaven_hourly_2020_revised.txt", sep="\t", header=TRUE)
+Tri_Hourly_2019 = read.table("Data/Trintelhaven_hourly_2019_revised.txt", sep="\t", header=TRUE)
+Tri_Hourly_2020 = read.table("Data/Trintelhaven_hourly_2020_revised.txt", sep="\t", header=TRUE)
 
 ```
 
@@ -171,13 +171,13 @@ RH		= Relative humidity [percents]
 
 #######Stavoren Station (Sta)
 #Daily
-Stra_Ewater_2019 = read.table("C:/Users/Mooz/OneDrive - Washington State University (email.wsu.edu)/Qual Exam_WSU/Evaporation Models/Data/Ewater_Stavoren_2019.txt", sep=",", header=TRUE)
+Stra_Ewater_2019 = read.table("Data/Ewater_Stavoren_2019.txt", sep=",", header=TRUE)
 
-Stra_Ewater_2020 = read.table("C:/Users/Mooz/OneDrive - Washington State University (email.wsu.edu)/Qual Exam_WSU/Evaporation Models/Data/Ewater_Stavoren_2020.txt", sep=",", header=TRUE)
+Stra_Ewater_2020 = read.table("Data/Ewater_Stavoren_2020.txt", sep=",", header=TRUE)
                               
-Tri_Ewater_2019 = read.table("C:/Users/Mooz/OneDrive - Washington State University (email.wsu.edu)/Qual Exam_WSU/Evaporation Models/Data/Ewater_Trintelhaven_2019.txt", sep=",", header=TRUE)
+Tri_Ewater_2019 = read.table("Data/Ewater_Trintelhaven_2019.txt", sep=",", header=TRUE)
 
-Tri_Ewater_2020 = read.table("C:/Users/Mooz/OneDrive - Washington State University (email.wsu.edu)/Qual Exam_WSU/Evaporation Models/Data/Ewater_Trintelhaven_2019.txt", sep=",", header=TRUE)                                                        
+Tri_Ewater_2020 = read.table("Data/Ewater_Trintelhaven_2019.txt", sep=",", header=TRUE)                                                        
 
 ```
 

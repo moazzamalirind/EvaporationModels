@@ -18,5 +18,8 @@ Tips:
 (Portion in the white background and starting with # are comments. Portion with Gray Background without # sign is the code).
 7. There are comments throughout the script describing details about operations and datasets.
 
+
+##Note: Fir producing estimates for any other study locations, it is recommended to use script available in the Generalized_Template folder. Please follow the readme for easy sailing. 
+
 For any further questions, happy to answer at moazzam.rind@wsu.edu.
 

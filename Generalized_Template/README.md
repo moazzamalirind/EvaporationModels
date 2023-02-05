@@ -1,8 +1,12 @@
 Requirements: 
 1. R Studio (https://posit.co/products/open-source/rstudio/)
 
-# Evaporation Models
 Instructions to run:
+
+
+
+
+
 1. The R code can be found at Code/Code.Rmd (https://github.com/moazzamalirind/EvaporationModels/blob/main/Code/Code.Rmd).
 2. Within the code you just have to change the data source. 
 For example: line 108 say "Sta_daily_2019 = ("Data/Stavoren_daily_2019_revised.txt", sep="\t", header=TRUE)". You have to change the source "Data/Stavoren_daily_2019_revised.txt" to location where your data is saved. 

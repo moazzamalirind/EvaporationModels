@@ -8,7 +8,8 @@ Instructions to run:
 For example: line 108 say "Sta_daily_2019 = ("Data/Stavoren_daily_2019_revised.txt", sep="\t", header=TRUE)". You have to change the source "Data/Stavoren_daily_2019_revised.txt" to location where your data is saved. 
 All the required data is available within "Data" folder.  
 
-Tip: 1.One easy way is to download the whole repository as Zip (click Code drop down and Download Zip) and save it to your desired loaction. 
+Tips: 
+1.One easy way is to download the whole repository as Zip (click Code drop down and Download Zip) and save it to your desired loaction. 
 2.Unzip the folder and open file "Evaporation Models.Rproj".
 3.It might be helpful to set wroking directory to the folder where your "Evaporation Models.Rproj" is located. 
 4. You can update working directory in Rstudio environment by clicking Session (locted in the top menu bar) then Set working directory and choose Directory.

@@ -7,7 +7,6 @@ output:
   html_document: default
 editor_options: 
   chunk_output_type: console
-
 ---
 
 ## Class project CE-560 

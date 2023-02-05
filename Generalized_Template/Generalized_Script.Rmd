@@ -1,0 +1,959 @@
+---
+title: "Evaporation Models"
+author: "Moazzam Rind"
+date: "1/23/2023"
+output:
+  pdf_document: default
+  html_document: default
+editor_options: 
+  chunk_output_type: console
+
+---
+
+## Class project CE-560 
+  
+### {Project Description
+Eleven commonly referred evaporation estimation models were used for comparative study. 
+The objectives were: 1. Discuss details (i.e. assumptions and requirements of each models). 2. Estimate Evaporation
+
+Application:: We believe this comparative study can be used to identify suitable model for a locality; especially if someone is interested to evaluate performance of different models at area of interest. 
+
+
+### Evaporation Methods.
+The selected methods are categorized into Three groups:
+
+a.	Combination Methods: 1.Bowen-ratio energy budget, 2. Penman, 3.Priestly-Taylor, 4. DeBruin–Keijman, 5.Brutsaert–Stricker, and 6.DeBruin  
+b.	Solar Radiation-based Methods: 7. Jensen–Haise and 8. Makkink
+c.	Dalton-based Methods: 9.Mass transfer, 10.Ryan–Harleman and 11. Bulk Transfer Approach
+d.  
+
+All the results are compared with direct estimation or estimation of LE. 
+
+
+### Study Location
+For the case study, I am choosing Lake Ijssel, Netherlands. There are two locations (Stavoren and Trintelhaven) surrounding Lake Ijssel where evaporation is estimated by Jasen et al., (2021).
+
+##########################################################################
+Description:
+Time series of open water evaporation of Lake IJssel, the Netherlands. 
+Data was collected at locations Stavoren and Trintelhaven at 7.5 m and 10.8 above land surface, respectively, from 2019 to 2020.
+Data was collected using the eddy covariance instrument of the type IRGASON at a sampling frequency of 20 Hz. 
+Variables Tair and RH were collected using a separate HMP155A instrument at a height of 7.4 m and 10.9 above surface in Stavoren and Trintelhaven, respectively. 
+The eddy covariance data was processed using the EddyPro software at an averaging interval of 30-min.
+########################################################################################
+
+
+##Reference:
+Jansen, F. A., Uijlenhoet, R., Jacobs, C. M., & Teuling, A. J. (2021). Evaporation from a large lowland reservoir–observed dynamics during a warm summer. Hydrology and Earth System Sciences Discussions, 1-28.
+
+
+```{r}
+
+#################
+# Getting started 
+#################
+# Remove everything from R's memory.
+rm(list=ls())
+
+##Packages required:
+#you might not require all of the following packages but no harm in downloading
+install.packages("sos")
+install.packages("leaps")
+install.packages("readxl")
+install.packages("Lubridate")
+install.packages("ggplot2")
+install.packages("zoo")
+install.packages("xlsx")
+```
+
+
+#Load Installed packages
+```{r }
+
+library(sos)
+library(leaps)
+library (data.table)
+library (dplyr)
+library (readxl)
+library (lubridate)
+library(ggplot2)
+library(leaps)
+library(tidyr)
+library(zoo)
+library (xlsx)
+```
+
+
+# Set working directory
+
+
+####################
+#### Read data sets 
+######################
+#Temporal coverage:  summer periods 2019-2020 
+
+#### Variable names:
+# LE = latent heat flux (W/m2)
+# Kin = global radiation (W/m2)
+# u = wind speed (m/s)
+# De = vapour pressure gradient (kpa)
+# VPD = vapour pressure deficit (kpa)
+# Twater = sub-skin water temperature (C)
+# H		= Sensible heat flux [W/m2]
+# wind_dir	= Wind direction [degrees]
+#air_pressure 	= Air pressure [Pa]
+#Tair		= Air temperature [degrees Celsius]
+#RH		= Relative humidity [percents]
+
+
+```{r}
+#Import data
+Summer_Stra_Daily2019 <- read.xlsx("Data_Netherlands.xlsx", sheetName = "Summer_Stra_Daily19")
+Summer_Stra_Daily2020 <- read.xlsx("Data_Netherlands.xlsx", sheetName = "Summer_Stra_Daily20")
+Summer_Tri_Daily2019 <- read.xlsx("Data_Netherlands.xlsx", sheetName = "Summer_Tri_Daily19")
+Summer_Tri_Daily2020 <- read.xlsx("Data_Netherlands.xlsx", sheetName = "Summer_Tri_Daily20")
+
+```
+
+#########################
+Evaporation estimation
+#########################
+
+#####Direct method (from Latent Heat flux LE).
+
+E = LE/(rw*lv)       (Considering this as observed Evaporation)       
+(Reference: Moreo, M. T., & Swancar, A. (2013). Evaporation from Lake Mead, Nevada and Arizona, March 2010 through February 2012. US Geological Survey Scientific Investigations Report, 5229, 40.)
+
+where: 
+E = Evaporation (mm/time)        (e.g. Time = day or hour)
+
+LE = latent heat flux (W/m2)
+Normally latent heat flux is difficult to measure and requires eddy covariance flux towers which measure gradient in vertical wind speed and specific humidity. For more information about dataset used in this exercise please refer Jasen et al., (2021).
+
+Lv= Latent heat of vaporization (MJ/Kg)
+Note: Latent heat of vaporization varies only slightly over normal temperature ranges, therefore is mostly taken constant i.e. 2.45 MJ/kg (for T = 20C). There is also an equation to estimate latent heat of vaporization given by FAO (https://www.fao.org/3/x0490e/x0490e0k.htm#annex%203.%20background%20on%20physical%20parameters%20used%20in%20evapotranspiration%20computatio). I am using here constant value of 2.45 MJ/kg while looking at my data.
+
+rw= density of water  (1000 kg/m3)
+
+#Assumptions
+1. The dataset used in this study has already been prepossessed by Jasen et al., (2021) so here we are not considering any additional corrections, filling gaps or data quality control techniques.
+
+##Reference:
+Jansen, F. A., Uijlenhoet, R., Jacobs, C. M., & Teuling, A. J. (2021). Evaporation from a large lowland reservoir–observed dynamics during a warm summer. Hydrology and Earth System Sciences Discussions, 1-28.
+
+
+```{r}
+#Defining variables and constants and conversions
+#With LE and Lv in units of MJ m-2 T-1 and MJ kg-1, respectively, ET is in units of kg m-2 T-1 which is equal to depth of water in mm T-1 (T=time)
+#Density of water (1000 kg/m3) was used during conversion of  kg m-2 T-1 to mm T-1.
+Lv <- 2.45   #(MJ/kg)  
+#LE data is given in W/m2 so converting it to MJ m-2 T-1
+
+#for daily Conversion
+# 1 w/M2 = 1 J/s.m2 = 1 J *86400 / day m2 = 86400*10^-6 MJ/m2 day
+
+Summer_Stra_Daily2019$LE_MJ <- Summer_Stra_Daily2019$LE * (86400*10^-6)
+Summer_Stra_Daily2020$LE_MJ <- Summer_Stra_Daily2020$LE * (86400*10^-6)
+Summer_Tri_Daily2019$LE_MJ <- Summer_Tri_Daily2019$LE * (86400*10^-6)
+Summer_Tri_Daily2020$LE_MJ <- Summer_Tri_Daily2020$LE * (86400*10^-6)
+
+#Evaporation Estimate 
+Stra_Eobs_daily2019 <-data.frame(Date= Summer_Stra_Daily2019$Date,
+                                  Evap_obs=Summer_Stra_Daily2019$LE_MJ/Lv)
+
+Stra_Eobs_daily2020 <-data.frame(Date= Summer_Stra_Daily2020$Date,
+                                  Evap_obs=Summer_Stra_Daily2020$LE_MJ/Lv)  
+  
+Tri_Eobs_daily2019 <-data.frame(Date= Summer_Tri_Daily2019$Date,
+                                  Evap_obs=Summer_Tri_Daily2019$LE_MJ/Lv)
+
+Tri_Eobs_daily2020 <-data.frame(Date= Summer_Tri_Daily2020$Date,
+                                  Evap_obs=Summer_Tri_Daily2020$LE_MJ/Lv)  
+  
+
+```
+
+
+
+I am creating dataframes with respect to year and location where evaporation (mm/T) from different models will populate. I am here only focusing summer months and daily evaporation:
+
+```{r}
+##Stavoren station
+
+Stra_Evap_Daily_2019 <- data.frame('Date' = Summer_Stra_Daily2019$Date)
+Stra_Evap_Daily_2020 <- data.frame('Date' = Summer_Stra_Daily2020$Date)
+
+##Trintelhaven station
+
+Tri_Evap_Daily_2019 <- data.frame ('Date' = Summer_Tri_Daily2019$Date)
+Tri_Evap_Daily_2020 <- data.frame ('Date' = Summer_Tri_Daily2020$Date)
+
+```
+
+
+#########11. Bulk transfer approach:
+
+E = Ce * rW * U * (qs - qair)
+
+Benefit: The main practical advantage of this mass-transfer approach, usually with a constant-known coefficient Ce, lies in the fact that it can be applied on a routine basis with regular and easily obtainable data of mean wind speed, water surface temperature and humidity of the air ((Brutsaert, 2005))
+
+E = Evaporation (mm/time)
+Ce = Water vapor transfer coefficient. Here we are talking Ce = 1.2*10^(-3) as constant (refer brutsaert for further details about this constant).
+u = wind speed (m/s)
+rw= density of water  (1000 kg/m3)
+qs = specific humidity at the water surface
+qair = specific humidity in air
+
+##Reference 
+Brutsaert,W.(2005). Hydrology : an introduction.United Kingdom:Cambridge University Press. Refer: section 4.2.2. 
+
+```{r}
+Ce <- 1.2*10^(-3)
+rw <- 1000 #(kg/m3)
+
+
+# calculating specific humidity of air and water from temperatures (air and water)
+ 
+#vapor pressures are in Kpa
+
+#Formula : saturated vapor pressure  e = 0.611 ^ {(17.27 * T)/(273.3 + T)}
+
+############air
+
+esat_air_Stra2019 <- 0.611^((17.27*Summer_Stra_Daily2019$Tair)/(237.3+Summer_Stra_Daily2019$Tair))
+esat_air_Stra2020 <- 0.611^((17.27*Summer_Stra_Daily2020$Tair)/(237.3+Summer_Stra_Daily2020$Tair))
+
+esat_air_Tri2019 <- 0.611^((17.27*Summer_Tri_Daily2019$Tair)/(237.3+Summer_Tri_Daily2019$Tair))
+esat_air_Tri2020 <- 0.611^((17.27*Summer_Tri_Daily2020$Tair)/(237.3+Summer_Tri_Daily2020$Tair))
+
+#Vapor pressure : e = esat *(Rh/100) 
+#Rh= Relative humidity (%)
+
+e_air_Stra2019 <- esat_air_Stra2019 * (Summer_Stra_Daily2019$RH /100)
+e_air_Stra2020 <- esat_air_Stra2020 * (Summer_Stra_Daily2020$RH /100)
+e_air_Tri2019 <- esat_air_Tri2019 * (Summer_Tri_Daily2019$RH /100)
+e_air_Tri2020 <- esat_air_Tri2020 * (Summer_Tri_Daily2020$RH /100)
+
+#Specific humidity q = 0.622 * (e/p) 
+# p = atmospheric pressure (101 kpa)
+
+p <- 101.32 #(Kpa)
+
+q_air_Stra2019 <- 0.622 * (e_air_Stra2019/p)
+q_air_Stra2020 <- 0.622 * (e_air_Stra2020/p)
+
+q_air_Tri2019 <- 0.622 * (e_air_Tri2019/p)
+q_air_Tri2020 <- 0.622 * (e_air_Tri2020/p)
+
+############Water
+
+
+esat_water_Stra2019 <- 0.611^((17.27*Summer_Stra_Daily2019$Twater)/(237.3+Summer_Stra_Daily2019$Twater))
+esat_water_Stra2020 <- 0.611^((17.27*Summer_Stra_Daily2020$Twater)/(237.3+Summer_Stra_Daily2020$Twater))
+
+esat_water_Tri2019 <- 0.611^((17.27*Summer_Tri_Daily2019$Twater)/(237.3+Summer_Tri_Daily2019$Twater))
+esat_water_Tri2020 <- 0.611^((17.27*Summer_Tri_Daily2020$Twater)/(237.3+Summer_Tri_Daily2020$Twater))
+
+# For water.... saturated vapor pressure equals to vapor pressure
+
+q_water_Stra2019 <- 0.622 * (esat_water_Stra2019/p)
+q_water_Stra2020 <- 0.622 * (esat_water_Stra2020/p)
+
+q_water_Tri2019 <- 0.622 * (esat_water_Tri2019/p)
+q_water_Tri2020 <- 0.622 * (esat_water_Tri2020/p)
+
+#Evaporation 
+#Density of water (1000 kg/m3) was used during conversion of  kg m-2 T-1 to mm T-1.
+#U is in m/s so covert in m/day by multiplying 60*60*24 =86400
+
+#E <- Ce * U * (qs - qair) * 86400
+
+Stra_Evap_Daily_2019$E_BT <- Ce * Summer_Stra_Daily2019$wind_speed* (q_water_Stra2019 - q_air_Stra2019) * 86400
+Stra_Evap_Daily_2020$E_BT <- Ce * Summer_Stra_Daily2020$wind_speed* (q_water_Stra2020 - q_air_Stra2020) * 86400
+
+Tri_Evap_Daily_2019$E_BT <- Ce * Summer_Tri_Daily2019$wind_speed* (q_water_Tri2019 - q_air_Tri2019) * 86400
+Tri_Evap_Daily_2020$E_BT <- Ce * Summer_Tri_Daily2020$wind_speed* (q_water_Tri2020 - q_air_Tri2020) * 86400
+
+```
+
+
+
+#Joining observed and estimated datasets
+```{r}
+
+Stra_Evap_Daily_2019 <- Stra_Evap_Daily_2019 %>% 
+  inner_join(.,Stra_Eobs_daily2019,by="Date")
+
+Stra_Evap_Daily_2020 <- Stra_Evap_Daily_2020 %>% 
+  inner_join(.,Stra_Eobs_daily2020,by="Date")
+
+Tri_Evap_Daily_2019 <- Tri_Evap_Daily_2019 %>% 
+  inner_join(.,Tri_Eobs_daily2019,by="Date")
+
+Tri_Evap_Daily_2020 <- Tri_Evap_Daily_2020 %>% 
+  inner_join(.,Tri_Eobs_daily2020,by="Date") 
+
+```
+
+1. Bowen-Ratio Energy Budget
+
+#Formula  
+E = Q_ne/(1+B)
+
+Q_ne = Q/Lv
+
+B= cp*(θ1 -θ2)/ (Lv * (q1-q2))
+
+cp = specific head of water
+θ = Potential temperature.
+According to Brutsaert,W.(2005) :  "The difference between T and θ is usually rather small, especially in the lower layers of the air near the ground surface, where most measurements are made. Therefore in many situations, when the height difference of the temperature measurements is only
+a few meters, the use of the actual temperature T is allowed; otherwise θ must be used in heat transfer formulations"
+
+So: B= cp*(T1 -T2)/ (Lv * (q1-q2))
+
+
+#Assumptions
+##1. The energy transfer coefficients for latent heat and sensible heat fluxes are equal{1}.
+##2. A basic criterion of this method is that the air temperature and water vapor pressure are measured (above an evaporating surface) at such heights that the horizontal gradient of air temperature and water vapor pressure can be neglected {1}. 
+##3.The equality  assumption (coefficients for latent heat = coefficients for sensible heat) has been proven to be valid for a range of field and vegetation surfaces in various climates. But not valid for some heterogeneous vegetation surfaces {1}
+
+"It should be clearly noted that, although Lake IJssel is a lake that is several metres deep, we have neglected G in the following analyses for the following two reasons: (1) we were not able to measure it, and (2) we wished to adhere to how Penman’s equation is typically employed for shallow water surfaces" (Jasen et al., (2021))
+
+
+##Reference:
+{1} Irmak, S., Skaggs, K. E., & Chatterjee, S. (2014). A review of the Bowen ratio surface energy balance method for quantifying evapo-transpiration and other energy fluxes. Transactions of the ASABE, 57(6), 1657-1674.
+
+Jansen, F. A., Uijlenhoet, R., Jacobs, C. M., & Teuling, A. J. (2021). Evaporation from a large lowland reservoir–observed dynamics during a warm summer. Hydrology and Earth System Sciences Discussions, 1-28.
+
+Brutsaert,W.(2005). Hydrology : an introduction.United Kingdom:Cambridge University Press. 
+
+```{r}
+cp  = 4182   #j/kg C  at 20C of water
+Lv1 = 2450000  #J/kg
+
+B_Stra_2019 = cp*(Summer_Stra_Daily2019$Twater -Summer_Stra_Daily2019$Tair)/ (Lv1 * (q_water_Stra2019-q_air_Stra2019))
+B_Stra_2020 = cp*(Summer_Stra_Daily2020$Twater -Summer_Stra_Daily2020$Tair)/ (Lv1 * (q_water_Stra2020-q_air_Stra2020))
+
+B_Tri_2019 = cp*(Summer_Tri_Daily2019$Twater -Summer_Tri_Daily2019$Tair)/ (Lv1 * (q_water_Tri2019-q_air_Tri2019))
+B_Tri_2020 = cp*(Summer_Tri_Daily2020$Twater -Summer_Tri_Daily2020$Tair)/ (Lv1 * (q_water_Tri2020-q_air_Tri2020))
+
+Lv <- 2.45   #(MJ/kg) 
+#Q_ne = Q/lv    where q is in W/m2 and Lv is in Mj/kg.
+# 1 w/M2 = 1 J/sm2 = 1 J *86400 / day m2 = 86400*10^-6 MJ/m2 day
+#With Q and Lv in units of MJ m-2 d-1 and MJ kg-1, respectively, ET is in units of kg m-2 d-1 which is equal to depth of water in mm d-1 (d=day)
+Q_ne_Stra_19 = Summer_Stra_Daily2019$Kin *(86400*10^-6)/Lv
+Q_ne_Stra_20 = Summer_Stra_Daily2020$Kin *(86400*10^-6)/Lv
+
+Q_ne_Tri_19 = Summer_Tri_Daily2019$Kin *(86400*10^-6)/Lv
+Q_ne_Tri_20 = Summer_Tri_Daily2020$Kin *(86400*10^-6)/Lv
+
+
+# Evaporation in mm/d
+
+Stra_Evap_Daily_2019$E_BR <- Q_ne_Stra_19 /(1+B_Stra_2019)
+Stra_Evap_Daily_2020$E_BR <- Q_ne_Stra_20 /(1+B_Stra_2020)
+Tri_Evap_Daily_2019$E_BR <- Q_ne_Tri_19/(1+B_Tri_2019)
+Tri_Evap_Daily_2020$E_BR <- Q_ne_Tri_20/(1+B_Tri_2020)
+
+```
+
+2. Penman Method    
+#Assumptions
+"When the surface is wet, the surface specific humidity may be assumed to be the saturation value at the surface temperature, i.e. qs = q∗ (Ts). This allows an approximation, first introduced by Penman (1948) and given in Equation (4.20) below; the main advantage of this approximation is that it eliminates the need for measurements of q, u and θ at two levels, as in the profile methods (Section 4.2.2) and standard energy budget methods (Section 4.3.1) and that measurements at one level suffice" (Brutsaert, 2005)
+
+#Assumptions:
+(1) closed energy balance at water surface
+(2) esat at surface decreases linearly to esat at observation height
+(3) ra can be estimated by a wind function        (Refer: Jasen et al., (2021)
+
+#formula
+LE = (Delta/(Delta+Pc))* Q + (Pc/(Delta+Pc)) *E_A           #latent heat flux (W m-2)
+
+E = LE/Lv  i.e latent heat flux by latent heat of vaporization   (mm/day)   (similar to Direct method)
+
+#Where:
+Delta = Slope of saturated vapor pressure at air temperature  (kPa/ Oc), 
+Pc= psychometric constant (kPa/ Oc), 
+
+EA = f_u *(eair_sat - eair)    #eair_sat-eair is vapor pressure deficit (VPD) at 2 m height given in the data (Jasen et al., (2021))
+f_U = Wind function  = 37 + 40 U #[W m−2 kPa−1]      (Refer: Jasen et al., (2021))  
+U = wind speed at the measurement height of 2m (m/s).
+
+
+##Reference 
+Brutsaert,W.(2005). Hydrology : an introduction.United Kingdom:Cambridge University Press. Refer: section 4.3.2.
+
+Jansen, F. A., Uijlenhoet, R., Jacobs, C. M., & Teuling, A. J. (2021). Evaporation from a large lowland reservoir–observed dynamics during a warm summer. Hydrology and Earth System Sciences Discussions, 1-28.
+
+
+
+```{r}
+
+#Delta <- {{4098*eair_sat)}/{Tair + 237.2}^2}  #(kPa/ Oc)
+
+Delta_Stra_2019 <- {4098*esat_air_Stra2019}/{Summer_Stra_Daily2019$Tair+ 237.2}^2
+Delta_Stra_2020 <- {4098*esat_air_Stra2020}/{Summer_Stra_Daily2020$Tair+ 237.2}^2
+
+Delta_Tri_2019 <- {4098*esat_air_Tri2019}/{Summer_Tri_Daily2019$Tair+ 237.2}^2
+Delta_Tri_2020 <- {4098*esat_air_Tri2020}/{Summer_Tri_Daily2020$Tair+ 237.2}^2
+
+#Pc = (cp *p) /(0.622*Lt)
+#When T is assumed 20 Oc
+#Cp = Specific heat capacity of water = 4182 J/kg Oc  = 4182*10^-6 MJ/kg Oc 
+#Lt = Latent heat of vaporization 2.453 MJ/kg 
+#p = atmospheric pressure  101.325 KPa
+
+Pc <- ((4182*10^-6)*101.325)/ (0.622*2.45)              # [Kpa/ oc]
+
+#wind function from Paper by Jasen et al., (2021) 
+fu_Stra_2019 <-  37 + 40 * Summer_Stra_Daily2019$wind_speed      #[W m−2 kPa−1]  
+fu_Stra_2020 <- 37 + 40 * Summer_Stra_Daily2020$wind_speed       #[W m−2 kPa−1] 
+
+fu_Tri_2019 <-  37 + 40 * Summer_Tri_Daily2019$wind_speed      #[W m−2 kPa−1]  
+fu_Tri_2020 <- 37 + 40 * Summer_Tri_Daily2020$wind_speed       #[W m−2 kPa−1] 
+
+EA_Stra_2019 <- fu_Stra_2019 *Summer_Stra_Daily2019$VPD        #[W m−2]
+EA_Stra_2020 <- fu_Stra_2020 *Summer_Stra_Daily2020$VPD        #[W m−2] 
+
+EA_Tri_2019 <- fu_Tri_2019 *Summer_Tri_Daily2019$VPD           #[W m−2] 
+EA_Tri_2020 <- fu_Tri_2020 *Summer_Tri_Daily2020$VPD           #[W m−2]
+  
+LE_pen_Stra_2019 <- (Delta_Stra_2019/(Delta_Stra_2019+Pc))* Summer_Stra_Daily2019$Kin + (Pc/(Delta_Stra_2019+Pc)) * EA_Stra_2019           #[W m−2]
+LE_pen_Stra_2020 <- (Delta_Stra_2020/(Delta_Stra_2020+Pc))* Summer_Stra_Daily2020$Kin + (Pc/(Delta_Stra_2020+Pc)) * EA_Stra_2020           #[W m−2]
+
+LE_pen_Tri_2019 <- (Delta_Tri_2019/(Delta_Tri_2019+Pc))* Summer_Tri_Daily2019$Kin + (Pc/(Delta_Tri_2019+Pc)) * EA_Tri_2019               #[W m−2]
+LE_pen_Tri_2020 <- (Delta_Tri_2020/(Delta_Tri_2020+Pc))* Summer_Tri_Daily2020$Kin + (Pc/(Delta_Tri_2020+Pc)) * EA_Tri_2020               #[W m−2]
+
+#LE data is given in W/m2 so converting it to MJ m-2 T-1
+#for daily Conversion
+# 1 w/M2 = 1 J/sm2 = 1 J *86400 / day m2 = 86400*10^-6 MJ/m2 day
+LE_pen_Stra_19 <- LE_pen_Stra_2019 *(86400*10^-6)
+LE_pen_Stra_20<- LE_pen_Stra_2020 *(86400*10^-6)
+LE_pen_Tri_19 <- LE_pen_Tri_2019 *(86400*10^-6)
+LE_pen_Tri_20 <- LE_pen_Tri_2020 *(86400*10^-6)
+
+#With LE and Lv in units of MJ m-2 d-1 and MJ kg-1, respectively, ET is in units of kg m-2 d-1 which is equal to depth of water in mm d-1 (d=day)
+#Density of water (1000 kg/m3) was used during conversion of  kg m-2 d-1 to mm d-1.
+Lv <- 2.45   #(MJ/kg)  
+
+# Evaporation in mm/d
+
+Stra_Evap_Daily_2019$E_PEN <- LE_pen_Stra_19 /Lv
+Stra_Evap_Daily_2020$E_PEN <- LE_pen_Stra_20 /Lv
+Tri_Evap_Daily_2019$E_PEN <- LE_pen_Tri_19/Lv
+Tri_Evap_Daily_2020$E_PEN <- LE_pen_Tri_20/Lv
+
+```
+
+For comparsion, I am re estimating evaporation from penman but this time with more commonly used wind function (refer Brutsaert,W.(2005) and Rosenberry et al., 2004 )
+
+#Reference:
+Brutsaert,W.(2005). Hydrology : an introduction.United Kingdom:Cambridge University Press. 
+Brutsaert used : f_u = 0.26 (1+ 0.54U)  
+
+where u2 is the mean wind speed at 2 m above the surface in m s−1, and the constants require that EA in Equation (4.24) is in mm d−1 and the vapor pressure is in hPa.
+
+Rosenberry, D. O., Stannard, D. I., Winter, T. C., & Martinez, M. L. (2004). Comparison of 13 equations for determining evapotranspiration from a prairie wetland, Cottonwood Lake area, North Dakota, USA. Wetlands, 24(3), 483-497.
+Rosenberry used: f_u = 0.26 (0.5 + 0.54U)           
+
+ I am using here Brutsaert formula:
+```{r}
+#wind function 
+fu2_Stra_2019 <-  0.26 *(1+ 0.54 * Summer_Stra_Daily2019$wind_speed)       
+fu2_Stra_2020 <- 0.26 *(1+ 0.54 * Summer_Stra_Daily2020$wind_speed)        
+
+fu2_Tri_2019 <-  0.26 *(1+ 0.54 * Summer_Tri_Daily2019$wind_speed)        
+fu2_Tri_2020 <- 0.26 *(1+ 0.54* Summer_Tri_Daily2020$wind_speed)   
+
+# vpd is kpa and function will be in W M-2 Kpa-1. To convert from W m-2 to mm/d we have to multiply by (86400*10^-6) and divide by LV
+#EA2_Stra_2019 <- fu_Stra_2019 *((Summer_Stra_Daily2019$VPD))*(86400*10^-6)/Lv          #mm/day
+#EA2_Stra_2020 <- fu_Stra_2020 *((Summer_Stra_Daily2020$VPD))*(86400*10^-6)/Lv         #mm/day 
+
+#EA2_Tri_2019 <- fu_Tri_2019 *((Summer_Tri_Daily2019$VPD))*(86400*10^-6)/Lv             #mm/day
+#EA2_Tri_2020 <- fu_Tri_2020 *((Summer_Tri_Daily2020$VPD))*(86400*10^-6)/Lv             #mm/day
+
+#Following four lines are used as per Brutsaert (no conversion is required)
+EA2_Stra_2019 <- fu2_Stra_2019 *((Summer_Stra_Daily2019$VPD))          #mm/day
+EA2_Stra_2020 <- fu2_Stra_2020 *((Summer_Stra_Daily2020$VPD))         #mm/day 
+EA2_Tri_2019 <- fu2_Tri_2019 *((Summer_Tri_Daily2019$VPD))             #mm/day
+EA2_Tri_2020 <- fu2_Tri_2020 *((Summer_Tri_Daily2020$VPD))             #mm/day
+
+# Formula : E = (Delta/(Delta+Pc))* Q_ne + (Pc/(Delta+Pc)) *E_A 
+Lv <- 2.45   #(MJ/kg) 
+#Q_ne = Q/lv    where q is in W/m2 and Lv is in Mj/kg.
+# 1 w/M2 = 1 J/sm2 = 1 J *86400 / day m2 = 86400*10^-6 MJ/m2 day
+#With Q and Lv in units of MJ m-2 d-1 and MJ kg-1, respectively, ET is in units of kg m-2 d-1 which is equal to depth of water in mm d-1 (d=day)
+Qne_pen_Stra_19 <- Summer_Stra_Daily2019$Kin *(86400*10^-6)/Lv
+Qne_pen_Stra_20<- Summer_Stra_Daily2020$Kin *(86400*10^-6)/Lv
+Qne_pen_Tri_19 <- Summer_Tri_Daily2019$Kin *(86400*10^-6)/Lv
+Qne_pen_Tri_20 <- Summer_Tri_Daily2020$Kin *(86400*10^-6)/Lv
+
+
+Stra_Evap_Daily_2019$E_PEN2 <- {(Delta_Stra_2019/(Delta_Stra_2019+Pc))* (Qne_pen_Stra_19)} + {(Pc/(Delta_Stra_2019+Pc)) * EA2_Stra_2019 }  #{mm/day}
+Stra_Evap_Daily_2020$E_PEN2 <- (Delta_Stra_2020/(Delta_Stra_2020+Pc))*(Qne_pen_Stra_20) + (Pc/(Delta_Stra_2020+Pc)) * EA2_Stra_2020           #{mm/day}
+
+Tri_Evap_Daily_2019$E_PEN2 <- (Delta_Tri_2019/(Delta_Tri_2019+Pc))* (Qne_pen_Tri_19) + (Pc/(Delta_Tri_2019+Pc)) * EA2_Tri_2019                #{mm/day}
+Tri_Evap_Daily_2020$E_PEN2<- (Delta_Tri_2020/(Delta_Tri_2020+Pc))* (Qne_pen_Tri_20) + (Pc/(Delta_Tri_2020+Pc)) * EA2_Tri_2020                 #{mm/day}
+
+
+```
+
+
+3. Priestley–Taylor Method        (refer: Brutsaert,W.(2005))
+#Assumptions
+evaporation from a wet surface under conditions of minimal advection (Transfer of heat by the flow of a fluid e.g. air (horizontal movement)). 
+
+LE = Alpha * (Delta/(Delta+Pc))* Q
+
+#Additional Parameters
+Alpha = Priestley–Taylor empirical constant ( value = 1.26)
+
+```{r}
+Alpha <- 1.26 
+
+LE_PT_Stra_2019 <- Alpha * (Delta_Stra_2019/(Delta_Stra_2019+Pc))* Summer_Stra_Daily2019$Kin                #[W m−2]
+LE_PT_Stra_2020 <- Alpha * (Delta_Stra_2020/(Delta_Stra_2020+Pc))* Summer_Stra_Daily2020$Kin                #[W m−2]
+
+LE_PT_Tri_2019 <- Alpha * (Delta_Tri_2019/(Delta_Tri_2019+Pc))* Summer_Tri_Daily2019$Kin                    #[W m−2]
+LE_PT_Tri_2020 <-  Alpha * (Delta_Tri_2020/(Delta_Tri_2020+Pc))* Summer_Tri_Daily2020$Kin                   #[W m−2]
+
+#LE data is given in W/m2 so converting it to MJ m-2 T-1
+#for daily Conversion
+# 1 w/M2 = 1 J/sm2 = 1 J *86400 / day m2 = 86400*10^-6 MJ/m2 day
+LE_PT_Stra_19 <- LE_PT_Stra_2019 *(86400*10^-6)
+LE_PT_Stra_20<- LE_PT_Stra_2020 *(86400*10^-6)
+LE_PT_Tri_19 <- LE_PT_Tri_2019 *(86400*10^-6)
+LE_PT_Tri_20 <- LE_PT_Tri_2020 *(86400*10^-6)
+
+#With LE and Lv in units of MJ m-2 T-1 and MJ kg-1, respectively, ET is in units of kg m-2 d-1 which is equal to depth of water in mm d-1 (d=day)
+#Density of water (1000 kg/m3) was used during conversion of  kg m-2 d-1 to mm d-1.
+Lv <- 2.45   #(MJ/kg)  
+
+# Evaporation in mm/d
+
+Stra_Evap_Daily_2019$E_PT <- LE_PT_Stra_19 /Lv
+Stra_Evap_Daily_2020$E_PT <- LE_PT_Stra_20 /Lv
+Tri_Evap_Daily_2019$E_PT <- LE_PT_Tri_19/Lv
+Tri_Evap_Daily_2020$E_PT <- LE_PT_Tri_20/Lv
+
+```
+
+4.DeBruin–Keijman method (Jansen and Teuling, 2020)
+
+#Assumptions
+(1) constant proportionality between radiation and aerodynamic term
+(2) aerodynamic term can be described by a constant, assuming no explicit wind effects
+(3) Heat storage often assumed to be negligible.
+
+LE = Alpha_Bk * (Delta/(Delta+Pc))* Q + Beta_Bk
+Empirically derived constants (Alpha_Bk and Beta_Bk)
+
+
+#Reference:
+Jansen, F. A., & Teuling, A. J. (2020). Evaporation from a large lowland reservoir–(dis) agreement between evaporation models from hourly to decadal timescales. Hydrology and Earth System Sciences, 24(3), 1055-1072.
+
+
+```{r}
+
+Alpha_Bk <- 1.1
+Beta_Bk <- 10       # [w m-2]
+
+LE_BK_Stra_2019 <- Alpha_Bk * (Delta_Stra_2019/(Delta_Stra_2019+Pc))* Summer_Stra_Daily2019$Kin + Beta_Bk               #[W m−2]
+LE_BK_Stra_2020 <- Alpha_Bk * (Delta_Stra_2020/(Delta_Stra_2020+Pc))* Summer_Stra_Daily2020$Kin + Beta_Bk               #[W m−2]
+
+LE_BK_Tri_2019 <- Alpha_Bk * (Delta_Tri_2019/(Delta_Tri_2019+Pc))* Summer_Tri_Daily2019$Kin  + Beta_Bk                  #[W m−2]
+LE_BK_Tri_2020 <-  Alpha_Bk * (Delta_Tri_2020/(Delta_Tri_2020+Pc))* Summer_Tri_Daily2020$Kin + Beta_Bk                  #[W m−2]
+
+#LE data is given in W/m2 so converting it to MJ m-2 T-1
+#for daily Conversion
+# 1 w/M2 = 1 J/sm2 = 1 J *86400 / day m2 = 86400*10^-6 MJ/m2 day
+LE_BK_Stra_19 <- LE_BK_Stra_2019 *(86400*10^-6)
+LE_BK_Stra_20<- LE_BK_Stra_2020 *(86400*10^-6)
+LE_BK_Tri_19 <- LE_BK_Tri_2019 *(86400*10^-6)
+LE_BK_Tri_20 <- LE_BK_Tri_2020 *(86400*10^-6)
+
+#With LE and Lv in units of MJ m-2 T-1 and MJ kg-1, respectively, ET is in units of kg m-2 d-1 which is equal to deBKh of water in mm d-1 (d=day)
+#Density of water (1000 kg/m3) was used during conversion of  kg m-2 d-1 to mm d-1.
+Lv <- 2.45   #(MJ/kg)  
+
+# Evaporation in mm/d
+
+Stra_Evap_Daily_2019$E_DK <- LE_BK_Stra_19/Lv
+Stra_Evap_Daily_2020$E_DK <- LE_BK_Stra_20/Lv
+Tri_Evap_Daily_2019$E_DK <- LE_BK_Tri_19/Lv
+Tri_Evap_Daily_2020$E_DK <- LE_BK_Tri_20/Lv
+
+```
+
+
+5.Brutsaert–Stricker method (Brutsaert,W.(2005)) equation 4.49
+
+# Formula : E = (2*alpha-1)*(Delta/(Delta+Pc))* Q_ne - (Pc/(Delta+Pc))*Ce*U*(q_sat-q)
+
+#Assumption:
+-Follow penman's template but different constant values. 
+-Aplha constant is emperical and yet require a physical explanation
+-Here I am using alpha = 1.26 (refer: Rosenberry et al., 2004 )
+
+#advantage
+-Only need meteorological parameters only instead of soil moisture, canopy resistance and other measures of aridity. 
+-The approach appears to perform best under conditions with relatively mild advection. However, under strongly advective conditions with large saturation humidity deficits, it seems that the validity of the assumptions on which it is based become questionable.
+
+#Reference:
+Brutsaert,W.(2005). Hydrology : an introduction.United Kingdom:Cambridge University Press.
+
+```{r}
+
+qsat_Stra_2019<- 0.622*(esat_air_Stra2019/p)
+qsat_Stra_2020<- 0.622*(esat_air_Stra2020/p)
+qsat_Tri_2019<- 0.622*(esat_air_Tri2019/p)
+qsat_Tri_2020<- 0.622*(esat_air_Tri2020/p)
+
+Stra_Evap_Daily_2019$E_BS <- (2*Alpha -1)*(Delta_Stra_2019/(Delta_Stra_2019+Pc))* (Qne_pen_Stra_19) - (Pc/(Delta_Stra_2019+Pc)) * {Ce*Summer_Stra_Daily2019$wind_speed*1000*(qsat_Stra_2019-q_air_Stra2019)}           #{mm/day}
+Stra_Evap_Daily_2020$E_BS <- (2*Alpha -1)*(Delta_Stra_2020/(Delta_Stra_2020+Pc))* (Qne_pen_Stra_20) - (Pc/(Delta_Stra_2020+Pc)) * {Ce*Summer_Stra_Daily2020$wind_speed*1000*(qsat_Stra_2020-q_air_Stra2020)}           #{mm/day}
+
+Tri_Evap_Daily_2019$E_BS <- (2*Alpha -1)*(Delta_Tri_2019/(Delta_Tri_2019+Pc))* (Qne_pen_Tri_19) - (Pc/(Delta_Tri_2019+Pc)) * {Ce*Summer_Tri_Daily2019$wind_speed*1000*(qsat_Tri_2019-q_air_Tri2019)}           #{mm/day}
+Tri_Evap_Daily_2020$E_BS<- (2*Alpha -1)*(Delta_Tri_2020/(Delta_Tri_2020+Pc))* (Qne_pen_Tri_20) - (Pc/(Delta_Tri_2020+Pc)) * {Ce*Summer_Tri_Daily2020$wind_speed*1000*(qsat_Tri_2020-q_air_Tri2020)}           #{mm/day}
+
+```
+
+6. DeBruin (DB) Method (Used for 10 days average or more)  # (refer: Rosenberry et al., 2004 or Althoff et al., 2019 )
+#Formula 
+
+E = 1.192*(alpha/(alph-1))*(Delta/(Delta+Pc))* {(2.9 +2.1*U)* VPD /LV}        (Althoff et al., 2019)
+
+#Assumptions
+Based on Penman template but ignored the energy budget form (Potential Evaporation)
+Aplha value being empirical (using same 1.26 alpha from Priestley-Taylor)
+
+
+#Reference:
+Rosenberry, D. O., Stannard, D. I., Winter, T. C., & Martinez, M. L. (2004). Comparison of 13 equations for determining evapotranspiration from a prairie wetland, Cottonwood Lake area, North Dakota, USA. Wetlands, 24(3), 483-497.
+
+Althoff, D., Rodrigues, L. N., & da Silva, D. D. (2019). Evaluating evaporation methods for estimating small reservoir water surface evaporation in the Brazilian savannah. Water, 11(9), 1942.
+
+#It should be noted that the constant values varies within literature and it requires calibration. Here I am just using constants given in Althoff without any calibration. 
+
+```{r}
+
+Stra_Evap_Daily_2019$E_D<- 1.192*(Alpha/(Alpha-1))*(Delta_Stra_2019/(Delta_Stra_2019+Pc))*{(2.9+2.1*Summer_Stra_Daily2019$wind_speed)* Summer_Stra_Daily2019$VPD}*(86400*10^-6)/Lv                                               #{mm/day}
+
+Stra_Evap_Daily_2020$E_D<- 1.192*(Alpha/(Alpha-1))*(Delta_Stra_2020/(Delta_Stra_2020+Pc))*{(2.9+2.1*Summer_Stra_Daily2020$wind_speed)* Summer_Stra_Daily2020$VPD}*(86400*10^-6)/Lv                                               #{mm/day}
+
+Tri_Evap_Daily_2019$E_D<- 1.192*(Alpha/(Alpha-1))*(Delta_Tri_2019/(Delta_Tri_2019+Pc))*{(2.9+2.1*Summer_Tri_Daily2019$wind_speed)* Summer_Tri_Daily2019$VPD}*(86400*10^-6)/Lv                                               #{mm/day}
+
+Tri_Evap_Daily_2020$E_D<- 1.192*(Alpha/(Alpha-1))*(Delta_Tri_2020/(Delta_Tri_2020+Pc))*{(2.9+2.1*Summer_Tri_Daily2020$wind_speed)* Summer_Tri_Daily2020$VPD}*(86400*10^-6)/Lv                                               #{mm/day}
+
+```
+
+
+7.Jensen–Haise method  (Daily)
+Formula:  E =  (0.0014*Ta -0.37)* (3.523*10^(-2) * Qs)  #refer Althoff et al., (2019)
+
+Qs = Incoming radiations  (W m-2)
+Ta should be in F (Farenheit)
+#Assumptions
+constant values require calibration
+
+#Reference
+Althoff, D., Rodrigues, L. N., & da Silva, D. D. (2019). Evaluating evaporation methods for estimating small reservoir water surface evaporation in the Brazilian savannah. Water, 11(9), 1942.
+
+```{r} 
+ #1c = (1 *9/5) +32 = 33.8f       #Conversion
+
+Stra_Evap_Daily_2019$E_JH<- {0.014*{(Summer_Stra_Daily2019$Tair*(9/5))+32} -0.37}* (3.523*10^(-2) * Summer_Stra_Daily2019$Kin)
+Stra_Evap_Daily_2020$E_JH<- {0.014*{(Summer_Stra_Daily2020$Tair*(9/5))+32} -0.37}* (3.523*10^(-2) * Summer_Stra_Daily2020$Kin)
+
+Tri_Evap_Daily_2019$E_JH<- {0.014*{(Summer_Tri_Daily2019$Tair*(9/5))+32} -0.37}* (3.523*10^(-2) * Summer_Tri_Daily2019$Kin)
+Tri_Evap_Daily_2020$E_JH<- {0.014*{(Summer_Tri_Daily2020$Tair*(9/5))+32} -0.37}* (3.523*10^(-2) * Summer_Tri_Daily2020$Kin)
+
+```
+
+8.Makkink method     (PET monthly)             # (refer: Rosenberry et al., 2004 or Althoff et al., 2019 )
+
+#Formula: E=  {52.6 * (Delta/(Delta+Pc)* (Q/(Lv*Rho)}- 0.12        #Althoff et al., 2019
+
+#Assumptions
+Requires calibration of the constants. 
+#Additional Parameters
+Rs= Incoming solar radiation (W/m2)
+
+
+#Reference:
+Rosenberry, D. O., Stannard, D. I., Winter, T. C., & Martinez, M. L. (2004). Comparison of 13 equations for determining evapotranspiration from a prairie wetland, Cottonwood Lake area, North Dakota, USA. Wetlands, 24(3), 483-497.
+
+Althoff, D., Rodrigues, L. N., & da Silva, D. D. (2019). Evaluating evaporation methods for estimating small reservoir water surface evaporation in the Brazilian savannah. Water, 11(9), 1942.
+
+#It should be noted that the constant values varies within literature and it requires calibration. Here I am just using constants given in Althoff without any calibration. 
+```{r}
+Rho  <- 1000   #(Kg/m3)
+
+Stra_Evap_Daily_2019$E_M <- {52.6 * (Delta_Stra_2019/(Delta_Stra_2019+Pc))* (Summer_Stra_Daily2019$Kin/(Lv*Rho))}- 0.12   
+Stra_Evap_Daily_2020$E_M <- {52.6 * (Delta_Stra_2020/(Delta_Stra_2020+Pc))* (Summer_Stra_Daily2020$Kin/(Lv*Rho))}- 0.12 
+
+Tri_Evap_Daily_2019$E_M <- {52.6 * (Delta_Tri_2019/(Delta_Tri_2019+Pc))* (Summer_Tri_Daily2019$Kin/(Lv*Rho))}- 0.12 
+Tri_Evap_Daily_2019$E_M <- {52.6 * (Delta_Tri_2019/(Delta_Tri_2019+Pc))* (Summer_Tri_Daily2019$Kin/(Lv*Rho))}- 0.12 
+          
+```
+
+   
+9.Ryan–Harleman method
+
+#Formula : E=  {(2.7* {(Ts-Ta)^(1/3)} + 3.1 *u )/ (lv*Rho)} * VPD *10 *D
+
+D is the multipliers that convert the unit of evaporation into mm d−1 (86.4 × 10^6)
+
+#Assumptions
+The RyH method considered the two main evaporation-driven processes: free convection caused by buoyancy and forced convection caused by wind (Meng et al ., 2020)
+
+Constants require Calibration.
+
+#Reference:
+Meng, X., Liu, H., Du, Q., Xu, L., & Liu, Y. (2020). Evaluation of the performance of different methods for estimating evaporation over a highland open freshwater lake in mountainous area. Water, 12(12), 3491.
+```{r}
+D <- 86.4* 10^6  
+L <- 2.45 *10^6      #j/kg Latent heat of vaporization
+
+Stra_Evap_Daily_2019$E_RH <- {(2.7* {(Summer_Stra_Daily2019$Twater-Summer_Stra_Daily2019$Tair)^(1/3)} + 3.1 *Summer_Stra_Daily2019$wind_speed)/ (L*Rho)} * Summer_Stra_Daily2019$VPD *10*D            #mm/day
+
+Stra_Evap_Daily_2020$E_RH <- {(2.7* {(Summer_Stra_Daily2020$Twater-Summer_Stra_Daily2020$Tair)^(1/3)} + 3.1 *Summer_Stra_Daily2020$wind_speed)/ (L*Rho)} * Summer_Stra_Daily2020$VPD *10*D            #mm/day
+
+Tri_Evap_Daily_2019$E_RH <- {(2.7* {(Summer_Tri_Daily2019$Twater-Summer_Tri_Daily2019$Tair)^(1/3)} + 3.1 *Summer_Tri_Daily2019$wind_speed)/ (L*Rho)} * Summer_Tri_Daily2019$VPD *10*D            #mm/day
+
+Tri_Evap_Daily_2020$E_RH <- {(2.7* {(Summer_Tri_Daily2020$Twater-Summer_Tri_Daily2020$Tair)^(1/3)} + 3.1 *Summer_Tri_Daily2020$wind_speed)/ (L*Rho)} * Summer_Tri_Daily2020$VPD *10*D            #mm/day
+
+```
+
+10. Mass Transfer           #(refer (Meng et al ., 2020))
+
+#Formula E= N*U*VPD *1000
+N= 0.00338/(As^0.05)
+
+As= Area of the lake in Acre.
+
+Area of lake Ijssel Netherlands = 1100 KM2 = 271816 acres                      #Refer: Jasen and Teuling (2020)
+
+#Assumption
+Empirical relation based on wind speed and vapor pressure deficit
+Need calibration
+
+#Reference:
+Meng, X., Liu, H., Du, Q., Xu, L., & Liu, Y. (2020). Evaluation of the performance of different methods for estimating evaporation over a highland open freshwater lake in mountainous area. Water, 12(12), 3491.
+
+Jansen, F. A., & Teuling, A. J. (2020). Evaporation from a large lowland reservoir–(dis) agreement between evaporation models from hourly to decadal timescales. Hydrology and Earth System Sciences, 24(3), 1055-1072.
+```{r}
+As = 271816           #acres
+N= 0.00338/(As^0.05)
+
+Stra_Evap_Daily_2019$E_MT <- N*Summer_Stra_Daily2019$wind_speed*Summer_Stra_Daily2019$VPD*1000
+Stra_Evap_Daily_2020$E_MT <- N*Summer_Stra_Daily2020$wind_speed*Summer_Stra_Daily2020$VPD*1000
+
+Tri_Evap_Daily_2019$E_MT <- N*Summer_Tri_Daily2019$wind_speed*Summer_Tri_Daily2019$VPD*1000
+Tri_Evap_Daily_2020$E_MT <- N*Summer_Tri_Daily2020$wind_speed*Summer_Tri_Daily2020$VPD*1000
+
+```
+ 
+
+
+Now cleaning up the data.. Due to various reasons (e.g. errors with data) some of the evaporation estimates  are negative. I am considering negative evaporation as NA 
+
+```{r}
+
+Evaporation_Stra2019 <- Stra_Evap_Daily_2019 %>% 
+                         mutate_each(funs(replace(., .<0, NA)))
+
+Evaporation_Stra2020 <- Stra_Evap_Daily_2020 %>% 
+                         mutate_each(funs(replace(., .<0, NA)))
+
+
+Evaporation_Tri2019 <- Tri_Evap_Daily_2019 %>% 
+                         mutate_each(funs(replace(., .<0, NA)))
+
+Evaporation_Tri2020 <- Tri_Evap_Daily_2020 %>% 
+                         mutate_each(funs(replace(., .<0, NA)))
+
+#Rounding off up to 2 decimals
+
+Evaporation_Stra2019[,-1]<- round(Evaporation_Stra2019[,-1], 2)             #the "-1" excludes column 1 
+Evaporation_Stra2020[,-1]<- round(Evaporation_Stra2020[,-1], 2)  
+
+Evaporation_Tri2019[,-1]<- round(Evaporation_Tri2019[,-1], 2)             
+Evaporation_Tri2020[,-1]<- round(Evaporation_Tri2020[,-1], 2) 
+
+```
+
+
+
+Plotting the data
+
+#Stra_2019
+```{r}
+
+Stra2019_plot <- Evaporation_Stra2019 %>% 
+ melt(.,id="Date")%>% 
+  #filter(value < 10) %>%               #lines to filter results
+  filter(variable != "E_MT")%>%
+  filter(variable != "E_PEN")%>%
+  filter(variable != "E_RH")%>%
+  filter(variable != "E_D")%>%
+  filter(variable != "E_M")%>%
+  filter(variable != "E_BR")%>%
+  filter(variable != "E_PT")%>%
+  filter(variable != "E_BT")%>%
+  filter(variable != "E_DK")
+
+  
+P<- ggplot()+
+  geom_point(Stra2019_plot,mapping = aes(x= Date, y= value,  group = variable,color = variable), size =2)+
+  theme_bw()+
+  labs(y = "Evaporation (mm/day)")+
+  theme(axis.title = element_text(size = 14, face = "bold",colour = "black"),
+        axis.text  = element_text(size = 12, face = "bold",colour = "black"))+
+  scale_color_manual(name = "Evaporation Methods",
+                     values = c("E_BT" = "#A6CEE3",
+                                "E_BR" = "#1F78B4",
+                                "E_PEN" = "#B2DF8A",
+                                "E_PEN2"= "#33A02C",
+                                "E_PT" = "#FB9A99",
+                                "E_DK" = "#E31A1C",
+                                "E_BS" = "#FFFF99",
+                                 "E_D" = "#FDBF6F",                     
+                                "E_JH" = "#FF7F00",  
+                               "E_M" = "#CAB2D6",
+                               "E_RH" = "#6A3D9A",                     
+                                "E_MT" = "#B15928",
+                               "Evap_obs" = "black"))
+print (P)
+```
+
+
+
+#Stra_2020
+```{r}
+
+Stra2020_plot <- Evaporation_Stra2020 %>% 
+ melt(.,id="Date")%>% 
+   #filter(value < 10) %>%               #lines to filter results
+  filter(variable != "E_MT")%>%
+  filter(variable != "E_PEN")%>%
+  filter(variable != "E_RH")%>%
+  filter(variable != "E_D")%>%
+  filter(variable != "E_M")%>%
+  filter(variable != "E_BR")%>%
+  filter(variable != "E_PT")%>%
+  filter(variable != "E_BT")%>%
+  filter(variable != "E_DK")
+
+  
+P<- ggplot()+
+  geom_point(Stra2020_plot,mapping = aes(x= Date, y= value,  group = variable,color = variable), size =2)+
+  theme_bw()+
+  labs(y = "Evaporation (mm/day)")+
+  theme(axis.title = element_text(size = 14, face = "bold",colour = "black"),
+        axis.text  = element_text(size = 12, face = "bold",colour = "black"))+
+  scale_color_manual(name = "Evaporation Methods",
+                     values = c("E_BT" = "#A6CEE3",
+                                "E_BR" = "#1F78B4",
+                                "E_PEN" = "#B2DF8A",
+                                "E_PEN2"= "#33A02C",
+                                "E_PT" = "#FB9A99",
+                                "E_DK" = "#E31A1C",
+                                "E_BS" = "#FFFF99",
+                                 "E_D" = "#FDBF6F",                     
+                                "E_JH" = "#FF7F00",  
+                               "E_M" = "#CAB2D6",
+                               "E_RH" = "#6A3D9A",                     
+                                "E_MT" = "#B15928",
+                               "Evap_obs" = "black"))
+print (P)
+
+```
+
+
+#Tri_2019
+```{r}
+
+Tri2019_plot <- Evaporation_Tri2019 %>% 
+  melt(.,id="Date")%>% 
+ # filter(value < 10) %>%               #lines to filter results
+  filter(variable != "E_MT")%>%
+  filter(variable != "E_PEN")%>%
+  filter(variable != "E_RH")%>%
+  filter(variable != "E_JH")%>%
+  filter(variable != "E_BR")%>%
+  filter(variable != "E_D")%>%
+  filter(variable != "E_M")%>%
+  filter(variable != "E_PEN2")%>%
+  filter(variable != "E_BS")
+  
+  
+P<- ggplot()+
+  geom_point(Tri2019_plot,mapping = aes(x= Date, y= value,  group = variable,color = variable), size =2)+
+  theme_bw()+
+  labs(y = "Evaporation (mm/day)")+
+  theme(axis.title = element_text(size = 14, face = "bold",colour = "black"),
+        axis.text  = element_text(size = 12, face = "bold",colour = "black"))+
+  scale_color_manual(name = "Evaporation Methods",
+                     values = c("E_BT" = "#A6CEE3",
+                                "E_BR" = "#1F78B4",
+                                "E_PEN" = "#B2DF8A",
+                                "E_PEN2"= "#33A02C",
+                                "E_PT" = "#FB9A99",
+                                "E_DK" = "#E31A1C",
+                                "E_BS" = "#FFFF99",
+                                 "E_D" = "#FDBF6F",                     
+                                "E_JH" = "#FF7F00",  
+                               "E_M" = "#CAB2D6",
+                               "E_RH" = "#6A3D9A",                     
+                                "E_MT" = "#B15928",
+                               "Evap_obs" = "black"))
+print (P)
+
+```
+
+#Tri_2020
+```{r}
+Tri2020_plot <- Evaporation_Tri2020 %>% 
+  melt(.,id="Date")%>% 
+  #filter(value < 10) %>%               #lines to filter results
+  filter(variable != "E_MT")%>%
+  filter(variable != "E_PEN")%>%
+  filter(variable != "E_RH")%>%
+  filter(variable != "E_JH")%>%
+  filter(variable != "E_BR")%>%
+  filter(variable != "E_D")%>%
+  filter(variable != "E_M")%>%
+  filter(variable != "E_PEN2")%>%
+  filter(variable != "E_BS")
+  
+  
+P<- ggplot()+
+  geom_point(Tri2020_plot,mapping = aes(x= Date, y= value,  group = variable,color = variable), size =2)+
+  theme_bw()+
+  labs(y = "Evaporation (mm/day)")+
+  theme(axis.title = element_text(size = 14, face = "bold",colour = "black"),
+        axis.text  = element_text(size = 12, face = "bold",colour = "black"))+
+  scale_color_manual(name = "Evaporation Methods",
+                     values = c("E_BT" = "#A6CEE3",
+                                "E_BR" = "#1F78B4",
+                                "E_PEN" = "#B2DF8A",
+                                "E_PEN2"= "#33A02C",
+                                "E_PT" = "#FB9A99",
+                                "E_DK" = "#E31A1C",
+                                "E_BS" = "#FFFF99",
+                                 "E_D" = "#FDBF6F",                     
+                                "E_JH" = "#FF7F00",  
+                               "E_M" = "#CAB2D6",
+                               "E_RH" = "#6A3D9A",                     
+                                "E_MT" = "#B15928",
+                               "Evap_obs" = "black"))
+print (P)
+
+```
+
+
+  
+
+
+
+

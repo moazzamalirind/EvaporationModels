@@ -1,6 +1,6 @@
 ## Requirements: 
 1. R Studio (https://posit.co/products/open-source/rstudio/)
-2. An excel file with atleast following formation: 
+2. An excel file with atleast following columns: 
   a. LE = latent heat flux (W/m2)
   b. Kin = global radiation (W/m2)
   c. u = wind speed (m/s)
